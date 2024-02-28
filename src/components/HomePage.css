@@ -1,0 +1,35 @@
+/* HomePage.css */
+.homepage {
+    text-align: center;
+    margin-top: 50px;
+  }
+  
+  .login-container {
+    width: 300px;
+    margin: 0 auto;
+  }
+  
+  input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+  
+  button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .toggle-link {
+    color: #007bff;
+    cursor: pointer;
+  }
+  
+  .toggle-link:hover {
+    text-decoration: underline;
+  }
+  
