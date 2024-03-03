@@ -10,15 +10,6 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
       alt={alt}
       className={`game-image-choice ${isSelected ? 'selected' : ''}`}
       onClick={onSelect}
-      style={{
-        aspectRatio: '1',
-        objectFit: 'cover',
-        width: '100px',
-        height: '100px',
-        cursor: 'pointer',
-        transition: 'transform 0.2s ease-in-out',
-        margin: '10px',
-      }}
     />
   );
 }
@@ -69,91 +60,81 @@ function TrainSelector() {
         </div>
       </div>
       <style jsx>{`
-      .full-page {
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start; /* Align items at the top */
-        min-height: 100vh;
-        background-color: #1c794c;
-        margin: 0;
-        padding: 0;
-        position: relative;
-      }
-      .top-content {
-        width: 100%;
-        position: absolute;
-        top: 0;
-        left: 0;
-        padding: 10px 20px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        color: white;
-        z-index: 2;
-      }
-      .centered-content {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center; /* Center content vertically */
-        text-align: center;
-        color: white;
-        width: 100%;
-        position: relative;
-        z-index: 1;
-      }
-      .choose-your-train {
-        font-size: 24px;
-        color: white;
-        margin: 20px 0;
-      }
-      .selection-container {
-        background-color: white;
-        padding: 20px;
-        border-radius: 20px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        margin-top: 20px;
-      }
-      .game-choices-container {
-        display: flex;
-        justify-content: center;
-        flex-wrap: wrap;
-        gap: 15px;
-        margin-bottom: 20px;
-      }
-      .game-image-choice {
-        aspectRatio: '1',
-        objectFit: 'cover',
-        width: '100px',
-        height: '100px',
-        cursor: 'pointer',
-        transition: 'transform 0.2s ease-in-out',
-        margin: '10px',
-        border: 3px solid transparent;
-        border-radius: 15px;
-      }
-      .selected {
-        border: 3px solid black;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-        transform: scale(1.1);
-      }
-      .confirm-selection {
-        padding: 12px 24px;
-        background-color: #23834a;
-        color: white;
-        cursor: pointer;
-        text-align: center;
-        width: auto;
-        border-radius: 12px;
-        transition: background-color 0.2s ease-in-out;
-      }
-      .confirm-selection:hover {
-        background-color: #1c7240;
-      }
-    `}</style>
+        .full-page {
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-start;
+          min-height: 100vh;
+          background-color: #1c794c;
+          margin: 0;
+          padding: 0;
+          position: relative;
+        }
+        .centered-content {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          text-align: center;
+          color: white;
+          width: 100%;
+          position: relative;
+          z-index: 1;
+        }
+        .choose-your-train {
+          font-size: 48px;
+          color: white;
+          margin: 20px 0;
+        }
+        .selection-container {
+          background-color: white;
+          padding: 40px;
+          border-radius: 20px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          margin-top: 40px;
+        }
+        .game-choices-container {
+          display: flex;
+          justify-content: center;
+          flex-wrap: wrap;
+          gap: 30px;
+          margin-bottom: 30px;
+        }
+        .game-image-choice {
+          aspect-ratio: 1;
+          object-fit: cover;
+          width: 100px;
+          height: 100px;
+          cursor: pointer;
+          transition: transform 0.2s ease-in-out;
+          border: 3px solid transparent;
+          border-radius: 15px;
+        }
+        .selected {
+          border: 6px solid black; /* Increased border size */
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+          transform: scale(1.1);
+          padding: 10px; /* Increased padding */
+        }
+        .confirm-selection {
+          padding: 12px 24px;
+          background-color: #23834a;
+          color: white;
+          cursor: pointer;
+          text-align: center;
+          width: auto;
+          border-radius: 12px;
+          font-size: 36px;
+          transition: background-color 0.2s ease-in-out;
+        }
+        .confirm-selection:hover {
+          background-color: #1c7240;
+        }
+      `}</style>
     </>
   );
 }
+
 export default TrainSelector;
