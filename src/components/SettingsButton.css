@@ -1,0 +1,12 @@
+.image-display {
+    aspect-ratio: 1.01;
+    object-fit: cover;
+    object-position: center;
+    width: 100%;
+    max-width: 80px;
+    display: block;
+}
+
+main {
+    text-align: center;
+}
