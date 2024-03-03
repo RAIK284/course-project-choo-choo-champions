@@ -1,11 +1,18 @@
 import React from "react";
+import { Link } from "react-router-dom";
+import SettingsButton from "./SettingsButton"; // Import the SettingsButton component
 
 function NavBar() {
   return (
     <>
       <header className="game-header">
         <div className="left-content">
-          <h1 className="game-title">Mexican Train Dominoes</h1>
+          <Link to="/" className="game-title">Mexican Train Dominoes</Link>
+        </div>
+        <div className="right-content">
+          <Link to="/settings"> {/* Link to the /settings page */}
+            <SettingsButton /> {/* Render the SettingsButton component */}
+          </Link>
         </div>
       </header>
       <style jsx>{`
@@ -14,18 +21,21 @@ function NavBar() {
           justify-content: space-between;
           align-items: center; /* Center items vertically */
           color: #fff;
+          padding: 10px 20px; /* Add padding to the header */
         }
         .left-content {
-          flex-grow: 1; /* Left content takes up remaining space */
+          /* Flex-grow removed */
         }
         .game-title {
           font-size: 40px; /* Adjusted font size */
           font-weight: 400;
           font-family: DM Serif Display, -apple-system, Roboto, Helvetica, sans-serif;
           margin: 0; /* Remove default margin */
+          text-decoration: none; /* Remove default underline */
+          color: #fff; /* Set color to white */
         }
         .right-content {
-          margin-left: auto; /* Right content moves to the right */
+          /* Flex-grow removed */
         }
         .game-image {
           aspect-ratio: 1.01;

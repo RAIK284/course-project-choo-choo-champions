@@ -1,10 +1,10 @@
 import React from 'react';
+import NavBar from './NavBar';
 
 function SignUpPage() {
   return (
     <div>
-      <h2>Sign Up Page</h2>
-      {/* Your sign-up form or content goes here */}
+      <NavBar />
     </div>
   );
 }

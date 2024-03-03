@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import NavBar from './NavBar'
-import Background from './Background'
+import NavBar from './NavBar';
+import Background from './Background';
 
 function GameChoice({ src, alt, onSelect, isSelected }) {
   return (
@@ -38,9 +38,7 @@ function TrainSelector() {
     <>
       <div className="full-page">
         <Background />
-        <div className="top-left-content">
-          <NavBar />
-        </div>
+        <NavBar />
         <div className="centered-content">
           <h2 className="choose-your-train">Choose Your Train</h2>
           <div className="selection-container">
@@ -71,93 +69,91 @@ function TrainSelector() {
         </div>
       </div>
       <style jsx>{`
-        .full-page {
-          display: flex;
-          flex-direction: column;
-          align-items: start;
-          justify-content: center;
-          min-height: 100vh;
-          background-color: #1c794c;
-          margin: 0;
-          padding: 0;
-          position: relative;
-        }
-        .top-left-content {
-          position: absolute;
-          top: 0;
-          left: 0;
-          padding: 10px 20px;
-          color: white;
-          z-index: 2;
-        }
-        .centered-content {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: flex-start;
-          text-align: center;
-          color: white;
-          width: 100%;
-          position: relative;
-          z-index: 1;
-        }
-        .game-title {
-          font-size: 48px;
-          color: white;
-        }
-        .choose-your-train {
-          font-size: 24px;
-          color: white;
-          margin: 20px 0;
-        }
-        .selection-container {
-          background-color: white;
-          padding: 20px;
-          border-radius: 20px;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          margin-top: 20px;
-        }
-        .game-choices-container {
-          display: flex;
-          justify-content: center;
-          flex-wrap: wrap;
-          gap: 15px;
-          margin-bottom: 20px;
-        }
-        .game-image-choice {
-          aspectRatio: '1',
-          objectFit: 'cover',
-          width: '100px',
-          height: '100px',
-          cursor: 'pointer',
-          transition: 'transform 0.2s ease-in-out',
-          margin: '10px',
-          border: 3px solid transparent;
-          border-radius: 15px;
-        }
-        .selected {
-          border: 3px solid black;
-          box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-          transform: scale(1.1);
-        }
-        .confirm-selection {
-          padding: 12px 24px;
-          background-color: #23834a;
-          color: white;
-          cursor: pointer;
-          text-align: center;
-          width: auto;
-          border-radius: 12px;
-          transition: background-color 0.2s ease-in-out;
-        }
-        .confirm-selection:hover {
-          background-color: #1c7240;
-        }
-      `}</style>
+      .full-page {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start; /* Align items at the top */
+        min-height: 100vh;
+        background-color: #1c794c;
+        margin: 0;
+        padding: 0;
+        position: relative;
+      }
+      .top-content {
+        width: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        padding: 10px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: white;
+        z-index: 2;
+      }
+      .centered-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center; /* Center content vertically */
+        text-align: center;
+        color: white;
+        width: 100%;
+        position: relative;
+        z-index: 1;
+      }
+      .choose-your-train {
+        font-size: 24px;
+        color: white;
+        margin: 20px 0;
+      }
+      .selection-container {
+        background-color: white;
+        padding: 20px;
+        border-radius: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 20px;
+      }
+      .game-choices-container {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin-bottom: 20px;
+      }
+      .game-image-choice {
+        aspectRatio: '1',
+        objectFit: 'cover',
+        width: '100px',
+        height: '100px',
+        cursor: 'pointer',
+        transition: 'transform 0.2s ease-in-out',
+        margin: '10px',
+        border: 3px solid transparent;
+        border-radius: 15px;
+      }
+      .selected {
+        border: 3px solid black;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        transform: scale(1.1);
+      }
+      .confirm-selection {
+        padding: 12px 24px;
+        background-color: #23834a;
+        color: white;
+        cursor: pointer;
+        text-align: center;
+        width: auto;
+        border-radius: 12px;
+        transition: background-color 0.2s ease-in-out;
+      }
+      .confirm-selection:hover {
+        background-color: #1c7240;
+      }
+    `}</style>
     </>
   );
 }
-
 export default TrainSelector;
