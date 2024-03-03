@@ -1,4 +1,5 @@
 import React from 'react';
+import './Background.css'; // Import the CSS file
 
 function Background() {
     return (
@@ -8,21 +9,6 @@ function Background() {
                 alt="Background"
                 className="background-image"
             />
-            <style jsx>{`
-                .background-image-container {
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100%;
-                    overflow: hidden;
-                }
-                .background-image {
-                    width: 100%;
-                    height: 100%;
-                    object-fit: cover;
-                }
-            `}</style>
         </div>
     );
 }
