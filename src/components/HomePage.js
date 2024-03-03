@@ -1,6 +1,7 @@
 // HomePage.js
 
 import React from 'react';
+import Background from './Background'
 
 function LoginForm() {
   return (
@@ -40,9 +41,7 @@ function HomePage() {
   return (
     <>
       <main className="login-page">
-        <div className="background-image-container">
-          <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/92e6f6b155c24838e0b6d42eef92ba124a44205de0dfd7abce69c8f47fc38cea?apiKey=7293d20271ec4f72a58fe358903b4fd6&" alt="Background" className="background-image" />
-        </div>
+        <Background />
         <div className="centered-content">
           <GameDescription />
           <LoginSection />
@@ -58,21 +57,6 @@ function HomePage() {
           margin: 0;
           padding: 0;
           position: relative;
-        }
-
-        .background-image-container {
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          overflow: hidden;
-        }
-
-        .background-image {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
         }
 
         .centered-content {

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import NavBar from './NavBar'
+import Background from './Background'
 
 function GameChoice({ src, alt, onSelect, isSelected }) {
   return (
@@ -13,7 +14,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
         aspectRatio: '1',
         objectFit: 'cover',
         width: '100px',
- height: '100px',
+        height: '100px',
         cursor: 'pointer',
         transition: 'transform 0.2s ease-in-out',
         margin: '10px',
@@ -36,15 +37,9 @@ function TrainSelector() {
   return (
     <>
       <div className="full-page">
-        <div className="background-image-container">
-          <img
-            src="https://cdn.builder.io/api/v1/image/assets/TEMP/8dbca933ffcd089f07077f037b47f9d35112fe8982e429140eb2217b3c26466f?apiKey=7293d20271ec4f72a58fe358903b4fd6&"
-            alt="Background"
-            className="background-image"
-          />
-        </div>
+        <Background />
         <div className="top-left-content">
-          <NavBar/>
+          <NavBar />
         </div>
         <div className="centered-content">
           <h2 className="choose-your-train">Choose Your Train</h2>
@@ -55,14 +50,20 @@ function TrainSelector() {
                   key={choice.src}
                   src={choice.src}
                   alt={choice.alt}
-                  onSelect={() => setSelectedTrain(choice.src)}
-                  isSelected={selectedTrain === choice.src}
+                  onSelect={() => setSelectedTrain(choice.alt)}
+                  isSelected={selectedTrain === choice.alt}
                 />
               ))}
             </div>
             <div
               className="confirm-selection"
-              onClick={() => alert(`You've selected: ${selectedTrain}`)}
+              onClick={() => {
+                if (selectedTrain) {
+                  alert(`You've selected: ${selectedTrain}`);
+                } else {
+                  alert("Please select a train first.");
+                }
+              }}
             >
               Confirm Selection
             </div>
@@ -88,19 +89,6 @@ function TrainSelector() {
           padding: 10px 20px;
           color: white;
           z-index: 2;
-        }
-        .background-image-container {
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          overflow: hidden;
-        }
-        .background-image {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
         }
         .centered-content {
           display: flex;
