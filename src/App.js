@@ -7,6 +7,7 @@ import TrainSelector from './components/TrainSelector'
 import NavBar from './components/NavBar'
 import Background from './components/Background'
 import SettingsButton from './components/SettingsButton'
+import JoinCodePage from './components/JoinCodePage'
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/navbar" element={<NavBar />} />
         <Route path="/background" element={<Background />} />
         <Route path="/settingsbutton" element={<SettingsButton />} />
+        <Route path="/join" element={<JoinCodePage />} />
       </Routes>
     </Router>
   );
