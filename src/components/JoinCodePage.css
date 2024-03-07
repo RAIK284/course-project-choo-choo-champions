@@ -1,0 +1,101 @@
+.full-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    min-height: 100vh;
+    background-color: black;
+    margin: 0;
+    padding: 0;
+    position: relative;
+}
+
+.centered-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /* Center vertically */
+    text-align: center;
+    color: white;
+    width: 100%;
+    min-width: 400px;
+    /* Set a minimum width */
+    position: relative;
+    z-index: 1;
+}
+
+.enter-join-code {
+    font-size: 48px;
+    color: white;
+    margin: 20px 0;
+}
+
+.join-code-input-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    /* Center horizontally */
+    margin-bottom: 20px;
+    /* Add margin to create space between the text box/button and the Join Random Game button */
+}
+
+.join-code-input {
+    padding: 18px;
+    font-size: 36px;
+    border-radius: 12px;
+    width: 400px;
+    /* Set width */
+    margin-right: 20px;
+    /* Add margin between input and button */
+}
+
+.confirm-join-code {
+    padding: 18px 36px;
+    background-color: white;
+    color: black;
+    cursor: pointer;
+    text-align: center;
+    border: none;
+    border-radius: 12px;
+    font-size: 36px;
+    transition: background-color 0.2s ease-in-out;
+    width: 250px;
+    /* Set width */
+}
+
+.join-random-game {
+    padding: 18px 36px;
+    background-color: white;
+    color: black;
+    cursor: pointer;
+    margin-top: 100px;
+    text-align: center;
+    border: none;
+    border-radius: 12px;
+    font-size: 36px;
+    transition: background-color 0.2s ease-in-out;
+    width: 400px;
+    /* Set width */
+}
+
+.confirm-join-code:hover,
+.join-random-game:hover {
+    background-color: white;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /* Center horizontally */
+    text-align: center;
+}
+
+.join-input-container {
+    display: flex;
+    align-items: center;
+    margin-top: 100px;
+    justify-content: center;
+}
