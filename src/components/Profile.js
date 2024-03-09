@@ -8,7 +8,7 @@ function ProfilePage() {
     const [email, setEmail] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [profileImage, setProfileImage] = useState('https://media.allure.com/photos/64504df592358acb5c543321/1:1/w_2667,h_2667,c_limit/Doja%20Cat.jpg'); // Default image URL
+    const [profileImage, setProfileImage] = useState('https://media.pitchfork.com/photos/64ef6382b3829911c69de7e0/4:3/w_3200,h_2400,c_limit/Doja-Cat.jpg'); // Default image URL
 
     // Function to handle profile image upload
     const handleImageChange = (e) => {
@@ -42,10 +42,10 @@ function ProfilePage() {
                             <span className="edit-icon">🖉</span>
                         </label>
                         <div className="navigation-buttons">
-                            <Link to="/" className="button-link">Dashboard</Link>
+                            <Link to="/dashboard" className="button-link">Dashboard</Link>
                             <Link to="/profile" className="button-link">Account Details</Link>
                             <Link to="/changepassword" className="button-link">Change Password</Link>
-                            <Link to="/" className="button-link">Log out</Link>
+                            <Link to="/" className="button-link">Log Out</Link>
                         </div>
                     </div>
                     <div className="profile-section right">

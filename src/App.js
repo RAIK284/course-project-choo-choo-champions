@@ -10,6 +10,7 @@ import SettingsButton from './components/SettingsButton'
 import JoinCodePage from './components/JoinCodePage'
 import Profile from './components/Profile'
 import ChangePassword from './components/ChangePassword';
+import DashboardPage from './components/DashboardPage'
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <Route path="/join" element={<JoinCodePage />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/changepassword" element={<ChangePassword />} />
+        <Route path="/dashboard" element={<DashboardPage />} />
       </Routes>
     </Router>
   );
