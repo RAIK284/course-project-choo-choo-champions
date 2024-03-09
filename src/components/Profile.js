@@ -7,7 +7,6 @@ import './Profile.css';
 function ProfilePage() {
     const [email, setEmail] = useState('');
     const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
     const [profileImage, setProfileImage] = useState('https://media.pitchfork.com/photos/64ef6382b3829911c69de7e0/4:3/w_3200,h_2400,c_limit/Doja-Cat.jpg'); // Default image URL
 
     // Function to handle profile image upload
@@ -21,7 +20,7 @@ function ProfilePage() {
     const handleSubmit = (e) => {
         e.preventDefault();
         // Here you can add logic to update user details
-        console.log('Form submitted:', { email, username, password });
+        console.log('Form submitted:', { email, username });
     };
 
     return (
