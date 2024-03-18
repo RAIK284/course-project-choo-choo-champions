@@ -33,12 +33,16 @@
 
 .game-title {
     font-size: 48px;
-    margin-bottom: 10px;
+    /* Increased font size */
+    margin-bottom: 20px;
+    /* Increased margin */
 }
 
 .game-info {
-    font-size: 24px;
-    margin-bottom: 20px;
+    font-size: 30px;
+    /* Increased font size */
+    margin-bottom: 30px;
+    /* Increased margin */
 }
 
 .login-form {
@@ -52,30 +56,40 @@
 
 .input-field {
     width: 100%;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
+    /* Increased margin */
     border-radius: 20px;
     border: 1px solid rgba(0, 0, 0, 0.2);
-    padding: 15px;
+    padding: 20px;
+    /* Increased padding */
+    font-size: 24px;
+    /* Increased font size */
 }
 
 .login-button {
     width: 100%;
     background-color: black;
     color: white;
-    padding: 15px;
+    padding: 20px;
+    /* Increased padding */
     border-radius: 20px;
     border: none;
     cursor: pointer;
+    font-size: 24px;
+    /* Increased font size */
 }
 
 .signup-prompt {
-    margin-top: 20px;
+    margin-top: 30px;
+    /* Increased margin */
 }
 
 .text,
 .signup-link {
     color: white;
     text-align: center;
+    font-size: 24px;
+    /* Increased font size */
 }
 
 .signup-link {

@@ -1,0 +1,78 @@
+.dashboard-page .container {
+    display: flex;
+    justify-content: space-between;
+    /* Add space between boxes */
+    flex-direction: row;
+}
+
+.dashboard-page .dashboard-section {
+    flex-grow: 1;
+}
+
+.dashboard-page .dashboard-section.left,
+.dashboard-page .dashboard-section.right {
+    background-color: white;
+    padding: 40px;
+    border-radius: 20px;
+    margin: 20px 100px;
+}
+
+.dashboard-page .dashboard-title {
+    color: black;
+    font-size: 36px;
+    margin-bottom: 30px;
+}
+
+.dashboard-page .button-row {
+    display: flex;
+    flex-direction: row;
+    /* Change to row to make buttons display horizontally */
+    justify-content: space-between;
+    /* Add space between buttons */
+}
+
+.dashboard-page .button-row>* {
+    /* Remove margin-bottom to prevent extra space between buttons */
+    margin-bottom: 0;
+    /* Add equal width to buttons */
+    flex-grow: 1;
+}
+
+.dashboard-page .button-link {
+    /* Keep black background and remove underline */
+    background-color: black;
+    color: white;
+    border: none;
+    padding: 15px;
+    /* Reduce padding for a more compact look */
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 30px;
+    text-decoration: none;
+    /* Center the text */
+    text-align: center;
+    /* Add margin between buttons */
+    margin-right: 10px;
+    margin-bottom: 30px;
+}
+
+.dashboard-page .button-link:hover {
+    background-color: #333;
+}
+
+.dashboard-page .stats-list {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.dashboard-page .stat-item {
+    color: black;
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+.dashboard-page .button-link:nth-child(3) {
+    margin-top: 20px;
+    /* Add more margin to the third button to increase space */
+}

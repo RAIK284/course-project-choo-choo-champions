@@ -10,7 +10,7 @@ function NavBar() {
         <Link to="/" className="game-title">Mexican Train Dominoes</Link>
       </div>
       <div className="right-content">
-        <Link to="/settings" className="settings-link">
+        <Link to="/profile" className="settings-link">
           <SettingsButton />
         </Link>
       </div>

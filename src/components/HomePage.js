@@ -33,7 +33,7 @@ function GameDescription() {
   return (
     <article className="game-description">
       <h1 className="game-title">Mexican Train Dominoes</h1>
-      <p className="game-info">Online multiplayer game with friends, stats, and etc.</p>
+      <p className="game-info">Online multiplayer game with friends, stats, etc.</p>
     </article>
   );
 }
