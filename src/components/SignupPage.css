@@ -1,0 +1,101 @@
+.signup-page .full-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    min-height: 100vh;
+    background-color: black;
+    margin: 0;
+    padding: 0;
+    position: relative;
+}
+
+.signup-page .signup-header {
+    font-size: 48px;
+    color: white;
+    margin: 20px 0;
+}
+
+.signup-page .white-box {
+    background-color: white;
+    border-radius: 12px;
+    padding: 20px;
+    width: 800px;
+    text-align: center;
+}
+
+.signup-page .registration-title {
+    font-size: 36px;
+    color: black;
+    margin-bottom: 20px;
+}
+
+.signup-page .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.signup-page .input-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.signup-page .input-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-right: 20px;
+}
+
+.signup-page .input-wrapper label {
+    font-size: 24px;
+    color: black;
+    margin-bottom: 5px;
+}
+
+.signup-page .signup-input {
+    padding: 18px;
+    font-size: 24px;
+    border-radius: 12px;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 20px;
+}
+
+.signup-page .register-button {
+    padding: 18px 36px;
+    background-color: black;
+    color: white;
+    cursor: pointer;
+    text-align: center;
+    border: none;
+    border-radius: 12px;
+    font-size: 30px;
+    transition: background-color 0.2s ease-in-out;
+    width: 250px;
+}
+
+.signup-page .register-button:hover {
+    background-color: black;
+}
+
+.signup-page .login-prompt {
+    color: black;
+    margin-top: 20px;
+    font-size: 24px;
+}
+
+.signup-page .login-prompt a {
+    color: black;
+    text-decoration: underline;
+    font-weight: bold;
+}
+
+.signup-page .centered-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
