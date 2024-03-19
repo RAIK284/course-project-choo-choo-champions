@@ -1,7 +1,7 @@
 .domino {
     width: 60px;
     height: 120px;
-    background-color: #fcf5e8;
+    background-color: #ffffff;
     border: 1px solid #000;
     border-radius: 4px;
     display: flex;
@@ -16,16 +16,15 @@
     width: 100%;
     text-align: center;
     position: relative;
-    padding-top: 10px;
-    padding-bottom: 10px;
+    padding-top: 15px;
+
 }
 
 .bottomnumber {
     width: 100%;
     text-align: center;
     position: relative;
-    padding-top: 10px;
-    padding-bottom: 10px;
+    padding-bottom: 18px;
 }
 
 .line {

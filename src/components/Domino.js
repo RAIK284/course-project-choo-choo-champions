@@ -10,9 +10,9 @@ function Domino({ top, bottom }) {
     //   <div className="number">{bottom}</div>
     // </div>
     <div className="domino">
-      <div className="topnumber">3</div>
+      <div className="topnumber">{top}</div>
       <div className="line"></div>
-      <div className="bottomnumber">2</div>
+      <div className="bottomnumber">{bottom}</div>
     </div>
   );
 }
