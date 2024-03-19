@@ -27,7 +27,7 @@ function LoginForm() {
       window.location.href = `/profile?email=${encodeURIComponent(response.data['email'])}&username=${encodeURIComponent(username)}`;
     } catch (error) {
       console.error('Error during login:', error);
-      alert('Error logging up. Username or password may be incorrect.');
+      alert('Error logging in. Username or password may be incorrect.');
     }
   };
 
