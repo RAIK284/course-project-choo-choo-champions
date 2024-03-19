@@ -23,7 +23,6 @@ function LoginForm() {
           password
         }
       });
-      alert('Login successful');
       console.log('Log in response:', response.data);
       window.location.href = `/profile?email=${encodeURIComponent(response.data['email'])}&username=${encodeURIComponent(username)}`;
     } catch (error) {
