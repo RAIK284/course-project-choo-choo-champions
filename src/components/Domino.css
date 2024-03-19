@@ -1,6 +1,6 @@
 .domino {
-    width: 60px;
-    height: 120px;
+    width: 5vw;
+    height: 10vw;
     background-color: #ffffff;
     border: 1px solid #000;
     border-radius: 4px;
@@ -8,7 +8,6 @@
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    font-size: 24px;
     font-weight: bold;
 }
 
@@ -16,7 +15,9 @@
     width: 100%;
     text-align: center;
     position: relative;
-    padding-top: 15px;
+    padding-top: 30%;
+    color: black;
+    font-size: 125%;
 
 }
 
@@ -24,7 +25,10 @@
     width: 100%;
     text-align: center;
     position: relative;
-    padding-bottom: 18px;
+    padding-bottom: 30%;
+    color: black;
+    font-size: 125%;
+
 }
 
 .line {
