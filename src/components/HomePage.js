@@ -1,16 +1,59 @@
 // HomePage.js
 
-import React from 'react';
+import React, { useState } from 'react';
+import axios from 'axios';
 import Background from './Background'
 import './HomePage.css';
 
 function LoginForm() {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleSubmit = async (event) => {
+    //added to prevent page from defaulting (it was before)
+    event.preventDefault(); 
+    
+    if(!username || !password){
+      alert('Please fill out all fields');
+    }
+    try {
+      const response = await axios.post('https://choochoochampionsapi.azurewebsites.net/user/login', null, {
+        params: {
+          username,
+          password
+        }
+      });
+      alert('Login successful');
+      console.log('Log in response:', response.data);
+      window.location.href = `/profile?email=${encodeURIComponent(response.data['email'])}&username=${encodeURIComponent(username)}`;
+    } catch (error) {
+      console.error('Error during login:', error);
+      alert('Error logging up. Username or password may be incorrect.');
+    }
+  };
+
   return (
-    <form className="login-form">
+    <form className="login-form" onSubmit={handleSubmit}>
       <label htmlFor="usernameInput" className="visually-hidden">Username</label>
-      <input type="text" id="usernameInput" className="input-field" placeholder="Username" aria-label="Username" />
+      <input
+        type="text"
+        id="usernameInput"
+        className="input-field"
+        placeholder="Username"
+        aria-label="Username"
+        value={username}
+        onChange={(event) => setUsername(event.target.value)}
+      />
       <label htmlFor="passwordInput" className="visually-hidden">Password</label>
-      <input type="password" id="passwordInput" className="input-field" placeholder="Password" aria-label="Password" />
+      <input
+        type="password"
+        id="passwordInput"
+        className="input-field"
+        placeholder="Password"
+        aria-label="Password"
+        value={password}
+        onChange={(event) => setPassword(event.target.value)}
+      />
       <button type="submit" className="login-button">Log In</button>
     </form>
   );
