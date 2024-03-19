@@ -1,13 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import NavBar from './NavBar';
 import Background from './Background';
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import './Profile.css';
 
 function ProfilePage() {
     const [email, setEmail] = useState('');
     const [username, setUsername] = useState('');
     const [profileImage, setProfileImage] = useState('https://media.pitchfork.com/photos/64ef6382b3829911c69de7e0/4:3/w_3200,h_2400,c_limit/Doja-Cat.jpg'); // Default image URL
+    const location = useLocation();
+
+    useEffect(() => {
+        const searchParams = new URLSearchParams(location.search);
+        const emailParam = searchParams.get('email');
+        const usernameParam = searchParams.get('username');
+        if (emailParam) setEmail(emailParam);
+        if (usernameParam) setUsername(usernameParam);
+    }, [location.search]);
 
     // Function to handle profile image upload
     const handleImageChange = (e) => {

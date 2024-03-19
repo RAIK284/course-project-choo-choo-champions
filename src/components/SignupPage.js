@@ -11,7 +11,7 @@ function SignupPage() {
   const [confirmPassword, setConfirmPassword] = useState('');
 
 
-  const handleSignup = async() => {
+  const handleSignup = async () => {
     if (!email || !username || !password || !confirmPassword) {
       alert('Please fill out all fields');
       return;
@@ -33,6 +33,7 @@ function SignupPage() {
       });
       alert('Signup successful');
       console.log('Signup response:', response.data);
+      window.location.href = `/profile?email=${encodeURIComponent(email)}&username=${encodeURIComponent(username)}`;
     } catch (error) {
       console.error('Error signing up:', error);
       alert('Error signing up. Username or email is already in use.');
