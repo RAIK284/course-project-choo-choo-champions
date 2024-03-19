@@ -11,8 +11,8 @@ import JoinCodePage from "./components/JoinCodePage";
 import Profile from "./components/Profile";
 import ChangePassword from "./components/ChangePassword";
 import DashboardPage from "./components/DashboardPage";
-import Domino from "./components/Domino";
 import DominoBank from "./components/DominoBank";
+import Domino from "./components/Domino";
 
 function App() {
   return (
@@ -29,8 +29,8 @@ function App() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/changepassword" element={<ChangePassword />} />
         <Route path="/dashboard" element={<DashboardPage />} />
-        <Route path="/domino" element={<Domino />} />
         <Route path="/dominobank" element={<DominoBank />} />
+        <Route path="/domino" element={<Domino />} />
       </Routes>
     </Router>
   );

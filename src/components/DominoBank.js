@@ -7,12 +7,12 @@ import Domino from "./Domino";
 function DominoBank() {
   const dominos = [];
 
-  for (let top = 0; top < 13; top++) {
-    for (let top = 0; top <= 12; top++) {
-      for (let bottom = 0; bottom <= 12; bottom++) {
-        const key = `${top}-${bottom}`;
-        dominos.push(<Domino key={key} top={top} bottom={bottom} />);
-      }
+  // Loop through unique combinations of numbers for both top and bottom
+  for (let top = 0; top <= 12; top++) {
+    for (let bottom = top; bottom <= 12; bottom++) {
+      // Start bottom from top to ensure uniqueness
+      const key = `${top}-${bottom}`;
+      dominos.push(<Domino key={key} top={top} bottom={bottom} />);
     }
   }
 
@@ -23,15 +23,8 @@ function DominoBank() {
       <div className="centered-content">
         <div className="container">
           <h2 className="domino-title">Bank</h2>
-
-          <div className="bank">
-            {dominos.map((domino, index) => (
-              <div key={index} className="domino-item">
-                {domino}
-              </div>
-            ))}
-          </div>
         </div>
+        <div className="bank">{dominos}</div>
       </div>
     </div>
   );
