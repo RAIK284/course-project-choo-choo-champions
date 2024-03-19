@@ -1,0 +1,31 @@
+.domino {
+    width: 50px;
+    height: 100px;
+    background-color: #ffffff;
+    border: 1px solid #000;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    color: #000;
+
+}
+
+.topnumber,
+.bottomnumber {
+    text-shadow: 0.5px 0.5px 1px #000;
+    flex-direction: column;
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+    padding: 1vw 0 1vw 0;
+    font-size: 125%;
+    /* color: red */
+}
+
+.line {
+    width: 100%;
+    border-top: 1px solid #000;
+}
