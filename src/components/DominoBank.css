@@ -4,9 +4,12 @@
     display: flex;
     margin-top: 250px;
     flex-wrap: wrap;
-    gap: 2%;
+    gap: 1%;
 }
 
+.domino-item {
+    margin: 1%;
+}
 
 .domino-page .container {
     margin-top: 40px;
