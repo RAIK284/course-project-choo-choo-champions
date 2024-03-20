@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import NavBar from './NavBar';
 import Background from './Background';
 import { Link, useLocation } from "react-router-dom";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPencilAlt } from '@fortawesome/free-solid-svg-icons';
+
 import './Profile.css';
 
 function ProfilePage() {
@@ -47,7 +50,10 @@ function ProfilePage() {
                                 id="profile-image-input"
                                 onChange={handleImageChange}
                             />
-                            <span className="edit-icon">🖉</span>
+                            <span className="edit-icon">
+                                <FontAwesomeIcon icon={faPencilAlt} />
+                            </span>
+
                         </label>
                         <div className="navigation-buttons">
                             <Link to="/dashboard" className="button-link">Dashboard</Link>

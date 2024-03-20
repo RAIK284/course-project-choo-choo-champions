@@ -6,6 +6,21 @@ import './JoinCodePage.css';
 function JoinCodePage() {
     const [joinCode, setJoinCode] = useState('');
 
+    const handleJoinGame = () => {
+        if (joinCode.trim().toUpperCase() === 'DEMO') {
+            // Redirect to "/trains" if the join code is "DEMO"
+            window.location.href = '/trains';
+        } else {
+            // Alert for invalid join code
+            alert("Invalid join code.");
+        }
+    };
+
+    const handleJoinRandomGame = () => {
+        alert("Joining random game...");
+        // Logic for joining random game
+    };
+
     return (
         <div className="full-page">
             <Background />
@@ -23,24 +38,14 @@ function JoinCodePage() {
                         />
                         <button
                             className="confirm-join-code"
-                            onClick={() => {
-                                if (joinCode.trim() !== '') {
-                                    alert(`Join code entered: ${joinCode}`);
-                                    // Here you can add logic to handle joining the game with the provided code
-                                } else {
-                                    alert("Please enter a valid join code.");
-                                }
-                            }}
+                            onClick={handleJoinGame}
                         >
                             Join Game
                         </button>
                     </div>
                     <button
                         className="join-random-game"
-                        onClick={() => {
-                            alert("Joining random game...");
-                            // Logic for joining random game
-                        }}
+                        onClick={handleJoinRandomGame}
                     >
                         Join Random Game
                     </button>
