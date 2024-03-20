@@ -7,7 +7,7 @@ import './Profile.css';
 function ProfilePage() {
     const [email, setEmail] = useState('');
     const [username, setUsername] = useState('');
-    const [profileImage, setProfileImage] = useState('https://media.pitchfork.com/photos/64ef6382b3829911c69de7e0/4:3/w_3200,h_2400,c_limit/Doja-Cat.jpg'); // Default image URL
+    const [profileImage, setProfileImage] = useState('https://upload.wikimedia.org/wikipedia/en/thumb/d/dc/Thomas_Tank_Engine_1.JPG/220px-Thomas_Tank_Engine_1.JPG'); // Default image URL
     const location = useLocation();
 
     useEffect(() => {
