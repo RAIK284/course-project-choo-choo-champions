@@ -36,7 +36,9 @@ function Domino({ top, bottom }) {
   };
 
   const getDots = (number) => {
-      return "src/assets/dots" + number + ".png";  
+      // return "assets/dots" + number + ".png";
+      return "src/assets/dots1.png";  
+  
   };
 
   const topNumberStyle = {
@@ -59,8 +61,6 @@ function Domino({ top, bottom }) {
   return (
     <div className="domino">
       <img  src= {topNumberDots}/>
-   
-    
       <div className="line"></div>
       <img src= {bottomNumberDots}/>
    
