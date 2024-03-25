@@ -9,27 +9,30 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
         <NavBar />
         <div className="content">
           <div className="sidegroup">
-            <div className="left-content">
+            <div className="inner-content">
               <div className="bank">
                 <h1 className="banktitle">Bank</h1>
-                <div> dominos here </div>
-                <div> dominos here </div>
-                <div> dominos here </div>
-                <div> dominos here </div>
+                {/* domino generation goes here!! */}
               </div>
               {/* end of bank group */}
-              <button className="button"> Draw</button>{" "}
+              <button className="button">Draw</button>{" "}
             </div>
             {/* end of left content */}
-            <img
-              className="trainstation"
-              src="./trainstation.png"
-              alt="domino train station"
-            />
+            <div className="inner-content">
+              <h3 className="players_turn">
+                {" "}
+                It is <strong> Carly</strong>'s turn
+              </h3>
+              <img
+                className="trainstation"
+                src="./trainstation.png"
+                alt="domino train station"
+              />
+            </div>
           </div>
+          {/* end of right content  */}
           {/* end of horizontal group */}
         </div>
-
         {/* end of content */}
       </div>
       <Background />
