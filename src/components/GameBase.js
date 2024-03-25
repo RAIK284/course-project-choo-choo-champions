@@ -6,18 +6,33 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
   return (
     <>
       <div className="full-page">
-        <Background />
         <NavBar />
         <div className="content">
           <div className="sidegroup">
-            <div className="bank">
-              <h1 className="h1">Bank</h1>
-              <div> dominos here </div>
+            <div className="left-content">
+              <div className="bank">
+                <h1 className="banktitle">Bank</h1>
+                <div> dominos here </div>
+                <div> dominos here </div>
+                <div> dominos here </div>
+                <div> dominos here </div>
+              </div>
+              {/* end of bank group */}
+              <button className="button"> Draw</button>{" "}
             </div>
-            <img src="./trainstation.png" alt="domino train station" />
+            {/* end of left content */}
+            <img
+              className="trainstation"
+              src="./trainstation.png"
+              alt="domino train station"
+            />
           </div>
+          {/* end of horizontal group */}
         </div>
+
+        {/* end of content */}
       </div>
+      <Background />
     </>
   );
 }
