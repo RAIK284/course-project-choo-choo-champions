@@ -13,6 +13,7 @@ import ChangePassword from "./components/ChangePassword";
 import DashboardPage from "./components/DashboardPage";
 import DominoBank from "./components/DominoBank";
 import Domino from "./components/Domino";
+import GameBase from "./components/GameBase";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/dominobank" element={<DominoBank />} />
         <Route path="/domino" element={<Domino />} />
+        <Route path="/gamebase" element={<GameBase />} />
       </Routes>
     </Router>
   );

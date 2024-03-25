@@ -1,0 +1,98 @@
+.basegame {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0 64px;
+    gap: 68px;
+    position: relative;
+    width: 1728px;
+    height: 1117px;
+    background: #000000;
+}
+
+
+.side-group {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 251px;
+    width: 1600px;
+    height: 615px;
+}
+
+/* Inside auto layout */
+.side-group>* {
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+}
+
+
+.bank-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 36px;
+    margin: 0 auto;
+    width: 500px;
+    height: 615px;
+}
+
+/* Inside auto layout */
+.bank-button>* {
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+
+.bank {
+    width: 500px;
+    height: 500px;
+    background: rgba(246, 246, 246, 0.8);
+    border-radius: 12px;
+}
+
+
+.button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 35px 40px;
+    gap: 8px;
+    width: 335px;
+    height: 79px;
+    background: #f2f9f6;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 12px;
+}
+
+.button>* {
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+}
+
+.draw {
+    width: 82px;
+    height: 42px;
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 36px;
+    line-height: 42px;
+    color: #191818;
+}
+
+.draw>* {
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+
+/* train_station */
+/* .train-station {
+    margin: 0 auto;
+    width: 500px;
+    height: 495px;
+} */
