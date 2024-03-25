@@ -1,15 +1,17 @@
-.basegame {
+.full-page {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    padding: 0 64px;
-    gap: 68px;
+    justify-content: flex-start;
+    min-height: 100vh;
+    background-color: black;
+    margin: 0;
+    padding: 0;
     position: relative;
-    width: 1728px;
-    height: 1117px;
-    background: #000000;
 }
 
+.h1 {
+    color: red;
+}
 
 .side-group {
     display: flex;
@@ -47,10 +49,14 @@
 }
 
 .bank {
-    width: 500px;
-    height: 500px;
-    background: rgba(246, 246, 246, 0.8);
+    width: 25vw;
+    height: 40vw;
+    background: rgb(246, 246, 246);
+    opacity: 100%;
     border-radius: 12px;
+    flex-direction: column;
+    flex: none;
+    z-index: 1;
 }
 
 
