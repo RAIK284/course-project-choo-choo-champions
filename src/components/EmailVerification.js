@@ -18,7 +18,7 @@ function EmailVerificationPage() {
 
     const handleSendVerificationCode = async () => {
         try {
-            const response = await axios.post('https://choochoochampionsapi.azurewebsites.net/user/sendEmailVerification', null, {
+            await axios.post('https://choochoochampionsapi.azurewebsites.net/user/sendEmailVerification', null, {
                 params: {
                     username,
                     email
@@ -34,7 +34,7 @@ function EmailVerificationPage() {
 
     const handleVerifyEmail = async () => {
         try {
-            const response = await axios.post('https://choochoochampionsapi.azurewebsites.net/user/verifyEmailCode', null, {
+            await axios.post('https://choochoochampionsapi.azurewebsites.net/user/verifyEmailCode', null, {
                 params: {
                     username,
                     code: verificationCode
