@@ -5,7 +5,7 @@ import axios from 'axios';
 import Background from './Background'
 import './HomePage.css';
 
-function LoginForm() {
+function LoginForm({ setToken }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -24,6 +24,8 @@ function LoginForm() {
         }
       });
       console.log('Log in response:', response.data);
+      const token = response.data['id'];
+      sessionStorage.setItem('token', token);
       window.location.href = `/profile?email=${encodeURIComponent(response.data['email'])}&username=${encodeURIComponent(username)}`;
     } catch (error) {
       console.error('Error during login:', error);
@@ -87,7 +89,7 @@ function HomePage() {
         <Background />
         <div className="centered-content">
           <GameDescription />
-          <LoginSection />
+          <LoginSection/>
         </div>
       </main>
     </>

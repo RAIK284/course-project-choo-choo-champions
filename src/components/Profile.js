@@ -4,28 +4,76 @@ import Background from './Background';
 import { Link, useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPencilAlt } from '@fortawesome/free-solid-svg-icons';
-
+import axios from 'axios';
 import './Profile.css';
+
+const fetchProfileImage = async (username, token) => {
+    try {
+        const response = await axios.get(`https://choochoochampionsapi.azurewebsites.net/user/ProfileImage/${username}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching image.', error);
+        alert('Error fetching image. Username is not yet logged in.');
+        return "";
+    }
+};
 
 function ProfilePage() {
     const [email, setEmail] = useState('');
     const [username, setUsername] = useState('');
-    const [profileImage, setProfileImage] = useState('https://upload.wikimedia.org/wikipedia/en/thumb/d/dc/Thomas_Tank_Engine_1.JPG/220px-Thomas_Tank_Engine_1.JPG'); // Default image URL
+    const [profileImage, setProfileImage] = useState(''); // Default image URL
     const location = useLocation();
 
     useEffect(() => {
-        const searchParams = new URLSearchParams(location.search);
-        const emailParam = searchParams.get('email');
-        const usernameParam = searchParams.get('username');
-        if (emailParam) setEmail(emailParam);
-        if (usernameParam) setUsername(usernameParam);
+        const fetchData = async () => {
+            const searchParams = new URLSearchParams(location.search);
+            const emailParam = searchParams.get('email');
+            const usernameParam = searchParams.get('username');
+            if (emailParam) setEmail(emailParam);
+            if (usernameParam) setUsername(usernameParam);
+            
+            const token = sessionStorage.getItem('token');
+            if (token && usernameParam) {
+                const imageUrl = await fetchProfileImage(usernameParam, token);
+                if (imageUrl) {
+                    setProfileImage(imageUrl);
+                }
+            }
+        };
+
+        fetchData();
     }, [location.search]);
 
     // Function to handle profile image upload
-    const handleImageChange = (e) => {
+    const handleImageChange = async(e) => {
         const file = e.target.files[0];
-        // Here you can add logic to upload the image
-        setProfileImage(URL.createObjectURL(file));
+        const imageLink = URL.createObjectURL(file);
+        const token = sessionStorage.getItem('token');
+        try {
+            const response = await axios.post(
+                'https://choochoochampionsapi.azurewebsites.net/user/UpdateProfileImage',
+                null,
+                {
+                    params: {
+                        username: username,
+                        imageURL: imageLink
+                    },
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            );
+            console.log(response);
+            setProfileImage(response.data['imageLink']);
+        } catch (error) {
+            console.error('Error uploading image.', error);
+            alert('Error uploading image.');
+        }
+
     };
 
     // Function to handle form submission
