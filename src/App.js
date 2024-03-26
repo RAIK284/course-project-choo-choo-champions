@@ -14,6 +14,7 @@ import DashboardPage from "./components/DashboardPage";
 import DominoBank from "./components/DominoBank";
 import Domino from "./components/Domino";
 import GameBase from "./components/GameBase";
+import EmailVerification from "./components/EmailVerification"
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
         <Route path="/dominobank" element={<DominoBank />} />
         <Route path="/domino" element={<Domino />} />
         <Route path="/gamebase" element={<GameBase />} />
+        <Route path="/email-verification" element={<EmailVerification />} />
       </Routes>
     </Router>
   );
