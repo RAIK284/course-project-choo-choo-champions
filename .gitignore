@@ -7,3 +7,4 @@ node_modules/
 =======
 node_modules/.cache/.eslintcache
 >>>>>>> 61cd868c258476e0f6295c51b871fe1802b7ec3f
+/node_modules
