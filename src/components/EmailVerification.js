@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import NavBar from './NavBar';
 import Background from './Background';
 import axios from 'axios';
@@ -6,15 +6,23 @@ import './EmailVerification.css';
 
 function EmailVerificationPage() {
     const [email, setEmail] = useState('');
+    const [username, setUsername] = useState('');
     const [verificationCode, setVerificationCode] = useState('');
     const [sentCode, setSentCode] = useState(false);
 
+    useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        const usernameParam = params.get('username');
+        setUsername(usernameParam);
+    }, []);
+
     const handleSendVerificationCode = async () => {
-        const username = sessionStorage.getItem('username');
         try {
-            await axios.post('https://choochoochampionsapi.azurewebsites.net/user/sendEmailVerification', {
-                username,
-                email
+            const response = await axios.post('https://choochoochampionsapi.azurewebsites.net/user/sendEmailVerification', null, {
+                params: {
+                    username,
+                    email
+                }
             });
             setSentCode(true);
             alert('Verification code sent successfully!');
@@ -25,14 +33,15 @@ function EmailVerificationPage() {
     };
 
     const handleVerifyEmail = async () => {
-        const username = sessionStorage.getItem('username');
         try {
-            await axios.post('https://choochoochampionsapi.azurewebsites.net/user/verifyEmailCode', {
-                username,
-                code: verificationCode
+            const response = await axios.post('https://choochoochampionsapi.azurewebsites.net/user/verifyEmailCode', null, {
+                params: {
+                    username,
+                    code: verificationCode
+                }
             });
             alert('Email verified successfully!');
-            window.location.href = '/profile';
+            window.location.href = `/profile?email=${encodeURIComponent(email)}&username=${encodeURIComponent(username)}`;
         } catch (error) {
             console.error('Error verifying email:', error);
             alert('Error verifying email. Please try again.');
@@ -45,8 +54,8 @@ function EmailVerificationPage() {
             <NavBar />
             <div className="centered-content">
                 <h2 className="enter-email">Enter Email for Verification</h2>
-                <div className="container">
-                    <div className="email-input-container">
+                <div className="container email-verification-container">
+                    <div className="form-group">
                         <input
                             type="email"
                             placeholder="Enter your email"
@@ -62,7 +71,7 @@ function EmailVerificationPage() {
                         </button>
                     </div>
                     {sentCode && (
-                        <div className="verification-code-container">
+                        <div className="form-group">
                             <input
                                 type="text"
                                 placeholder="Enter verification code"
