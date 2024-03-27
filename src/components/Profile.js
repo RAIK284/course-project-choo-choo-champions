@@ -25,7 +25,7 @@ const fetchProfileImage = async (username, token) => {
 function ProfilePage() {
     const [email, setEmail] = useState('');
     const [username, setUsername] = useState('');
-    const [profileImage, setProfileImage] = useState(''); // Default image URL
+    const [profileImage, setProfileImage] = useState('https://upload.wikimedia.org/wikipedia/en/thumb/d/dc/Thomas_Tank_Engine_1.JPG/220px-Thomas_Tank_Engine_1.JPG'); // Default image URL
     const location = useLocation();
 
     useEffect(() => {
@@ -40,7 +40,9 @@ function ProfilePage() {
             if (token && usernameParam) {
                 const imageUrl = await fetchProfileImage(usernameParam, token);
                 if (imageUrl) {
-                    setProfileImage(imageUrl);
+                    const blob = new Blob([imageUrl], { type: 'image/jpeg' });
+                    const url = URL.createObjectURL(blob);
+                    setProfileImage(url);
                 }
             }
         };
@@ -51,18 +53,19 @@ function ProfilePage() {
     // Function to handle profile image upload
     const handleImageChange = async(e) => {
         const file = e.target.files[0];
-        const imageLink = URL.createObjectURL(file);
+        const formData = new FormData();
+        formData.append('image', file);
         const token = sessionStorage.getItem('token');
         try {
             const response = await axios.post(
                 'https://choochoochampionsapi.azurewebsites.net/user/UpdateProfileImage',
-                null,
+                formData,
                 {
                     params: {
                         username: username,
-                        imageURL: imageLink
                     },
                     headers: {
+                        'Content-Type': 'multipart/form-data',
                         Authorization: `Bearer ${token}`
                     }
                 }
