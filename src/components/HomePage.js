@@ -3,7 +3,7 @@ import axios from 'axios';
 import Background from './Background';
 import './HomePage.css';
 
-function LoginForm({ setToken }) {
+function LoginForm() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -26,7 +26,6 @@ function LoginForm({ setToken }) {
       const token = response.data['id'];
       sessionStorage.setItem('token', token);
       sessionStorage.setItem('username', username);
-      setToken(token);
       window.location.href = `/profile?email=${encodeURIComponent(response.data['email'])}&username=${encodeURIComponent(username)}`;
     } catch (error) {
       console.error('Error during login:', error);
@@ -61,11 +60,11 @@ function LoginForm({ setToken }) {
   );
 }
 
-function LoginSection({ setToken }) {
+function LoginSection() {
   return (
     <section className="login-section">
       <h2 className="section-title visually-hidden">Login Section</h2>
-      <LoginForm setToken={setToken} />
+      <LoginForm />
       <div className="signup-prompt">
         <span className="text">Don’t have an account? </span>
         <a href="/signup" className="signup-link">Sign Up</a>
@@ -84,14 +83,12 @@ function GameDescription() {
 }
 
 function HomePage() {
-  const [token, setToken] = useState(null);
-
   return (
     <main className="login-page">
       <Background />
       <div className="centered-content">
         <GameDescription />
-        <LoginSection setToken={setToken} token={token} />
+        <LoginSection />
       </div>
     </main>
   );
