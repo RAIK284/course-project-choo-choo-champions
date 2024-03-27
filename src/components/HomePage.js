@@ -84,14 +84,14 @@ function GameDescription() {
 }
 
 function HomePage() {
-  const [setToken] = useState(null);
+  const [token, setToken] = useState(null);
 
   return (
     <main className="login-page">
       <Background />
       <div className="centered-content">
         <GameDescription />
-        <LoginSection setToken={setToken} />
+        <LoginSection setToken={setToken} token={token} />
       </div>
     </main>
   );
