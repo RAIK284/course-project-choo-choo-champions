@@ -84,7 +84,7 @@ function GameDescription() {
 }
 
 function HomePage() {
-  const [token, setToken] = useState(null);
+  const [setToken] = useState(null);
 
   return (
     <main className="login-page">
