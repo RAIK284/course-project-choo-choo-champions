@@ -1,21 +1,20 @@
-// HomePage.js
-
 import React, { useState } from 'react';
 import axios from 'axios';
-import Background from './Background'
+import Background from './Background';
 import './HomePage.css';
 
-function LoginForm() {
+function LoginForm({ setToken }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
   const handleSubmit = async (event) => {
-    //added to prevent page from defaulting (it was before)
-    event.preventDefault(); 
-    
-    if(!username || !password){
+    event.preventDefault();
+
+    if (!username || !password) {
       alert('Please fill out all fields');
+      return;
     }
+
     try {
       const response = await axios.post('https://choochoochampionsapi.azurewebsites.net/user/login', null, {
         params: {
@@ -24,6 +23,10 @@ function LoginForm() {
         }
       });
       console.log('Log in response:', response.data);
+      const token = response.data['id'];
+      sessionStorage.setItem('token', token);
+      sessionStorage.setItem('username', username);
+      setToken(token);
       window.location.href = `/profile?email=${encodeURIComponent(response.data['email'])}&username=${encodeURIComponent(username)}`;
     } catch (error) {
       console.error('Error during login:', error);
@@ -58,11 +61,11 @@ function LoginForm() {
   );
 }
 
-function LoginSection() {
+function LoginSection({ setToken }) {
   return (
     <section className="login-section">
       <h2 className="section-title visually-hidden">Login Section</h2>
-      <LoginForm />
+      <LoginForm setToken={setToken} />
       <div className="signup-prompt">
         <span className="text">Don’t have an account? </span>
         <a href="/signup" className="signup-link">Sign Up</a>
@@ -81,16 +84,16 @@ function GameDescription() {
 }
 
 function HomePage() {
+  const [token, setToken] = useState(null);
+
   return (
-    <>
-      <main className="login-page">
-        <Background />
-        <div className="centered-content">
-          <GameDescription />
-          <LoginSection />
-        </div>
-      </main>
-    </>
+    <main className="login-page">
+      <Background />
+      <div className="centered-content">
+        <GameDescription />
+        <LoginSection setToken={setToken} />
+      </div>
+    </main>
   );
 }
 
