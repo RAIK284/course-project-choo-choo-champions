@@ -13,7 +13,9 @@ function EmailVerificationPage() {
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
         const usernameParam = params.get('username');
+        const emailParam = params.get('email');
         setUsername(usernameParam);
+        setEmail(emailParam);
     }, []);
 
     const handleSendVerificationCode = async () => {
@@ -62,6 +64,7 @@ function EmailVerificationPage() {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             className="email-input"
+                            readOnly
                         />
                         <button
                             className="send-verification-code"
