@@ -16,7 +16,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
               <h1 className="banktitle">Bank</h1>
               <div className="bank">{dominos["carly"]}</div>
               {/* end of bank group */}
-              <button className="button">Draw</button>{" "}
+              <button className="button">Draw</button>
             </div>
             {/* end of left content */}
           </div>

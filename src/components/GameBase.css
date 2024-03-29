@@ -50,7 +50,7 @@
     -moz-box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.123);
     color: #191818;
     display: flex;
-    font-size: 20px;
+    font-size: 24px;
     font-weight: 1000;
     height: 80px;
     justify-content: center;
@@ -60,6 +60,11 @@
     padding: 15px 30px;
     width: 200px;
     z-index: 3;
+}
+
+.button:hover {
+    background: #ddf4ea;
+
 }
 
 .inner-content {
