@@ -21,19 +21,22 @@
 .bank {
     background: rgb(246, 246, 246);
     border-radius: 12px;
-    flex-direction: column;
-    flex: none;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: space-evenly;
+    display: flex;
     height: 300px;
+    overflow-y: auto;
     width: 300px;
-    opacity: 1;
-    z-index: 2;
-    justify-content: flex-start;
-    align-items: center;
+    padding: 0 10px 0 10px;
+    overflow-x: none;
+    flex-wrap: wrap;
 }
 
 .banktitle {
     font-size: 30px;
     margin: 0;
+    color: black
 }
 
 .button {

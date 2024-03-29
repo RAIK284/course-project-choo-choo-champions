@@ -11,12 +11,12 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
     <>
       <div className="full-page">
         <NavBar />
-        <div className="content">
+        <div className="centered-content">
           <div className="sidegroup">
             <div className="inner-content">
               <div className="bank">
                 <h1 className="banktitle">Bank</h1>
-                <div className="bank">{dominos['max']}</div>
+                <div className="bank">{dominos['carly']}</div>
               </div>
               {/* end of bank group */}
               <button className="button">Draw</button>{" "}
