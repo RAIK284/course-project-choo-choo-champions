@@ -1,7 +1,7 @@
-import DominoBank from "./DominoBank";
+import {GenerateDominoBankForGame} from "./DominoBank";
 
-function GenerateDominos(player_list) {
-  const dominos = DominoBank.GenerateDominoBank();
+function GenerateDominoesForPlayers(player_list) {
+  const dominos = GenerateDominoBankForGame();
   // generate the "dictionaries"
   const playerDominoes = {};
   for (let k = 0; k < player_list.length; k++) {
@@ -11,12 +11,15 @@ function GenerateDominos(player_list) {
   // "deal" dominoes to all players until they have fifteen
   for (let i = 0; i < 15; i++) {
     for (let j = 0; j < player_list.length; j++) {
-      playerDominoes[player_list[j]].push(
-        dominos.pop(Math.floor(Math.random() * dominos.length))
-      );
+        playerDominoes[player_list[j]].push(
+            dominos.splice(Math.floor(Math.random() * dominos.length), 1)[0]
+        );
     }
   }
   return playerDominoes;
 }
 
-export default DominoBank;
+function GameLogic(){
+    return null;
+}
+export default GameLogic;

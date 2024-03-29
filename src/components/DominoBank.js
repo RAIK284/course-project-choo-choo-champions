@@ -4,9 +4,8 @@ import Background from "./Background";
 import "./DominoBank.css";
 import Domino from "./Domino";
 
-function GenerateDominoBank(){
+function GenerateDominoBank() {
   const dominos = [];
-
   // Loop through unique combinations of numbers for both top and bottom
   for (let top = 0; top <= 12; top++) {
     for (let bottom = top; bottom <= 12; bottom++) {
@@ -16,6 +15,10 @@ function GenerateDominoBank(){
     }
   }
   return dominos;
+}
+
+export function GenerateDominoBankForGame() {
+  return GenerateDominoBank();
 }
 
 function DominoBank() {
