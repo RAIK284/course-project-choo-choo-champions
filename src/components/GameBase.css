@@ -19,24 +19,26 @@
 }
 
 .bank {
+    margin: 8px;
     background: rgb(246, 246, 246);
     border-radius: 12px;
     flex-wrap: wrap;
     flex-direction: row;
     justify-content: space-evenly;
     display: flex;
-    height: 300px;
-    overflow-y: auto;
-    width: 300px;
-    padding: 0 10px 0 10px;
+    height: auto;
+    overflow-y: no;
+    width: 350px;
+    padding: 10px;
     overflow-x: none;
+    gap: 8px;
     flex-wrap: wrap;
 }
 
 .banktitle {
     font-size: 30px;
     margin: 0;
-    color: black
+    color: white
 }
 
 .button {
