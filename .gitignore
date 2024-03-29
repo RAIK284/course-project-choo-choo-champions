@@ -3,3 +3,4 @@ node_modules/
 *.pack
 *.old
 *.pack
+node_modules/.cache/.eslintcache
