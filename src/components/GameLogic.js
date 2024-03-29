@@ -1,6 +1,6 @@
 import {GenerateDominoBankForGame} from "./DominoBank";
 
-function GenerateDominoesForPlayers(player_list) {
+export function GenerateDominoesForPlayers(player_list) {
   const dominos = GenerateDominoBankForGame();
   // generate the "dictionaries"
   const playerDominoes = {};
