@@ -51,7 +51,6 @@ function ProfilePage() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const token = sessionStorage.getItem('token');
         const currentUsername = sessionStorage.getItem('username');
         const currentEmail = sessionStorage.getItem('email');
 
