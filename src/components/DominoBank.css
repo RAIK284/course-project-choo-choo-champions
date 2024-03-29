@@ -1,15 +1,17 @@
-.bank {
+.domino-page .bank {
     flex-direction: row;
     justify-content: space-evenly;
     display: flex;
-    flex-wrap: wrap;
-    height: calc(100vh - 250px);
+    height: 300px;
     overflow-y: auto;
     background-color: #333;
-    padding: 0 100px 0 100px;
+    width: 500px;
+    padding: 0 10px 0 10px;
+    overflow-x: none;
+    flex-wrap: wrap;
 }
 
-.domino-item {
+.domino-page .domino-item {
     margin: .5%;
 }
 
@@ -24,7 +26,6 @@
     height: 50px;
     border-radius: 10px;
     margin-bottom: 10px;
-
 }
 
 .domino-page .domino-section {

@@ -19,26 +19,21 @@
 }
 
 .bank {
-    margin: 8px;
     background: rgb(246, 246, 246);
     border-radius: 12px;
-    flex-wrap: wrap;
-    flex-direction: row;
-    justify-content: space-evenly;
-    display: flex;
-    height: auto;
-    overflow-y: no;
-    width: 350px;
-    padding: 10px;
-    overflow-x: none;
-    gap: 8px;
-    flex-wrap: wrap;
+    flex-direction: column;
+    flex: none;
+    height: 300px;
+    width: 300px;
+    opacity: 1;
+    z-index: 2;
+    justify-content: flex-start;
+    align-items: center;
 }
 
 .banktitle {
     font-size: 30px;
     margin: 0;
-    color: white
 }
 
 .button {
@@ -50,7 +45,7 @@
     -moz-box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.123);
     color: #191818;
     display: flex;
-    font-size: 24px;
+    font-size: 20px;
     font-weight: 1000;
     height: 80px;
     justify-content: center;
@@ -60,11 +55,6 @@
     padding: 15px 30px;
     width: 200px;
     z-index: 3;
-}
-
-.button:hover {
-    background: #ddf4ea;
-
 }
 
 .inner-content {
