@@ -26,7 +26,8 @@ function LoginForm() {
       const token = response.data['id'];
       sessionStorage.setItem('token', token);
       sessionStorage.setItem('username', username);
-      window.location.href = `/profile?email=${encodeURIComponent(response.data['email'])}&username=${encodeURIComponent(username)}`;
+      window.location.href = `/profile`;
+      sessionStorage.setItem('email', response.data['email']);
     } catch (error) {
       console.error('Error during login:', error);
       alert('Error logging in. Username or password may be incorrect.');
