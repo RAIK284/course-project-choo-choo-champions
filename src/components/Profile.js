@@ -46,10 +46,41 @@ function ProfilePage() {
         setProfileImage(URL.createObjectURL(file));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('Form submitted:', { email, username });
+
+        if (username === sessionStorage.getItem('username')) {
+            return;
+        }
+
+        e.target.querySelector('button[type="submit"]').disabled = true;
+
+        try {
+            const response = await axios.post(
+                'https://choochoochampionsapi.azurewebsites.net/user/updateUsername',
+                null,
+                {
+                    params: {
+                        username: sessionStorage.getItem('username'),
+                        newUsername: username
+                    }
+                }
+            );
+            if (response.status === 200) {
+                alert('Username changed successfully!');
+                window.location.href = '/';
+            } else {
+                console.error('Failed to update username:', response.data);
+                alert('Failed to update username. Please try again.');
+            }
+        } catch (error) {
+            console.error('Error updating username:', error);
+            alert('Error updating username. Please try again.');
+        } finally {
+            e.target.querySelector('button[type="submit"]').disabled = false;
+        }
     };
+
 
     return (
         <div className="profile-page full-page">

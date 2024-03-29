@@ -41,7 +41,7 @@ function EmailVerificationPage() {
                 }
             });
             alert('Email verified successfully!');
-            window.location.href = `/profile?email=${encodeURIComponent(email)}&username=${encodeURIComponent(username)}`;
+            window.location.href = `/`;
         } catch (error) {
             console.error('Error verifying email:', error);
             alert('Error verifying email. Please try again.');
