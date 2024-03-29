@@ -1,6 +1,7 @@
 import NavBar from "./NavBar";
 import Background from "./Background";
 import "./GameBase.css";
+import GameLogic from "./GameLogic";
 
 function GameChoice({ src, alt, onSelect, isSelected }) {
   return (
