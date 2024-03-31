@@ -13,6 +13,7 @@ function DashboardPage() {
     const totalPoints = 500;
     const winRanking = 2;
     const pointsRanking = 3;
+    // comment
 
     return (
         <div className="dashboard-page full-page">
