@@ -10,7 +10,11 @@
     align-items: center;
     font-weight: bold;
     color: #000;
+}
 
+.domino:hover {
+    background-color: #e4e5ff;
+    box-shadow: 0 0 5px rgb(185, 187, 254);
 }
 
 .topnumber,
