@@ -17,6 +17,17 @@
     box-shadow: 0 0 5px rgb(185, 187, 254);
 }
 
+.domino:active {
+    background-color: #B9BBFE;
+}
+
+.domino.clicked {
+    background-color: #e4e5ff;
+    border: 2px solid #000;
+    border-radius: 6px;
+
+}
+
 .topnumber,
 .bottomnumber {
     text-shadow: 0.5px 0.5px 1px #000;
@@ -26,7 +37,7 @@
     justify-content: center;
     padding: 1vw 0 1vw 0;
     font-size: 125%;
-    /* color: red */
+
 }
 
 .line {

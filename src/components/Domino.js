@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Domino.css";
 
 function Domino({ top, bottom }) {
+  const [clicked, setClicked] = useState(false);
   const getColor = (number) => {
     switch (number) {
       case 0:
@@ -43,8 +44,12 @@ function Domino({ top, bottom }) {
     color: getColor(bottom),
   };
 
+  const toggleState = () => {
+    setClicked(!clicked);
+  };
+
   return (
-    <div className="domino">
+    <div className={`domino ${clicked ? "clicked" : ""}`} onClick={toggleState}>
       <div className="topnumber" style={topNumberStyle}>
         {top}
       </div>
