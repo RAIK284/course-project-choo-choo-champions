@@ -13,7 +13,9 @@ function EmailVerificationPage() {
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
         const usernameParam = params.get('username');
+        const emailParam = params.get('email');
         setUsername(usernameParam);
+        setEmail(emailParam);
     }, []);
 
     const handleSendVerificationCode = async () => {
@@ -41,7 +43,7 @@ function EmailVerificationPage() {
                 }
             });
             alert('Email verified successfully!');
-            window.location.href = `/profile?email=${encodeURIComponent(email)}&username=${encodeURIComponent(username)}`;
+            window.location.href = `/`;
         } catch (error) {
             console.error('Error verifying email:', error);
             alert('Error verifying email. Please try again.');
@@ -62,6 +64,7 @@ function EmailVerificationPage() {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             className="email-input"
+                            readOnly
                         />
                         <button
                             className="send-verification-code"
