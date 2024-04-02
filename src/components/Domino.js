@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./Domino.css";
 
 function Domino({ top, bottom }) {
-  const [clicked, setClicked] = useState(false);
+  const [isSelected, setIsSelected] = useState(false);
   const getColor = (number) => {
     switch (number) {
       case 0:
@@ -44,12 +44,15 @@ function Domino({ top, bottom }) {
     color: getColor(bottom),
   };
 
-  const toggleState = () => {
-    setClicked(!clicked);
+  const handleClick = () => {
+    setIsSelected((prevState) => !prevState);
   };
 
   return (
-    <div className={`domino ${clicked ? "clicked" : ""}`} onClick={toggleState}>
+    <div
+      className={`domino ${isSelected ? "selected" : ""}`}
+      onClick={handleClick}
+    >
       <div className="topnumber" style={topNumberStyle}>
         {top}
       </div>

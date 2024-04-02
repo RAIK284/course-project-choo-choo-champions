@@ -21,11 +21,16 @@
     background-color: #B9BBFE;
 }
 
-.domino.clicked {
+.domino.selected {
     background-color: #e4e5ff;
+    margin-top: -10px;
     border: 2px solid #000;
     border-radius: 6px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    transform: scale(.9);
 
+
+    transition: all 0.3s ease;
 }
 
 .topnumber,
