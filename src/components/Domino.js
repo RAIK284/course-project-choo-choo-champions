@@ -36,7 +36,8 @@ function Domino({ top, bottom }) {
   };
 
   const getDots = (number) => {
-      return "assets/dots" + number + ".png";
+      // return "./dots" + number + ".png";
+      return "./assets/dots3.png";
   
   };
 
