@@ -16,10 +16,12 @@ function ProfilePage() {
     useEffect(() => {
         const token = sessionStorage.getItem('token');
         const storedUsername = sessionStorage.getItem('username');
-        if (!token || !storedUsername) {
+        const storedEmail = sessionStorage.getItem('email');
+        if (!token || !storedUsername || !storedEmail) {
             window.location.href = '/';
         } else {
             setUsername(storedUsername);
+            setEmail(storedEmail);
             fetchUserDetails(token, storedUsername);
         }
     }, []);
@@ -46,10 +48,70 @@ function ProfilePage() {
         setProfileImage(URL.createObjectURL(file));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('Form submitted:', { email, username });
+
+        const currentUsername = sessionStorage.getItem('username');
+        const currentEmail = sessionStorage.getItem('email');
+
+        if (username === currentUsername && email === currentEmail) {
+            return;
+        }
+        e.target.querySelector('button[type="submit"]').disabled = true;
+
+        try {
+            if (username !== currentUsername) {
+                const responseUsername = await axios.post(
+                    'https://choochoochampionsapi.azurewebsites.net/user/updateUsername',
+                    null,
+                    {
+                        params: {
+                            username: currentUsername,
+                            newUsername: username
+                        }
+                    }
+                );
+                if (responseUsername.status === 200) {
+                    alert('Username changed successfully!');
+                    sessionStorage.setItem('username', username);
+                } else {
+                    console.error('Failed to update username:', responseUsername.data);
+                    alert('Failed to update username. Please try again.');
+                }
+            }
+
+            if (email !== currentEmail) {
+                const responseEmail = await axios.post(
+                    'https://choochoochampionsapi.azurewebsites.net/user/updateEmail',
+                    null,
+                    {
+                        params: {
+                            username: username,
+                            newEmail: email
+                        }
+                    }
+                );
+                if (responseEmail.status === 200) {
+                    alert('Email changed. Please verify it.');
+                    sessionStorage.setItem('email', email);
+                    window.location.href = `/email-verification?username=${encodeURIComponent(username)}&email=${encodeURIComponent(email)}`;
+                } else {
+                    console.error('Failed to update email:', responseEmail.data);
+                    alert('Failed to update email. Please try again.');
+                }
+            } else {
+                window.location.href = '/';
+            }
+
+        } catch (error) {
+            console.error('Error updating profile:', error);
+            alert('Error updating profile. Please try again.');
+        } finally {
+            e.target.querySelector('button[type="submit"]').disabled = false;
+        }
     };
+
+
 
     return (
         <div className="profile-page full-page">

@@ -1,18 +1,52 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import NavBar from './NavBar';
 import Background from './Background';
 import { Link } from "react-router-dom";
+import axios from 'axios';
 import './DashboardPage.css';
 
 function DashboardPage() {
-    // Define variables for each stat value
-    const averagePPG = 25.5;
-    const averagePPR = 30.2;
-    const totalGamesWon = 15;
-    const totalRoundsWon = 30;
-    const totalPoints = 500;
-    const winRanking = 2;
-    const pointsRanking = 3;
+    const [stats, setStats] = useState({
+        averagePPG: 0,
+        averagePPR: 0,
+        totalGamesWon: 0,
+        totalRoundsWon: 0,
+        totalPoints: 0,
+        winRanking: 0,
+        pointsRanking: 0
+    });
+
+    useEffect(() => {
+        fetchUserStats();
+    }, []);
+
+    const fetchUserStats = async () => {
+        try {
+            const token = sessionStorage.getItem('token');
+            const storedUsername = sessionStorage.getItem('username');
+            const response = await axios.get(`https://choochoochampionsapi.azurewebsites.net/user/Profile/${storedUsername}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            const userData = response.data;
+            setStats({
+                averagePPG: userData.averagePointsPerGame,
+                averagePPR: userData.averagePointsPerRound,
+                totalGamesWon: userData.totalGameWins,
+                totalRoundsWon: userData.totalRoundWins,
+                totalPoints: userData.totalPoints,
+                winRanking: userData.winRanking,
+                pointsRanking: userData.pointRanking
+            });
+        } catch (error) {
+            console.error('Error fetching user stats:', error);
+        }
+    };
+
+    const renderStatValue = (value) => {
+        return value !== 0 ? value : '-';
+    };
 
     return (
         <div className="dashboard-page full-page">
@@ -34,15 +68,15 @@ function DashboardPage() {
                     </div>
                     <div className="dashboard-section right">
                         <div className="navigation-buttons">
-                            <h2 className="dashboard-title">Stats</h2>
+                            <h2 className="dashboard-title">{sessionStorage.getItem('username')}'s Stats</h2>
                             <div className="stats-list">
-                                <div className="stat-item">Average PPG: {averagePPG}</div>
-                                <div className="stat-item">Average PPR: {averagePPR}</div>
-                                <div className="stat-item">Total Games Won: {totalGamesWon}</div>
-                                <div className="stat-item">Total Rounds Won: {totalRoundsWon}</div>
-                                <div className="stat-item">Total Points: {totalPoints}</div>
-                                <div className="stat-item">Win Ranking: #{winRanking}</div>
-                                <div className="stat-item">Points Ranking: #{pointsRanking}</div>
+                                <div className="stat-item">Average PPG: {renderStatValue(stats.averagePPG)}</div>
+                                <div className="stat-item">Average PPR: {renderStatValue(stats.averagePPR)}</div>
+                                <div className="stat-item">Total Games Won: {renderStatValue(stats.totalGamesWon)}</div>
+                                <div className="stat-item">Total Rounds Won: {renderStatValue(stats.totalRoundsWon)}</div>
+                                <div className="stat-item">Total Points: {renderStatValue(stats.totalPoints)}</div>
+                                <div className="stat-item">Win Ranking: #{renderStatValue(stats.winRanking)}</div>
+                                <div className="stat-item">Points Ranking: #{renderStatValue(stats.pointsRanking)}</div>
                             </div>
                         </div>
                     </div>
