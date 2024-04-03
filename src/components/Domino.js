@@ -1,6 +1,15 @@
 import React from "react";
 import "./Domino.css";
 
+export function ConvertToReact(dominos){
+  const reactDominos = [];
+  for (let i=0;i<dominos.length;i++){
+    const domino = dominos[i];
+    reactDominos.push(<Domino key={domino[0]} top={domino[1]} bottom={domino[2]} />);
+  }
+  return reactDominos
+}
+
 function Domino({ top, bottom }) {
   const getColor = (number) => {
     switch (number) {

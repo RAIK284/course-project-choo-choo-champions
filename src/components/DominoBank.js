@@ -2,19 +2,21 @@ import React from "react";
 import NavBar from "./NavBar";
 import Background from "./Background";
 import "./DominoBank.css";
-import Domino from "./Domino";
+import {ConvertToReact} from "./Domino";
 
 function GenerateDominoBank() {
-  const dominos = [];
+  const dominoJSON = [];
+  let index = 0
   // Loop through unique combinations of numbers for both top and bottom
   for (let top = 0; top <= 12; top++) {
     for (let bottom = top; bottom <= 12; bottom++) {
       // Start bottom from top to ensure uniqueness
-      const key = `${top}-${bottom}`;
-      dominos.push(<Domino key={key} top={top} bottom={bottom} />);
+      const key = index;
+      index++;
+      dominoJSON.push([key,top,bottom]);
     }
   }
-  return dominos;
+  sessionStorage.setItem("Domino", JSON.stringify(dominoJSON));
 }
 
 export function GenerateDominoBankForGame() {
@@ -22,8 +24,7 @@ export function GenerateDominoBankForGame() {
 }
 
 function DominoBank() {
-  const dominos = GenerateDominoBank();
-
+  const dominos = ConvertToReact(JSON.parse(sessionStorage.getItem("Domino")))
   return (
     <div className="domino-page full-page">
       <Background />
