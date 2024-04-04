@@ -10,7 +10,25 @@
     align-items: center;
     font-weight: bold;
     color: #000;
+}
 
+.domino:hover {
+    background-color: #e4e5ff;
+    box-shadow: 0 0 5px rgb(185, 187, 254);
+}
+
+.domino:active {
+    background-color: #B9BBFE;
+}
+
+.domino.selected {
+    background-color: #e4e5ff;
+    margin-top: -10px;
+    border: 2px solid #000;
+    border-radius: 6px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    transform: scale(.9);
+    transition: all 0.3s ease;
 }
 
 .topnumber,
@@ -22,7 +40,7 @@
     justify-content: center;
     padding: 1vw 0 1vw 0;
     font-size: 125%;
-    /* color: red */
+
 }
 
 .line {

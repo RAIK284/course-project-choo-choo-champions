@@ -54,7 +54,7 @@
     font-weight: 1000;
     height: 80px;
     justify-content: center;
-    line-height: 80px;
+    line-height: auto;
     margin-top: 10px;
     max-width: 200px;
     padding: 15px 30px;
@@ -62,9 +62,14 @@
     z-index: 3;
 }
 
-.button:hover {
-    background: #ddf4ea;
+.button:not([disabled]) {
+    background: #d8d8d8;
+    color: #a5a4a4;
 
+}
+
+.button:not([disabled]):hover {
+    background: #ddf4ea;
 }
 
 .inner-content {
