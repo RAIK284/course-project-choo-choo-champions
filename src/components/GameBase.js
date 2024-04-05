@@ -14,7 +14,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
   if(sessionStorage.getItem("Player Paths") == null){
     GeneratePathsForGame(startingDomino, players)
   }
-  const playerPaths = JSON.parse(sessionStorage.getItem("Player Paths"));
+  //const playerPaths = JSON.parse(sessionStorage.getItem("Player Paths"));
   //const dominos = ConvertToReact(playerPaths["Starting Domino"]);
   const dominos = ConvertToReact(playerDominoes['carly']);
   console.log(DeterminePlayablePaths('carly', players));
