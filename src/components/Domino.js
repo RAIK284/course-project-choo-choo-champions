@@ -41,13 +41,13 @@ function Domino({ top, bottom }) {
   };
 
 
-  const topNumberStyle = {
-    color: getColor(top),
-  };
+  // const topNumberStyle = {
+  //   color: getColor(top),
+  // };
 
-  const bottomNumberStyle = {
-    color: getColor(bottom),
-  };
+  // const bottomNumberStyle = {
+  //   color: getColor(bottom),
+  // };
 
   const topNumberDots = {
     color: getDots(top),
