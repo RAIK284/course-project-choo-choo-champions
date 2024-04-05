@@ -1,8 +1,6 @@
-// HomePage.js
-
 import React, { useState } from 'react';
 import axios from 'axios';
-import Background from './Background'
+import Background from './Background';
 import './HomePage.css';
 
 function LoginForm() {
@@ -10,12 +8,13 @@ function LoginForm() {
   const [password, setPassword] = useState('');
 
   const handleSubmit = async (event) => {
-    //added to prevent page from defaulting (it was before)
-    event.preventDefault(); 
-    
-    if(!username || !password){
+    event.preventDefault();
+
+    if (!username || !password) {
       alert('Please fill out all fields');
+      return;
     }
+
     try {
       const response = await axios.post('https://choochoochampionsapi.azurewebsites.net/user/login', null, {
         params: {
@@ -24,7 +23,11 @@ function LoginForm() {
         }
       });
       console.log('Log in response:', response.data);
-      window.location.href = `/profile?email=${encodeURIComponent(response.data['email'])}&username=${encodeURIComponent(username)}`;
+      const token = response.data['id'];
+      sessionStorage.setItem('token', token);
+      sessionStorage.setItem('username', username);
+      window.location.href = `/profile`;
+      sessionStorage.setItem('email', response.data['email']);
     } catch (error) {
       console.error('Error during login:', error);
       alert('Error logging in. Username or password may be incorrect.');
@@ -82,15 +85,13 @@ function GameDescription() {
 
 function HomePage() {
   return (
-    <>
-      <main className="login-page">
-        <Background />
-        <div className="centered-content">
-          <GameDescription />
-          <LoginSection />
-        </div>
-      </main>
-    </>
+    <main className="login-page">
+      <Background />
+      <div className="centered-content">
+        <GameDescription />
+        <LoginSection />
+      </div>
+    </main>
   );
 }
 

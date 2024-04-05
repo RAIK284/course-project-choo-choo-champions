@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Domino.css";
 
 function Domino({ top, bottom }) {
+  const [isSelected, setIsSelected] = useState(false);
   const getColor = (number) => {
     switch (number) {
       case 0:
@@ -56,26 +57,32 @@ function Domino({ top, bottom }) {
     color: getDots(bottom),
   };
 
+  const handleClick = () => {
+    setIsSelected((prevState) => !prevState);
+  };
 
   return (
-    <div className="domino">
-      <img className="dominoImageTop" src= {topNumberDots.color}/>
+    <div
+      className={`domino ${isSelected ? "selected" : ""}`}
+      onClick={handleClick}
+    >
+      <img className="dominoImageTop" src={topNumberDots.color} />
       <div className="line"></div>
-      <img className="dominoImageBottom" src= {bottomNumberDots.color}/>
-   
+      <img className="dominoImageBottom" src={bottomNumberDots.color} />
+
     </div>
   );
 
-//   <div className="domino">
-//   <div className="topnumber" style={topNumberStyle}>
-//     {top}
-//   </div>
-//   <div className="line"></div>
-//   <div className="bottomnumber" style={bottomNumberStyle}>
-//     {bottom}
-//   </div>
-// </div>
-// );
+  //   <div className="domino">
+  //   <div className="topnumber" style={topNumberStyle}>
+  //     {top}
+  //   </div>
+  //   <div className="line"></div>
+  //   <div className="bottomnumber" style={bottomNumberStyle}>
+  //     {bottom}
+  //   </div>
+  // </div>
+  // );
 }
 
 export default Domino;

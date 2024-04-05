@@ -3,20 +3,17 @@ import axios from 'axios';
 import Background from './Background';
 import './SignupPage.css';
 
-
 function SignupPage() {
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-
   const handleSignup = async () => {
     if (!email || !username || !password || !confirmPassword) {
       alert('Please fill out all fields');
       return;
     }
-
 
     if (password !== confirmPassword) {
       alert('Password and Confirm Password must match');
@@ -31,15 +28,14 @@ function SignupPage() {
           email
         }
       });
-      alert('Signup successful');
       console.log('Signup response:', response.data);
-      window.location.href = `/profile?email=${encodeURIComponent(email)}&username=${encodeURIComponent(username)}`;
+      alert('Signup successful');
+      window.location.href = `/email-verification?username=${encodeURIComponent(username)}&email=${encodeURIComponent(email)}`;
     } catch (error) {
       console.error('Error signing up:', error);
       alert('Error signing up. Username or email is already in use.');
     }
   };
-
 
   return (
     <div className="signup-page full-page">
@@ -106,6 +102,5 @@ function SignupPage() {
     </div>
   );
 }
-
 
 export default SignupPage;
