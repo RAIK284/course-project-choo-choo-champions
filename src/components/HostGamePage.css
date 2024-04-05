@@ -1,0 +1,95 @@
+.full-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    min-height: 100vh;
+    background-color: black;
+    margin: 0;
+    padding: 0;
+    position: relative;
+}
+
+.centered-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+    width: 100%;
+    min-width: 400px;
+    position: relative;
+    z-index: 1;
+}
+
+.join-code {
+    font-size: 48px;
+    color: white;
+    margin: 20px 0;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.white-box {
+    background-color: white;
+    border-radius: 12px;
+    padding: 20px;
+    width: 600px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.user-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.username {
+    font-weight: bold;
+    color: black;
+    font-size: 24px;
+}
+
+.ready-state {
+    color: black;
+    font-size: 24px;
+}
+
+.ready-state {
+    font-style: italic;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.ready {
+    background-color: lightgreen;
+}
+
+.not-ready {
+    background-color: lightcoral;
+}
+
+.start-game {
+    padding: 18px 36px;
+    background-color: white;
+    color: black;
+    cursor: pointer;
+    margin-top: 20px;
+    text-align: center;
+    border: none;
+    border-radius: 12px;
+    font-size: 36px;
+    transition: background-color 0.2s ease-in-out;
+    width: 300px;
+}
+
+.start-game:hover {
+    background-color: lightgray;
+}

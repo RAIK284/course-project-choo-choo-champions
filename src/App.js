@@ -16,6 +16,7 @@ import Domino from "./components/Domino";
 import GameBase from "./components/GameBase";
 import EmailVerification from "./components/EmailVerification";
 import GameLogic from "./components/GameLogic";
+import HostGamePage from "./components/HostGamePage";
 
 function App() {
   return (
@@ -23,7 +24,6 @@ function App() {
       <Routes>
         <Route exact path="/" element={<HomePage />} />
         <Route path="/signup" element={<SignUpPage />} />{" "}
-        {/* Add route for SignUpPage */}
         <Route path="/trains" element={<TrainSelector />} />
         <Route path="/navbar" element={<NavBar />} />
         <Route path="/background" element={<Background />} />
@@ -37,6 +37,7 @@ function App() {
         <Route path="/gamebase" element={<GameBase />} />
         <Route path="/email-verification" element={<EmailVerification />} />
         <Route path="/gamelogic" element={<GameLogic />} />
+        <Route path="/host" element={<HostGamePage />} />
       </Routes>
     </Router>
   );
