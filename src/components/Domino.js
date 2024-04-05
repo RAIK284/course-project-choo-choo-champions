@@ -65,9 +65,10 @@ function Domino({ top, bottom }) {
       className={`domino ${isSelected ? "selected" : ""}`}
       onClick={handleClick}
     >
-      <img className="dominoImageTop" src={topNumberDots.color} />
-      <div className="line"></div>
-      <img className="dominoImageBottom" src={bottomNumberDots.color} />
+      <img className="dominoImageTop" src={topNumberDots.color} alt="Top dots representing a number" />
+      <div className="line" aria-hidden="true"></div>
+      <img className="dominoImageBottom" src={bottomNumberDots.color} alt="Bottom dots representing a number" />
+
 
     </div>
   );
