@@ -1,7 +1,8 @@
 import { GenerateDominoBankForGame } from "./DominoBank";
 
 export function GenerateDominoesForPlayers(player_list) {
-  const dominos = GenerateDominoBankForGame();
+  GenerateDominoBankForGame();
+  const dominos = JSON.parse(sessionStorage.getItem("Domino"));
   // generate the "dictionaries"
   const playerDominoes = {};
   for (let k = 0; k < player_list.length; k++) {
@@ -16,7 +17,7 @@ export function GenerateDominoesForPlayers(player_list) {
       );
     }
   }
-  return playerDominoes;
+  sessionStorage.setItem("Player Dominoes", JSON.stringify(playerDominoes));
 }
 
 function GameLogic() {

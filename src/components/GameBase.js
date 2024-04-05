@@ -1,11 +1,16 @@
 import NavBar from "./NavBar";
 import Background from "./Background";
 import { GenerateDominoesForPlayers } from "./GameLogic";
+import { ConvertToReact } from "./Domino";
 import "./GameBase.css";
 
 function GameChoice({ src, alt, onSelect, isSelected }) {
   const players = ["max", "arjun", "carly"];
-  const dominos = GenerateDominoesForPlayers(players);
+  if(sessionStorage.getItem("Player Dominoes") == null){
+    GenerateDominoesForPlayers(players);
+  }
+  const playerDominoes = JSON.parse(sessionStorage.getItem("Player Dominoes"));
+  const dominos = ConvertToReact(playerDominoes["max"]);
   return (
     <>
       <div className="full-page">
@@ -14,7 +19,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
           <div className="sidegroup">
             <div className="inner-content">
               <h1 className="banktitle">Bank</h1>
-              <div className="bank">{dominos["carly"]}</div>
+              <div className="bank">{dominos}</div>
               {/* end of bank group */}
               <button className="button">Draw</button>
             </div>
