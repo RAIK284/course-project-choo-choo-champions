@@ -1,6 +1,6 @@
 import NavBar from "./NavBar";
 import Background from "./Background";
-import { GenerateDominoesForPlayers } from "./GameLogic";
+import { GenerateDominoesForPlayers, GeneratePathsForGame, DeterminePlayablePaths} from "./GameLogic";
 import { ConvertToReact } from "./Domino";
 import "./GameBase.css";
 
@@ -10,7 +10,14 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
     GenerateDominoesForPlayers(players);
   }
   const playerDominoes = JSON.parse(sessionStorage.getItem("Player Dominoes"));
-  const dominos = ConvertToReact(playerDominoes["max"]);
+  const startingDomino = [[91,12,12]];
+  if(sessionStorage.getItem("Player Paths") == null){
+    GeneratePathsForGame(startingDomino, players)
+  }
+  const playerPaths = JSON.parse(sessionStorage.getItem("Player Paths"));
+  //const dominos = ConvertToReact(playerPaths["Starting Domino"]);
+  const dominos = ConvertToReact(playerDominoes['carly']);
+  console.log(DeterminePlayablePaths('carly', players));
   return (
     <>
       <div className="full-page">
