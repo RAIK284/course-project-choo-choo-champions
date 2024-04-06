@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "site": "mexicantraindomino",
     "public": "build",
     "ignore": [
       "firebase.json",
