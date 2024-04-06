@@ -1,4 +1,4 @@
-.full-page {
+.host-game-page .full-page {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -9,7 +9,7 @@
     position: relative;
 }
 
-.centered-content {
+.host-game-page .centered-content {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -22,13 +22,13 @@
     z-index: 1;
 }
 
-.join-code {
+.host-game-page .join-code {
     font-size: 48px;
     color: white;
     margin: 20px 0;
 }
 
-.container {
+.host-game-page .container {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -36,7 +36,7 @@
     text-align: center;
 }
 
-.white-box {
+.host-game-page .white-box {
     background-color: white;
     border-radius: 12px;
     padding: 20px;
@@ -45,38 +45,35 @@
     overflow-y: auto;
 }
 
-.user-row {
+.host-game-page .user-row {
     display: flex;
     justify-content: space-between;
     margin-bottom: 20px;
 }
 
-.username {
+.host-game-page .username {
     font-weight: bold;
     color: black;
     font-size: 24px;
 }
 
-.ready-state {
-    color: black;
-    font-size: 24px;
-}
-
-.ready-state {
+.host-game-page .ready-state {
     font-style: italic;
     padding: 5px 10px;
     border-radius: 5px;
+    font-size: 24px;
+    color: black;
 }
 
-.ready {
+.host-game-page .ready {
     background-color: lightgreen;
 }
 
-.not-ready {
+.host-game-page .not-ready {
     background-color: lightcoral;
 }
 
-.start-game {
+.host-game-page .start-game {
     padding: 18px 36px;
     background-color: white;
     color: black;
@@ -90,6 +87,6 @@
     width: 300px;
 }
 
-.start-game:hover {
+.host-game-page .start-game:hover {
     background-color: lightgray;
 }

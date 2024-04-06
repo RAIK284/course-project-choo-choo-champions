@@ -15,7 +15,7 @@ function HostGamePage() {
     };
 
     return (
-        <div className="full-page">
+        <div className="host-game-page full-page">
             <Background />
             <NavBar />
             <div className="centered-content">
