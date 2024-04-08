@@ -16,6 +16,7 @@ import Domino from "./components/Domino";
 import GameBase from "./components/GameBase";
 import EmailVerification from "./components/EmailVerification";
 import GameLogic from "./components/GameLogic";
+import DraftGameBase from "./components/z_DRAFT_GameBase"
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
         <Route path="/gamebase" element={<GameBase />} />
         <Route path="/email-verification" element={<EmailVerification />} />
         <Route path="/gamelogic" element={<GameLogic />} />
+        <Route path="/draftgamebase" element={<DraftGameBase />} />
       </Routes>
     </Router>
   );
