@@ -77,23 +77,15 @@ export function DeterminePlayablePaths(player, player_list){
   return playablePaths;
 }
 
-export function CheckIfDominoIsPlayable(player, player_list, domino){
+export function CheckIfDominoIsPlayable(player, player_list, domino, path){
     const paths = DeterminePlayablePaths(player, player_list);
-    if(paths[0]==='Draw' || paths[0]==='Pass'){
-      return false;
-    }
-    const playerPaths = JSON.parse(sessionStorage.getItem("Player Paths"));
-    for(let i=0; i<paths.length; i++){
-      if(playerPaths[player_list[i]].Dominoes.length===0){
-        if(playerPaths['Starting Domino'][2]===domino[1] || playerPaths['Starting Domino'][2]===domino[2]){
-          return true;
-        }
-        return false;
+    if(paths.includes(path)){
+      if(paths[path].Dominoes.length===0){
+        return paths['Starting Domino'][2]===domino[1] || paths['Starting Domino']===domino[2];
+      } else {
+        const endDomino = paths[path].Dominoes[paths[path].Dominoes.length-1]
+        return endDomino[2]===domino[1] || endDomino[2]===domino[2]
       }
-      const endingDomino = playerPaths[player_list[i]].Dominoes[playerPaths[player_list[i]].Dominoes.length-1];
-      if(endingDomino[2]===domino[1] || endingDomino[2]===domino[2]){
-        return true;
-      }      
     }
     return false;
   }
