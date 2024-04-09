@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import NavBar from "./NavBar";
 import Background from "./Background";
 import "./z_DRAFT_GameBase.css";
@@ -7,8 +7,17 @@ function GameChoice() {
   const players = ["Carly", "Alison", "Max", "Arjun"];
   const [currentPlayerIndex, setCurrentPlayerIndex] = useState(0);
 
+  useEffect(() => {
+    const storedIndex = sessionStorage.getItem('currentPlayerIndex');
+    if (storedIndex !== null) {
+      setCurrentPlayerIndex(parseInt(storedIndex));
+    }
+  }, []);
+
   const switchToNextPlayer = () => {
-    setCurrentPlayerIndex((currentPlayerIndex + 1) % players.length);
+    const nextIndex = (currentPlayerIndex + 1) % players.length;
+    setCurrentPlayerIndex(nextIndex);
+    sessionStorage.setItem('currentPlayerIndex', nextIndex.toString());
   };
 
   const finishTurn = () => {
