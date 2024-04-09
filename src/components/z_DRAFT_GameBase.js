@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import NavBar from "./NavBar";
 import Background from "./Background";
-import "./z_DRAFT_GameBase.css";
+import "./z_DRAFT_GameBase.module.css";
 
 function GameChoice() {
   const players = ["Carly", "Alison", "Max", "Arjun"];
