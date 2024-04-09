@@ -17,6 +17,7 @@ import GameBase from "./components/GameBase";
 import EmailVerification from "./components/EmailVerification";
 import GameLogic from "./components/GameLogic";
 import DraftGameBase from "./components/z_DRAFT_GameBase"
+import HostGamePage from "./components/HostGamePage";
 
 function App() {
   return (
@@ -24,7 +25,6 @@ function App() {
       <Routes>
         <Route exact path="/" element={<HomePage />} />
         <Route path="/signup" element={<SignUpPage />} />{" "}
-        {/* Add route for SignUpPage */}
         <Route path="/trains" element={<TrainSelector />} />
         <Route path="/navbar" element={<NavBar />} />
         <Route path="/background" element={<Background />} />
@@ -39,6 +39,7 @@ function App() {
         <Route path="/email-verification" element={<EmailVerification />} />
         <Route path="/gamelogic" element={<GameLogic />} />
         <Route path="/draftgamebase" element={<DraftGameBase />} />
+        <Route path="/host" element={<HostGamePage />} />
       </Routes>
     </Router>
   );
