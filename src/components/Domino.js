@@ -54,16 +54,8 @@ function Domino({ top, bottom }) {
   };
 
   const handleClick = () => {
-    const storedSelected = sessionStorage.getItem("OneSelected") ? JSON.parse(sessionStorage.getItem("OneSelected")) : false;
-    if(isSelected && storedSelected){
-      setIsSelected(false); 
-      sessionStorage.setItem('OneSelected', false);
-    } else if(!isSelected && !storedSelected){
-      setIsSelected(true); 
-      sessionStorage.setItem('OneSelected', true);
-      sessionStorage.setItem('SelectedDomino', JSON.stringify([0, top, bottom]));
-    }
-};
+    setIsSelected((prevState) => !prevState);
+  };
 
   return (
     <div
