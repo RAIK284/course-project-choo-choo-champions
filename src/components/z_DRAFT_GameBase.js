@@ -1,8 +1,29 @@
+import { useState, useEffect } from 'react';
 import NavBar from "./NavBar";
 import Background from "./Background";
-import "./z_DRAFT_GameBase.css";
+import "./z_DRAFT_GameBase.module.css";
 
-function GameChoice({ src, alt, onSelect, isSelected }) {
+function GameChoice() {
+  const players = ["Carly", "Alison", "Max", "Arjun"];
+  const [currentPlayerIndex, setCurrentPlayerIndex] = useState(0);
+
+  useEffect(() => {
+    const storedIndex = sessionStorage.getItem('currentPlayerIndex');
+    if (storedIndex !== null) {
+      setCurrentPlayerIndex(parseInt(storedIndex));
+    }
+  }, []);
+
+  const switchToNextPlayer = () => {
+    const nextIndex = (currentPlayerIndex + 1) % players.length;
+    setCurrentPlayerIndex(nextIndex);
+    sessionStorage.setItem('currentPlayerIndex', nextIndex.toString());
+  };
+
+  const finishTurn = () => {
+    switchToNextPlayer();
+  };
+
   return (
     <>
       <div className="full-page">
@@ -20,14 +41,14 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
             {/* end of left content */}
             <div className="inner-content">
               <h3 className="players_turn">
-                {" "}
-                It is <strong> Carly</strong>'s turn
+                It is <strong>{players[currentPlayerIndex]}</strong>'s turn
               </h3>
               <img
                 className="trainstation"
                 src="./trainstation.png"
                 alt="domino train station"
               />
+              <button className="button" onClick={finishTurn}>Finish Turn</button>{" "}
             </div>
           </div>
           {/* end of right content  */}
@@ -39,4 +60,5 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
     </>
   );
 }
+
 export default GameChoice;
