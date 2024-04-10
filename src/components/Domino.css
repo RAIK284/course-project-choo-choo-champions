@@ -13,22 +13,30 @@
 }
 
 .domino:hover {
-    background-color: #e4e5ff;
-    box-shadow: 0 0 5px rgb(185, 187, 254);
+    /* background-color: #e4e5ff; */
+    box-shadow: 0 0 10px rgb(88, 93, 236);
+    border: 1.5px solid #000;
+    border-radius: 6px;
+    width: 48px;
+    height: 98px;
 }
 
 .domino:active {
-    background-color: #B9BBFE;
+    /* background-color: #B9BBFE; */
+    box-shadow: 0 0 10px rgb(88, 93, 236);
+
 }
 
 .domino.selected {
-    background-color: #e4e5ff;
-    margin-top: -10px;
+    background-color: #ffffff;
+    margin-top: 0px;
     border: 2px solid #000;
     border-radius: 6px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-    transform: scale(.9);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    /* transform: scale(.85); */
     transition: all 0.3s ease;
+    width: 30px;
+    height: 75px;
 }
 
 .topnumber,
@@ -47,12 +55,14 @@
     width: 100%;
     border-top: 1px solid #000;
 }
-.dominoImageTop{
+
+.dominoImageTop {
     width: 40px;
     height: auto;
     padding-bottom: 5px;
 }
-.dominoImageBottom{
+
+.dominoImageBottom {
     width: 40px;
     height: auto;
     padding-top: 5px;
