@@ -16,6 +16,16 @@ function ChangePassword() {
       return;
     }
 
+    if (newPassword.length < 8) {
+      alert('New password must be at least 8 characters long.');
+      return;
+    }
+
+    if (!strongPassword(newPassword)) {
+      alert('New password must contain at least one uppercase letter, one lowercase letter, one number, and one special character (@#$%^&+=!).');
+      return;
+    }
+
     try {
       const response = await axios.post(
         'https://choochoochampionsapi.azurewebsites.net/user/changePassword',
@@ -38,6 +48,11 @@ function ChangePassword() {
       }
       alert('Error changing password. Please try again.');
     }
+  };
+
+  const strongPassword = (password) => {
+    const regex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!]).{8,}$/;
+    return regex.test(password);
   };
 
   return (

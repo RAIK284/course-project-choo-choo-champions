@@ -20,6 +20,16 @@ function SignupPage() {
       return;
     }
 
+    if (password.length < 8) {
+      alert('Password must be at least 8 characters long');
+      return;
+    }
+
+    if (!strongPassword(password)) {
+      alert('Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character (@#$%^&+=!).');
+      return;
+    }
+
     try {
       const response = await axios.post('https://choochoochampionsapi.azurewebsites.net/user/register', null, {
         params: {
@@ -35,6 +45,11 @@ function SignupPage() {
       console.error('Error signing up:', error);
       alert('Error signing up. Username or email is already in use.');
     }
+  };
+
+  const strongPassword = (password) => {
+    const regex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!]).{8,}$/;
+    return regex.test(password);
   };
 
   return (
