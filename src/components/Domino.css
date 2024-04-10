@@ -13,12 +13,18 @@
 }
 
 .domino:hover {
-    background-color: #e4e5ff;
-    box-shadow: 0 0 5px rgb(185, 187, 254);
+    /* background-color: #e4e5ff; */
+    box-shadow: 0 0 10px rgb(88, 93, 236);
+    border: 1.5px solid #000;
+    border-radius: 6px;
+    width: 48px;
+    height: 98px;
 }
 
 .domino:active {
-    background-color: #B9BBFE;
+    /* background-color: #B9BBFE; */
+    box-shadow: 0 0 10px rgb(88, 93, 236);
+
 }
 
 .domino.selected {
