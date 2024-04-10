@@ -47,6 +47,8 @@ const getColor = (number) => {
       return "#FF7E21";
     case 12:
       return "#909090";
+    default:
+      return 'FFFFFFF';
   }
 };
 
@@ -55,10 +57,12 @@ function Domino({ top, bottom, isSelected, onSelect }) {
     return `./assets/dots${number}.png`;
   };
 
+  // eslint-disable-next-line no-unused-vars
   const topNumberStyle = {
     color: getColor(top),
   };
 
+  // eslint-disable-next-line no-unused-vars
   const bottomNumberStyle = {
     color: getColor(bottom),
   };
