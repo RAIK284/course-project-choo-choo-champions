@@ -74,6 +74,77 @@
     color: #a5a4a4;
 }
 
+.mexican-train {
+    aspect-ratio: 1;
+    object-fit: fit;
+    width: 40px;
+    height: auto;
+    border: 3px solid transparent;
+    border-radius: 15px;
+    position: fixed;
+    top: 277px;
+    z-index: 10;
+}
+
+.first-train {
+    aspect-ratio: 1;
+    object-fit: fit;
+    width: 40px;
+    height: auto;
+    border: 3px solid transparent;
+    border-radius: 15px;
+    position: fixed;
+    top: 332px;
+    right: 117px;
+    z-index: 10;
+    rotate: 72deg;
+}
+
+.second-train {
+    aspect-ratio: 1;
+    object-fit: fit;
+    width: 40px;
+    height: auto;
+    border: 3px solid transparent;
+    border-radius: 15px;
+    position: fixed;
+    top: 332px;
+    right: 278px;
+    z-index: 10;
+    rotate: -72deg;
+}
+
+.third-train {
+    aspect-ratio: 1;
+    object-fit: fit;
+    width: 40px;
+    height: auto;
+    border: 3px solid transparent;
+    border-radius: 15px;
+    position: fixed;
+    bottom: 265px;
+    right: 255px;
+    z-index: 10;
+    rotate: 215deg;
+}
+
+
+.fourth-train {
+    aspect-ratio: 1;
+    object-fit: fit;
+    width: 40px;
+    height: auto;
+    border: 3px solid transparent;
+    border-radius: 15px;
+    position: fixed;
+    bottom: 265px;
+    right: 140px;
+    z-index: 10;
+    rotate: 140deg;
+}
+
+
+
 .button:not([disabled]):hover {
     background: #ddf4ea;
 }
