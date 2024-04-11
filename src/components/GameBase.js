@@ -21,7 +21,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
   const playerPaths = JSON.parse(sessionStorage.getItem("Player Paths"));
   //const dominos = ConvertToReact(playerPaths["Starting Domino"]);
   const dominos = ConvertToReact(playerDominoes["carly"]);
-  const sDomino = ConvertToReact(playerPaths['Starting Domino'])
+  const sDomino = ConvertToReact(playerPaths["Starting Domino"]);
   console.log(DeterminePlayablePaths("carly", players));
   return (
     <>
@@ -44,7 +44,9 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
                 src="./trainstation.png"
                 alt="domino train station"
               />
-              <div className="StartingDomino">{sDomino}</div>
+              <div aria-disabled="true" className="StartingDomino">
+                {sDomino}
+              </div>
               {/* CARLY FIX THIS!! */}
               <button className="button">Finish Turn</button>{" "}
             </div>

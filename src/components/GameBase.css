@@ -1,3 +1,10 @@
+.StartingDomino {
+    position: absolute;
+    z-index: 2;
+    rotate: 90deg;
+    pointer-events: none;
+}
+
 .content {
     align-items: center;
     display: flex;
@@ -38,7 +45,7 @@
 .banktitle {
     font-size: 30px;
     margin: 0;
-    color: white
+    color: white;
 }
 
 .button {
@@ -65,7 +72,6 @@
 .button:not([disabled]) {
     background: #d8d8d8;
     color: #a5a4a4;
-
 }
 
 .button:not([disabled]):hover {
@@ -97,10 +103,10 @@
     gap: 20px;
     height: 50%;
     justify-content: space-evenly;
-    margin: 3% 0% 0% 0%;
+    margin: 24px 0 0 0;
     max-width: 100%;
     position: relative;
-    width: 80%;
+    width: 2000px;
     z-index: 1;
 }
 
