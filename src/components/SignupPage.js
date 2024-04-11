@@ -20,13 +20,8 @@ function SignupPage() {
       return;
     }
 
-    if (password.length < 8) {
-      alert('Password must be at least 8 characters long');
-      return;
-    }
-
-    if (!strongPassword(password)) {
-      alert('Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character (@#$%^&+=!).');
+    if (password.length < 8 || !strongPassword(password)) {
+      alert('Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character (@#$%^&+=!).');
       return;
     }
 
