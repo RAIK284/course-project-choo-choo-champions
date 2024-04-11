@@ -99,21 +99,6 @@ export function DeterminePlayablePaths(player, player_list) {
   return playablePaths;
 }
 
-export function CheckIfDominoIsPlayable(player, player_list, domino, path) {
-  const paths = DeterminePlayablePaths(player, player_list);
-  if (paths.includes(path)) {
-    if (paths[path].Dominoes.length === 0) {
-      return (
-        paths["Starting Domino"][2] === domino[1] ||
-        paths["Starting Domino"] === domino[2]
-      );
-    } else {
-      const endDomino = paths[path].Dominoes[paths[path].Dominoes.length - 1];
-      return endDomino[2] === domino[1] || endDomino[2] === domino[2];
-    }
-  }
-  return false;
-}
 
 export function DrawADomino(player, player_list) {
   const paths = DeterminePlayablePaths(player, player_list);
@@ -133,6 +118,30 @@ export function DrawADomino(player, player_list) {
   }
 }
 
+export function CheckIfDominoIsPlayable(player, player_list, domino) {
+  const paths = DeterminePlayablePaths(player, player_list);
+  const playerPaths = JSON.parse(sessionStorage.getItem("Player Paths"));
+  const playablePaths = [];
+  
+  for(let i = 0; i < paths.length; i++) {
+    if(playerPaths[paths[i]].Dominoes.length === 0) {
+      if(playerPaths['Starting Domino'][2] === domino[1] || playerPaths['Starting Domino'][2] === domino[2]) {
+        playablePaths.push(paths[i]);
+      }
+    } else {
+      const endingDomino = playerPaths[paths[i]].Dominoes[playerPaths[paths[i]].Dominoes.length - 1];
+      if(endingDomino[2] === domino[1] || endingDomino[2] === domino[2]) {
+        playablePaths.push(paths[i]);
+      }
+    }
+  }
+  
+  if(playablePaths.length === 0) {
+    alert('This Domino is not playable. Please pick a different one!');
+  } else {
+    return playablePaths;
+  }
+}
 function GameLogic() {
   return null;
 }

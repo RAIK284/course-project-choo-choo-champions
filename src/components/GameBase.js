@@ -5,8 +5,9 @@ import {
   GeneratePathsForGame,
   DeterminePlayablePaths,
   DrawADomino,
+  CheckIfDominoIsPlayable,
 } from "./GameLogic";
-import { ConvertToReact } from "./Domino";
+import { ConvertToReact} from "./Domino";
 import "./GameBase.css";
 import { useEffect, useState } from "react";
 
@@ -41,6 +42,18 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
     window.location.reload();
   };
 
+  const SelectADominoToPlay = () => {
+    const domino = sessionStorage.getItem('SelectedDomino');
+    if(domino == null){
+      alert("No domino selected");
+      return;
+    }
+    const result = CheckIfDominoIsPlayable("carly", players, domino);
+    if(result !== null){
+      alert(result);
+    }
+  };
+
   const playerDominoes = JSON.parse(sessionStorage.getItem("Player Dominoes"));
   if (sessionStorage.getItem("Player Paths") == null) {
     GeneratePathsForGame(startingDomino, players);
@@ -64,7 +77,9 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
                 <button className="button" onClick={DrawDomino}>
                   Draw
                 </button>
-                <button className="button">AddToPath</button>
+                <button className="button" onClick={SelectADominoToPlay}>
+                  AddToPath
+                  </button>
               </div>
             </div>
             {/* end of left content */}

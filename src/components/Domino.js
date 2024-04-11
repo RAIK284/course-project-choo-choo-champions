@@ -17,6 +17,9 @@ export function ConvertToReact(dominos) {
       onSelect={() => handleSelectDomino(index)}
     />
   ));
+  if(selectedDomino!==null){
+    sessionStorage.setItem('Selected Domino', dominos[selectedDomino]);
+  }
   return reactDominos;
 }
 const getColor = (number) => {
