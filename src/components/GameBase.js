@@ -58,15 +58,15 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
             </div>
             {/* end of left content */}
             <div className="inner-content">
-              {/* CARLY FIX THIS!! */}
-              <h3 className="players_turn">It is turn</h3>
+              <h3 className="players_turn">
+                It is <strong>{players[currentPlayerIndex]}</strong>'s turn
+              </h3>{" "}
               <img
                 className="trainstation"
                 src="./trainstation.png"
                 alt="domino train station"
               />
               <div className="StartingDomino">{sDomino}</div>
-              {/* CARLY FIX THIS!! */}
               <button className="button" onClick={finishTurn}>
                 Finish Turn
               </button>{" "}
