@@ -91,6 +91,22 @@ export function CheckIfDominoIsPlayable(player, player_list, domino, path){
     return false;
   }
 
+export function DrawADomino(player, player_list){
+  const paths = DeterminePlayablePaths(player, player_list);
+  const boneyard = JSON.parse(sessionStorage.getItem("Boneyard"));
+  const playerDominos = JSON.parse(sessionStorage.getItem("Player Dominoes"));
+  if(boneyard.length !== 0){
+    alert('Cannot draw domino. There are no dominoes available!');
+  }
+  f(paths.includes("Draw")){
+    playerDominos[player].push(boneyard.splice(Math.floor(Math.random() * boneyard.length), 1)[0]);
+    sessionStorage.setItem('Boneyard', JSON.stringify(boneyard));
+    sessionStorage.setItem('Player Dominoes', JSON.stringify(playerDominos));
+  } else{
+    alert('Cannot draw domino. There are playable dominoes!');
+  }
+}  
+
 function GameLogic() {
   return null;
 }
