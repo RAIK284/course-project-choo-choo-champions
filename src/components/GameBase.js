@@ -37,9 +37,9 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
   };
 
   const DrawDomino = () => {
-    DrawADomino('carly', players);
-    window.location.reload(); 
-  }
+    DrawADomino("carly", players);
+    window.location.reload();
+  };
 
   const playerDominoes = JSON.parse(sessionStorage.getItem("Player Dominoes"));
   if (sessionStorage.getItem("Player Paths") == null) {
@@ -60,7 +60,9 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
               <h1 className="banktitle">Bank</h1>
               <div className="bank">{dominos}</div>
               {/* end of bank group */}
-              <button className="button" onClick={DrawDomino}>Draw</button>
+              <button className="button" onClick={DrawDomino}>
+                Draw
+              </button>
             </div>
             {/* end of left content */}
             <div className="inner-content">

@@ -2,6 +2,7 @@
     position: absolute;
     z-index: 2;
     rotate: 90deg;
+    top: 200px;
     pointer-events: none;
 }
 
@@ -74,77 +75,6 @@
     color: #a5a4a4;
 }
 
-.mexican-train {
-    aspect-ratio: 1;
-    object-fit: fit;
-    width: 40px;
-    height: auto;
-    border: 3px solid transparent;
-    border-radius: 15px;
-    position: fixed;
-    top: 277px;
-    z-index: 10;
-}
-
-.first-train {
-    aspect-ratio: 1;
-    object-fit: fit;
-    width: 40px;
-    height: auto;
-    border: 3px solid transparent;
-    border-radius: 15px;
-    position: fixed;
-    top: 332px;
-    right: 117px;
-    z-index: 10;
-    rotate: 72deg;
-}
-
-.second-train {
-    aspect-ratio: 1;
-    object-fit: fit;
-    width: 40px;
-    height: auto;
-    border: 3px solid transparent;
-    border-radius: 15px;
-    position: fixed;
-    top: 332px;
-    right: 278px;
-    z-index: 10;
-    rotate: -72deg;
-}
-
-.third-train {
-    aspect-ratio: 1;
-    object-fit: fit;
-    width: 40px;
-    height: auto;
-    border: 3px solid transparent;
-    border-radius: 15px;
-    position: fixed;
-    bottom: 265px;
-    right: 255px;
-    z-index: 10;
-    rotate: 215deg;
-}
-
-
-.fourth-train {
-    aspect-ratio: 1;
-    object-fit: fit;
-    width: 40px;
-    height: auto;
-    border: 3px solid transparent;
-    border-radius: 15px;
-    position: fixed;
-    bottom: 265px;
-    right: 140px;
-    z-index: 10;
-    rotate: 140deg;
-}
-
-
-
 .button:not([disabled]):hover {
     background: #ddf4ea;
 }
@@ -185,4 +115,74 @@
     height: 300px;
     width: 300px;
     z-index: 1;
+}
+
+
+.mexican-train {
+    aspect-ratio: 1;
+    object-fit: fit;
+    width: 40px;
+    height: auto;
+    border: 3px solid transparent;
+    border-radius: 15px;
+    position: relative;
+    bottom: 438px;
+    z-index: 10;
+}
+
+.first-train {
+    aspect-ratio: 1;
+    object-fit: fit;
+    width: 40px;
+    height: auto;
+    border: 3px solid transparent;
+    border-radius: 15px;
+    position: relative;
+    bottom: 195px;
+    left: 80px;
+    z-index: 11;
+    rotate: 72deg;
+}
+
+.second-train {
+    aspect-ratio: 1;
+    object-fit: fit;
+    width: 40px;
+    height: auto;
+    border: 3px solid transparent;
+    border-radius: 15px;
+    position: relative;
+    bottom: 242px;
+    right: 81px;
+    z-index: 10;
+    rotate: -72deg;
+}
+
+.third-train {
+    aspect-ratio: 1;
+    object-fit: fit;
+    width: 40px;
+    height: auto;
+    border: 3px solid transparent;
+    border-radius: 15px;
+    position: relative;
+    bottom: 210px;
+    right: 55px;
+    z-index: 10;
+    rotate: 215deg;
+}
+
+
+.fourth-train {
+    aspect-ratio: 1;
+    object-fit: fit;
+    width: 40px;
+    height: auto;
+    border: 3px solid transparent;
+    border-radius: 15px;
+    position: relative;
+    bottom: 258px;
+    left: 55px;
+    z-index: 10;
+    rotate: 140deg;
 }
