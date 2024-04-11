@@ -69,7 +69,7 @@
     z-index: 3;
 }
 
-.button:not([disabled]) {
+.button:is([disabled]) {
     background: #d8d8d8;
     color: #a5a4a4;
 }

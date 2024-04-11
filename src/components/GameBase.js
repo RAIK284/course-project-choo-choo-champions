@@ -7,9 +7,30 @@ import {
 } from "./GameLogic";
 import { ConvertToReact } from "./Domino";
 import "./GameBase.css";
+import { useEffect, useState } from "react";
 
 function GameChoice({ src, alt, onSelect, isSelected }) {
   const players = ["max", "arjun", "carly"];
+
+  const [currentPlayerIndex, setCurrentPlayerIndex] = useState(0);
+
+  useEffect(() => {
+    const storedIndex = sessionStorage.getItem("currentPlayerIndex");
+    if (storedIndex !== null) {
+      setCurrentPlayerIndex(parseInt(storedIndex));
+    }
+  }, []);
+
+  const switchToNextPlayer = () => {
+    const nextIndex = (currentPlayerIndex + 1) % players.length;
+    setCurrentPlayerIndex(nextIndex);
+    sessionStorage.setItem("currentPlayerIndex", nextIndex.toString());
+  };
+
+  const finishTurn = () => {
+    switchToNextPlayer();
+  };
+
   const startingDomino = [[90, 12, 12]];
   if (sessionStorage.getItem("Player Dominoes") == null) {
     GenerateDominoesForPlayers(players, startingDomino);
@@ -44,11 +65,11 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
                 src="./trainstation.png"
                 alt="domino train station"
               />
-              <div aria-disabled="true" className="StartingDomino">
-                {sDomino}
-              </div>
+              <div className="StartingDomino">{sDomino}</div>
               {/* CARLY FIX THIS!! */}
-              <button className="button">Finish Turn</button>{" "}
+              <button className="button" onClick={finishTurn}>
+                Finish Turn
+              </button>{" "}
             </div>
           </div>
           {/* end of right content  */}
