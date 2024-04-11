@@ -1,8 +1,9 @@
 import { GenerateDominoBankForGame } from "./DominoBank";
 
-export function GenerateDominoesForPlayers(player_list) {
+export function GenerateDominoesForPlayers(player_list, startingDomino) {
   GenerateDominoBankForGame();
   const dominos = JSON.parse(sessionStorage.getItem("Domino"));
+  dominos.splice(dominos.indexOf(startingDomino));
   // generate the "dictionaries"
   const playerDominoes = {};
   for (let k = 0; k < player_list.length; k++) {

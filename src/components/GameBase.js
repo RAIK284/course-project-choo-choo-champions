@@ -6,11 +6,11 @@ import "./GameBase.css";
 
 function GameChoice({ src, alt, onSelect, isSelected }) {
   const players = ["max", "arjun", "carly"];
+  const startingDomino = [[90,12,12]];
   if(sessionStorage.getItem("Player Dominoes") == null){
-    GenerateDominoesForPlayers(players);
+    GenerateDominoesForPlayers(players, startingDomino);
   }
   const playerDominoes = JSON.parse(sessionStorage.getItem("Player Dominoes"));
-  const startingDomino = [[91,12,12]];
   if(sessionStorage.getItem("Player Paths") == null){
     GeneratePathsForGame(startingDomino, players)
   }
