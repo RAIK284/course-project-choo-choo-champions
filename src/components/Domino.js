@@ -48,7 +48,7 @@ const getColor = (number) => {
     case 12:
       return "#909090";
     default:
-      return 'FFFFFFF';
+      return "FFFFFFF";
   }
 };
 
