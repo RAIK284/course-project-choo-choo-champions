@@ -4,6 +4,7 @@ import {
   GenerateDominoesForPlayers,
   GeneratePathsForGame,
   DeterminePlayablePaths,
+  DrawADomino,
 } from "./GameLogic";
 import { ConvertToReact } from "./Domino";
 import "./GameBase.css";
@@ -11,6 +12,10 @@ import { useEffect, useState } from "react";
 
 function GameChoice({ src, alt, onSelect, isSelected }) {
   const players = ["max", "arjun", "carly"];
+  const startingDomino = [[90, 12, 12]];
+  if (sessionStorage.getItem("Player Dominoes") == null) {
+    GenerateDominoesForPlayers(players, startingDomino);
+  }
 
   const [currentPlayerIndex, setCurrentPlayerIndex] = useState(0);
 
@@ -31,10 +36,11 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
     switchToNextPlayer();
   };
 
-  const startingDomino = [[90, 12, 12]];
-  if (sessionStorage.getItem("Player Dominoes") == null) {
-    GenerateDominoesForPlayers(players, startingDomino);
+  const DrawDomino = () => {
+    DrawADomino('carly', players);
+    window.location.reload(); 
   }
+
   const playerDominoes = JSON.parse(sessionStorage.getItem("Player Dominoes"));
   if (sessionStorage.getItem("Player Paths") == null) {
     GeneratePathsForGame(startingDomino, players);
@@ -54,7 +60,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
               <h1 className="banktitle">Bank</h1>
               <div className="bank">{dominos}</div>
               {/* end of bank group */}
-              <button className="button">Draw</button>
+              <button className="button" onClick={DrawDomino}>Draw</button>
             </div>
             {/* end of left content */}
             <div className="inner-content">
