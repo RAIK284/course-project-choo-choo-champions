@@ -63,10 +63,16 @@
     justify-content: center;
     line-height: auto;
     margin-top: 10px;
+    margin-right:10px;
+    margin-left:10px;
     max-width: 200px;
     padding: 15px 30px;
     width: 200px;
     z-index: 3;
+}
+
+.button-container {
+    display: flex;
 }
 
 .button:is([disabled]) {

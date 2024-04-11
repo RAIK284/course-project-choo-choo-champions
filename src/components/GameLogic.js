@@ -95,7 +95,7 @@ export function DrawADomino(player, player_list){
   const paths = DeterminePlayablePaths(player, player_list);
   const boneyard = JSON.parse(sessionStorage.getItem("Boneyard"));
   const playerDominos = JSON.parse(sessionStorage.getItem("Player Dominoes"));
-  if(boneyard.length !== 0){
+  if(boneyard.length === 0){
     alert('Cannot draw domino. There are no dominoes available!');
   }
   if(paths.includes("Draw")){
