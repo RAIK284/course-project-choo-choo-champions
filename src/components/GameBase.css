@@ -2,7 +2,7 @@
     position: absolute;
     z-index: 2;
     rotate: 90deg;
-    top: 200px;
+    top: 220px;
     pointer-events: none;
 }
 
@@ -54,8 +54,6 @@
     background: #f2f9f6;
     border-radius: 12px;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.123);
-    -webkit-box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.123);
-    -moz-box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.123);
     color: #191818;
     display: flex;
     font-size: 24px;
@@ -64,16 +62,37 @@
     justify-content: center;
     line-height: auto;
     margin-top: 10px;
-    margin-right:10px;
-    margin-left:10px;
+    margin-right: 10px;
+    margin-left: 10px;
     max-width: 200px;
     padding: 15px 30px;
-    width: 200px;
+    width: 170px;
     z-index: 3;
+}
+
+.finish-turn-button {
+    align-items: center;
+    background-color: #f2f9f6;
+    border-radius: 12px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.123);
+    color: #191818;
+    display: flex;
+    font-size: 24px;
+    font-weight: 1000;
+    min-height: 80px;
+    justify-content: center;
+    position: relative;
+    bottom: 200px;
+    max-width: 200px;
+    width: 200px;
+    z-index: 4;
+    margin-top: -26px;
 }
 
 .button-container {
     display: flex;
+    width: 100%;
+    justify-content: center;
 }
 
 .button:is([disabled]) {
@@ -89,12 +108,10 @@
     align-items: center;
     display: flex;
     flex-direction: column;
-    flex: auto;
-    gap: auto;
-    justify-content: space-evenly;
-    margin: 0 auto;
-    position: relative;
+    margin: auto;
+    /* position: relative; */
     z-index: 1;
+    height: 500px;
 }
 
 .players_turn {
@@ -105,15 +122,14 @@
 
 .sidegroup {
     align-items: center;
+    align-content: center;
     display: flex;
     flex-direction: row;
     gap: 20px;
-    height: 50%;
     justify-content: space-evenly;
     margin: 24px 0 0 0;
     max-width: 100%;
-    position: relative;
-    width: 2000px;
+    min-width: 90%;
     z-index: 1;
 }
 
@@ -123,7 +139,6 @@
     z-index: 1;
 }
 
-
 .mexican-train {
     aspect-ratio: 1;
     object-fit: fit;
@@ -132,7 +147,7 @@
     border: 3px solid transparent;
     border-radius: 15px;
     position: relative;
-    bottom: 438px;
+    bottom: 435px;
     z-index: 10;
 }
 
@@ -177,7 +192,6 @@
     z-index: 10;
     rotate: 215deg;
 }
-
 
 .fourth-train {
     aspect-ratio: 1;
