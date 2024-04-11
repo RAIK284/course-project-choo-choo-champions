@@ -43,14 +43,14 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
   };
 
   const SelectADominoToPlay = () => {
-    const domino = sessionStorage.getItem('SelectedDomino');
+    const domino = JSON.parse(sessionStorage.getItem('SelectedDomino'));
     if(domino == null){
       alert("No domino selected");
       return;
     }
     const result = CheckIfDominoIsPlayable("carly", players, domino);
-    if(result !== null){
-      alert(result);
+    if(result !== undefined){
+      alert("Playable Paths: " + result.toString());
     }
   };
 

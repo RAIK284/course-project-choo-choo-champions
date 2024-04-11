@@ -122,10 +122,9 @@ export function CheckIfDominoIsPlayable(player, player_list, domino) {
   const paths = DeterminePlayablePaths(player, player_list);
   const playerPaths = JSON.parse(sessionStorage.getItem("Player Paths"));
   const playablePaths = [];
-  
   for(let i = 0; i < paths.length; i++) {
     if(playerPaths[paths[i]].Dominoes.length === 0) {
-      if(playerPaths['Starting Domino'][2] === domino[1] || playerPaths['Starting Domino'][2] === domino[2]) {
+      if(playerPaths['Starting Domino'][0][2] === domino[1] || playerPaths['Starting Domino'][0][2] === domino[2]) {
         playablePaths.push(paths[i]);
       }
     } else {

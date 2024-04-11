@@ -77,6 +77,9 @@ function Domino({ top, bottom, isSelected, onSelect }) {
   const bottomNumberDots = {
     color: getDots(bottom),
   };
+  if(isSelected){
+    sessionStorage.setItem("SelectedDomino", JSON.stringify([0, bottom, top]));
+  }
 
   return (
     <div
