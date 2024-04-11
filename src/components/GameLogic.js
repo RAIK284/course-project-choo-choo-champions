@@ -98,7 +98,7 @@ export function DrawADomino(player, player_list){
   if(boneyard.length !== 0){
     alert('Cannot draw domino. There are no dominoes available!');
   }
-  f(paths.includes("Draw")){
+  if(paths.includes("Draw")){
     playerDominos[player].push(boneyard.splice(Math.floor(Math.random() * boneyard.length), 1)[0]);
     sessionStorage.setItem('Boneyard', JSON.stringify(boneyard));
     sessionStorage.setItem('Player Dominoes', JSON.stringify(playerDominos));
