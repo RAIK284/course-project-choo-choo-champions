@@ -3,7 +3,6 @@ import Background from "./Background";
 import {
   GenerateDominoesForPlayers,
   GeneratePathsForGame,
-  DeterminePlayablePaths,
   DrawADomino,
   CheckIfDominoIsPlayable,
 } from "./GameLogic";
@@ -12,6 +11,7 @@ import "./GameBase.css";
 import { useEffect, useState } from "react";
 
 function GameChoice({ src, alt, onSelect, isSelected }) {
+  // hard coded setup
   const players = ["max", "arjun", "carly"];
   const startingDomino = [[90, 12, 12]];
   if (sessionStorage.getItem("Player Dominoes") == null) {
@@ -54,15 +54,19 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
     }
   };
 
+  // set up round
   const playerDominoes = JSON.parse(sessionStorage.getItem("Player Dominoes"));
   if (sessionStorage.getItem("Player Paths") == null) {
     GeneratePathsForGame(startingDomino, players);
   }
   const playerPaths = JSON.parse(sessionStorage.getItem("Player Paths"));
-  //const dominos = ConvertToReact(playerPaths["Starting Domino"]);
   const dominos = ConvertToReact(playerDominoes["carly"]);
   const sDomino = ConvertToReact(playerPaths["Starting Domino"]);
-  console.log(DeterminePlayablePaths("carly", players));
+
+  function turn(player){
+
+  }
+  turn();
   return (
     <>
       <div className="full-page">

@@ -41,6 +41,7 @@ export function DeterminePlayablePaths(player, player_list) {
     for (let j = 0; j < player_list.length; j++) {
       const pathDominoes = playerPaths[player_list[j]]["Dominoes"];
       // if train is playable we can check for playability
+      // TODO: this if will have to be modified in the future (can keep right now)
       if (playerPaths[player_list[j]].Playable || player_list[j] === player) {
         // if there isn't a path we check the starting domino
         if (
@@ -113,8 +114,10 @@ export function DrawADomino(player, player_list) {
     );
     sessionStorage.setItem("Boneyard", JSON.stringify(boneyard));
     sessionStorage.setItem("Player Dominoes", JSON.stringify(playerDominos));
+    return true;
   } else {
     alert("Cannot draw domino. There are playable dominoes!");
+    return false;
   }
 }
 
@@ -141,6 +144,30 @@ export function CheckIfDominoIsPlayable(player, player_list, domino) {
     return playablePaths;
   }
 }
+
+export function PlayDomino(player, player_list, domino){
+  // this runs under assumption that the call to this function will only occur on a playable path
+  const playerDominos = JSON.parse(sessionStorage.getItem("Player Dominoes"));
+  const playerPaths = JSON.parse(sessionStorage.getItem("Player Paths"));
+  playerDominos[player].splice(playerDominos[player].indexOf(domino));
+  playerPaths[player].Dominoes.push(domino);
+
+  // check for double, if it is return false (signifying turn isn't ove)
+  if(domino[1] === domino[2]){
+    for(let i=0;i<player_list.length;i++){
+      if(player !== player_list[i]){
+        playerPaths[player].Playable = false;
+      }
+    }
+    sessionStorage('Player Paths', JSON.stringify(playerPaths));
+    sessionStorage('Player Dominoes', JSON.stringify(playerDominos));
+    return false;
+  }
+  sessionStorage('Player Paths', JSON.stringify(playerPaths));
+  sessionStorage('Player Dominoes', JSON.stringify(playerDominos));
+  return true;
+}
+
 function GameLogic() {
   return null;
 }
