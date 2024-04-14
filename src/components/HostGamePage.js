@@ -4,11 +4,15 @@ import Background from './Background';
 import './HostGamePage.css';
 
 function HostGamePage() {
-    const [sessionId] = useState(generateSessionId());
+    const [sessionId, setSessionId] = useState(null);
     const [players, setPlayers] = useState([{ username: sessionStorage.getItem('username'), ready: true }]);
     const [ws, setWs] = useState(null);
 
     useEffect(() => {
+        if (ws !== null) {
+            return;
+        }
+
         const newWs = new WebSocket('ws://localhost:8765');
 
         newWs.onopen = () => {
@@ -17,9 +21,16 @@ function HostGamePage() {
         };
 
         newWs.onmessage = (event) => {
+            console.log('Message received:', event.data);
             const message = JSON.parse(event.data);
             if (message.type === 'playerJoined') {
-                setPlayers([...players, message.player]);
+                const newPlayer = message.player;
+                if (!players.some(player => player.username === newPlayer.username)) {
+                    console.log('Adding new player:', newPlayer);
+                    setPlayers(prevPlayers => [...prevPlayers, newPlayer]);
+                }
+            } else if (message.type === 'sessionId') {
+                setSessionId(message.sessionId);
             }
         };
 
@@ -32,21 +43,11 @@ function HostGamePage() {
         };
 
         return () => {
-            if (ws) {
-                ws.close();
+            if (newWs !== null) {
+                newWs.close();
             }
         };
     }, []);
-
-    function generateSessionId() {
-        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-        const length = 6;
-        let result = '';
-        for (let i = 0; i < length; i++) {
-            result += characters.charAt(Math.floor(Math.random() * characters.length));
-        }
-        return result;
-    }
 
     const handleStartGame = () => {
     };

@@ -6,6 +6,7 @@ import './JoinCodePage.css';
 function JoinCodePage() {
     const [joinCode, setJoinCode] = useState('');
     const [ws, setWs] = useState(null);
+    const [sessionId, setSessionId] = useState(null);
 
     useEffect(() => {
         const newWs = new WebSocket('ws://localhost:8765');
@@ -13,6 +14,13 @@ function JoinCodePage() {
         newWs.onopen = () => {
             console.log('WebSocket connection established');
             setWs(newWs);
+        };
+
+        newWs.onmessage = (event) => {
+            const message = JSON.parse(event.data);
+            if (message.type === 'sessionId') {
+                setSessionId(message.sessionId);
+            }
         };
 
         newWs.onclose = () => {
@@ -31,9 +39,8 @@ function JoinCodePage() {
     }, []);
 
     const handleJoinGame = () => {
-        if (ws && joinCode) {
+        if (ws && joinCode === sessionId) {
             const username = sessionStorage.getItem('username');
-
             ws.send(JSON.stringify({ type: 'joinGame', sessionId: joinCode, username }));
             setJoinCode('');
         } else {
