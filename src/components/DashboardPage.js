@@ -59,7 +59,13 @@ function DashboardPage() {
                             <h2 className="dashboard-title">Play a Game</h2>
                             <div className="button-row">
                                 <Link to="/join" className="button-link">Join</Link>
-                                <Link to="/host" className="button-link">Host</Link>
+                                <Link
+                                    to={`/host?username=${sessionStorage.getItem('username')}&ready=true`}
+                                    className="button-link"
+                                >
+                                    Host
+                                </Link>
+
                             </div>
                             <div className="button-row">
                                 <Link to="/how-to-play" className="button-link">How to Play</Link>

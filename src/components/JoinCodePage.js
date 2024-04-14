@@ -1,15 +1,41 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import NavBar from './NavBar';
 import Background from './Background';
 import './JoinCodePage.css';
 
 function JoinCodePage() {
     const [joinCode, setJoinCode] = useState('');
+    const [ws, setWs] = useState(null);
+
+    useEffect(() => {
+        const newWs = new WebSocket('ws://localhost:8765');
+
+        newWs.onopen = () => {
+            console.log('WebSocket connection established');
+            setWs(newWs);
+        };
+
+        newWs.onclose = () => {
+            console.log('WebSocket connection closed');
+        };
+
+        newWs.onerror = (error) => {
+            console.error('WebSocket error:', error);
+        };
+
+        return () => {
+            if (ws) {
+                ws.close();
+            }
+        };
+    }, []);
 
     const handleJoinGame = () => {
-        if (joinCode.trim().toUpperCase() === 'DEMO') {
-            // Redirect to "/trains" if the join code is "DEMO"
-            window.location.href = '/trains';
+        if (ws && joinCode) {
+            const username = sessionStorage.getItem('username');
+
+            ws.send(JSON.stringify({ type: 'joinGame', sessionId: joinCode, username }));
+            setJoinCode('');
         } else {
             // Alert for invalid join code
             alert("Invalid join code.");
