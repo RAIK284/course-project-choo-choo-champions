@@ -89,8 +89,13 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
               <h3 className="players_turn">
                 It is <strong>{players[currentPlayerIndex]}</strong>'s turn
               </h3>{" "}
+              {/* first player domino */}
               <div className="playerOneDomino">
                 {ConvertToReact([[0, 3, 12]])}
+              </div>
+              {/* second player domino */}
+              <div className="playerTwoDomino">
+                {ConvertToReact([[0, 6, 12]])}
               </div>
               {/* Theoretically this will all be moved to another component to not clutter gamebase, for now do not touch */}
               <img

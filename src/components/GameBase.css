@@ -1,8 +1,8 @@
 .StartingDomino {
     position: absolute;
-    z-index: 2;
+    z-index: 15;
     rotate: 90deg;
-    top: 310px;
+    top: 220px;
     pointer-events: none;
 }
 
@@ -12,6 +12,15 @@
     rotate: -72deg;
     top: 177px;
     right: 300px;
+    pointer-events: none;
+}
+
+.playerTwoDomino {
+    position: absolute;
+    z-index: 100;
+    rotate: 72deg;
+    top: 177px;
+    right: 0px;
     pointer-events: none;
 }
 
