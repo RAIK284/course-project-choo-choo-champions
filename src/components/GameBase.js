@@ -6,7 +6,7 @@ import {
   DrawADomino,
   CheckIfDominoIsPlayable,
 } from "./GameLogic";
-import { ConvertToReact} from "./Domino";
+import { ConvertToReact } from "./Domino";
 import "./GameBase.css";
 import { useEffect, useState } from "react";
 
@@ -43,13 +43,13 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
   };
 
   const SelectADominoToPlay = () => {
-    const domino = JSON.parse(sessionStorage.getItem('SelectedDomino'));
-    if(domino == null){
+    const domino = JSON.parse(sessionStorage.getItem("SelectedDomino"));
+    if (domino == null) {
       alert("No domino selected");
       return;
     }
     const result = CheckIfDominoIsPlayable("carly", players, domino);
-    if(result !== undefined){
+    if (result !== undefined) {
       alert("Playable Paths: " + result.toString());
     }
   };
@@ -63,9 +63,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
   const dominos = ConvertToReact(playerDominoes["carly"]);
   const sDomino = ConvertToReact(playerPaths["Starting Domino"]);
 
-  function turn(player){
-
-  }
+  function turn(player) {}
   turn();
   return (
     <>
@@ -83,7 +81,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
                 </button>
                 <button className="button" onClick={SelectADominoToPlay}>
                   AddToPath
-                  </button>
+                </button>
               </div>
             </div>
             {/* end of left content */}
@@ -91,6 +89,10 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
               <h3 className="players_turn">
                 It is <strong>{players[currentPlayerIndex]}</strong>'s turn
               </h3>{" "}
+              <div className="playerOneDomino">
+                {ConvertToReact([[0, 3, 12]])}
+              </div>
+              {/* Theoretically this will all be moved to another component to not clutter gamebase, for now do not touch */}
               <img
                 className="trainstation"
                 src="./trainstation.png"
@@ -117,11 +119,6 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
                 src="https://cdn.builder.io/api/v1/image/assets/TEMP/b113a030456c013a7e21d15ec68b8ef946e9a436bdd585825811f93c41853999"
                 alt="Blue Train"
               />
-              {/* <img
-                className="game-image-choice"
-                src="https://cdn.builder.io/api/v1/image/assets/TEMP/19af73f19f2af54ce737c599541168e9050396e728f163bd56c5c822021bf5ac"
-                alt="Pink Train"
-              /> */}
               <img
                 className="mexican-train"
                 src="https://cdn.builder.io/api/v1/image/assets/TEMP/2e707c1c15ef3106cc95045c56346e6166b027d11a3d59268444fa4919181093"

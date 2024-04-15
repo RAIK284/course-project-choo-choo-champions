@@ -2,7 +2,16 @@
     position: absolute;
     z-index: 2;
     rotate: 90deg;
-    top: 220px;
+    top: 310px;
+    pointer-events: none;
+}
+
+.playerOneDomino {
+    position: absolute;
+    z-index: 100;
+    rotate: -72deg;
+    top: 177px;
+    right: 300px;
     pointer-events: none;
 }
 
