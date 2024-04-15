@@ -1,5 +1,7 @@
 import NavBar from "./NavBar";
 import Background from "./Background";
+import RedTrain from "./RedTrain";
+
 import {
   GenerateDominoesForPlayers,
   GeneratePathsForGame,
@@ -133,26 +135,25 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
                 It is <strong>{players[currentPlayerIndex]}</strong>'s turn
               </h3>{" "}
               <div className="newTrainStation">
-                {/* mexican train domino */}
                 <div className="mexicanDomino">
                   {ConvertToReact([[0, 2, 12]])}
                 </div>
                 <div className="rotateDominos">
-                  <div className="playerOneDomino">
-                    {ConvertToReact([[0, 3, 12]])}
+                  <div className="train-domino-pairing">
+                    <div className="playerOneDomino">
+                      {ConvertToReact([[0, 3, 12]])}
+                    </div>
+                    <div className="playerOneTrain">{RedTrain()}</div>
                   </div>
-                  {/* fourth player domino */}
                   <div className="playerFourDomino">
                     {ConvertToReact([[0, 6, 12]])}
                   </div>
                 </div>
                 <div className="StartingDomino">{sDomino}</div>
                 <div className="rotateDominos">
-                  {/* second player domino */}
                   <div className="playerTwoDomino">
                     {ConvertToReact([[0, 9, 12]])}
                   </div>
-                  {/* third player domino */}
                   <div className="playerThreeDomino">
                     {ConvertToReact([[0, 11, 12]])}
                   </div>

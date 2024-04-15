@@ -1,3 +1,16 @@
+.playerOneTrain {
+    z-index: 15;
+    transform: scale(.2) rotate(-60deg);
+    padding-top: 0%;
+}
+
+.train-domino-pairing {
+    display: flex;
+    flex-direction: row;
+    justify-items: space-evenly;
+    align-items: center;
+}
+
 .StartingDomino {
     z-index: 15;
     rotate: 90deg;
@@ -138,7 +151,7 @@
 
 }
 
-.finish-turn-button:is([disabled]){
+.finish-turn-button:is([disabled]) {
     background: #d8d8d8;
     color: #a5a4a4;
 }
