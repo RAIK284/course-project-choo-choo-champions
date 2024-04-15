@@ -21,14 +21,15 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
     GenerateDominoesForPlayers(players, startingDomino);
   }
 
-  // functions that we will use within 
+  // a bunch of booleans that we will use within 
   const [currentPlayerIndex, setCurrentPlayerIndex] = useState(0);
   const [drawDisabled, setDrawDisabled] = useState(true);
   const [playDisabled, setPlayDisabled] = useState(true);
-  const [finishDisabled, sitFinishDisabled] = useState(true);
+  const [finishDisabled, setFinishDisabled] = useState(true);
   const [loading, setLoading] = useState(true);
   const [inTurn, setInTurn] = useState(false);
 
+  // now the functions
   useEffect(() => {
     const storedIndex = sessionStorage.getItem("currentPlayerIndex");
     if (storedIndex !== null) {
@@ -38,6 +39,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
 
   const finishTurn = () => {
     switchToNextPlayer();
+    setInTurn(false);
   };
 
   const switchToNextPlayer = () => {
@@ -56,27 +58,30 @@ const SelectADominoToPlay = () => {
   const domino = JSON.parse(sessionStorage.getItem('SelectedDomino'));
   if(domino == null){
     alert("No domino selected");
-    return;
+    return false;
   }
   const result = CheckIfDominoIsPlayable(currentPlayer, players, domino);
   if(result !== undefined){
     alert("Playable Paths: " + result.toString());
+    return true;
   }
+  return false;
 };
 
 async function Turn() {
   // timer goes here
-  const initialDominoes = (JSON.parse(sessionStorage.getItem("Player Dominoes")))[currentPlayer];
-  const initialDominoLength = initialDominoes.length;
   const options = DeterminePlayablePaths(currentPlayer, players);
-  const drew = false;
-  //while((JSON.parse(sessionStorage.getItem("Player Dominoes")))[currentPlayer].length === initialDominoLength){
-    if(options.includes('Draw')){
-      setDrawDisabled(false);
-    } else if(options.includes(currentPlayer) || options.includes('Mexican Train')){
-      setPlayDisabled(false)
+  if(options.includes('Draw')){
+    setDrawDisabled(false);
+    const optionsTwo = DeterminePlayablePaths(currentPlayer, players);
+    if(!optionsTwo.includes('Draw')){
+      setDrawDisabled(true);
+      setPlayDisabled(false);
     }
-  //}
+  } else if(options.includes(currentPlayer) || options.includes('Mexican Train')){
+    setPlayDisabled(false);
+  }
+  setFinishDisabled(false);
 }
   // set up round
   const playerDominoes = JSON.parse(sessionStorage.getItem("Player Dominoes"));
