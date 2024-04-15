@@ -136,6 +136,15 @@
     margin-top: -26px;
 }
 
+.finish-turn-button:is([disabled]){
+    background: #d8d8d8;
+    color: #a5a4a4;
+}
+
+.finish-turn-button:not([disabled]):hover {
+    background: #ddf4ea;
+}
+
 .button-container {
     display: flex;
     width: 100%;
