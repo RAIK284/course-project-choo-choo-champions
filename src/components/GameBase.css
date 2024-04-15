@@ -2,27 +2,56 @@
     position: absolute;
     z-index: 15;
     rotate: 90deg;
-    top: 220px;
+    top: 320px;
     pointer-events: none;
 }
 
 .playerOneDomino {
-    position: absolute;
+    position: relative;
     z-index: 100;
     rotate: -72deg;
-    top: 177px;
-    right: 300px;
+    top: 153px;
+    right: 151px;
     pointer-events: none;
 }
 
-.playerTwoDomino {
-    position: absolute;
+/* .playerTwoDomino {
+    position: relative;
+    z-index: 100;
+    rotate: -144deg;
+    top: 335px;
+    right: 248px;
+    pointer-events: none;
+} */
+
+/* .playerThreeDomino {
+    position: relative;
+    z-index: 100;
+    rotate: 144deg;
+    top: 335px;
+    right: 52px;
+    pointer-events: none;
+}
+
+.playerFourDomino {
+    position: relative;
     z-index: 100;
     rotate: 72deg;
     top: 177px;
     right: 0px;
     pointer-events: none;
 }
+
+.mexicanDomino {
+    position: relative;
+    z-index: 100;
+    rotate: 0;
+    top: 0px;
+    right: 0px;
+    pointer-events: none;
+} */
+
+
 
 .content {
     align-items: center;

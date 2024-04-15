@@ -94,9 +94,21 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
                 {ConvertToReact([[0, 3, 12]])}
               </div>
               {/* second player domino */}
-              <div className="playerTwoDomino">
+              {/* <div className="playerTwoDomino">
+                {ConvertToReact([[0, 9, 12]])}
+              </div> */}
+              {/* third player domino */}
+              {/* <div className="playerThreeDomino">
+                {ConvertToReact([[0, 11, 12]])}
+              </div> */}
+              {/* fourth player domino */}
+              {/* <div className="playerFourDomino">
                 {ConvertToReact([[0, 6, 12]])}
-              </div>
+              </div> */}
+              {/* mexican train domino */}
+              {/* <div className="playerFiveDomino">
+                {ConvertToReact([[0, 2, 12]])}
+              </div> */}
               {/* Theoretically this will all be moved to another component to not clutter gamebase, for now do not touch */}
               <img
                 className="trainstation"
