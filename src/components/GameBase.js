@@ -5,6 +5,7 @@ import {
   GeneratePathsForGame,
   DrawADomino,
   CheckIfDominoIsPlayable,
+  DeterminePlayablePaths
 } from "./GameLogic";
 import { ConvertToReact } from "./Domino";
 import "./GameBase.css";
@@ -14,11 +15,19 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
   // hard coded setup
   const players = ["max", "arjun", "carly"];
   const startingDomino = [[90, 12, 12]];
+  const currentPlayer = 'max';
+
   if (sessionStorage.getItem("Player Dominoes") == null) {
     GenerateDominoesForPlayers(players, startingDomino);
   }
 
+  // functions that we will use within 
   const [currentPlayerIndex, setCurrentPlayerIndex] = useState(0);
+  const [drawDisabled, setDrawDisabled] = useState(true);
+  const [playDisabled, setPlayDisabled] = useState(true);
+  const [finishDisabled, sitFinishDisabled] = useState(true);
+  const [loading, setLoading] = useState(true);
+  const [inTurn, setInTurn] = useState(false);
 
   useEffect(() => {
     const storedIndex = sessionStorage.getItem("currentPlayerIndex");
@@ -27,44 +36,63 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
     }
   }, []);
 
+  const finishTurn = () => {
+    switchToNextPlayer();
+  };
+
   const switchToNextPlayer = () => {
     const nextIndex = (currentPlayerIndex + 1) % players.length;
     setCurrentPlayerIndex(nextIndex);
     sessionStorage.setItem("currentPlayerIndex", nextIndex.toString());
   };
 
-  const finishTurn = () => {
-    switchToNextPlayer();
-  };
 
-  const DrawDomino = () => {
-    DrawADomino("carly", players);
-    window.location.reload();
-  };
+const DrawDomino = () => {
+  DrawADomino(currentPlayer, players);
+  window.location.reload();
+};
 
-  const SelectADominoToPlay = () => {
-    const domino = JSON.parse(sessionStorage.getItem("SelectedDomino"));
-    if (domino == null) {
-      alert("No domino selected");
-      return;
+const SelectADominoToPlay = () => {
+  const domino = JSON.parse(sessionStorage.getItem('SelectedDomino'));
+  if(domino == null){
+    alert("No domino selected");
+    return;
+  }
+  const result = CheckIfDominoIsPlayable(currentPlayer, players, domino);
+  if(result !== undefined){
+    alert("Playable Paths: " + result.toString());
+  }
+};
+
+async function Turn() {
+  // timer goes here
+  const initialDominoes = (JSON.parse(sessionStorage.getItem("Player Dominoes")))[currentPlayer];
+  const initialDominoLength = initialDominoes.length;
+  const options = DeterminePlayablePaths(currentPlayer, players);
+  const drew = false;
+  //while((JSON.parse(sessionStorage.getItem("Player Dominoes")))[currentPlayer].length === initialDominoLength){
+    if(options.includes('Draw')){
+      setDrawDisabled(false);
+    } else if(options.includes(currentPlayer) || options.includes('Mexican Train')){
+      setPlayDisabled(false)
     }
-    const result = CheckIfDominoIsPlayable("carly", players, domino);
-    if (result !== undefined) {
-      alert("Playable Paths: " + result.toString());
-    }
-  };
-
+  //}
+}
   // set up round
   const playerDominoes = JSON.parse(sessionStorage.getItem("Player Dominoes"));
   if (sessionStorage.getItem("Player Paths") == null) {
     GeneratePathsForGame(startingDomino, players);
   }
   const playerPaths = JSON.parse(sessionStorage.getItem("Player Paths"));
-  const dominos = ConvertToReact(playerDominoes["carly"]);
+  const dominos = ConvertToReact(playerDominoes[currentPlayer]);
   const sDomino = ConvertToReact(playerPaths["Starting Domino"]);
 
-  function turn(player) {}
-  turn();
+  if(!loading && !inTurn){
+    Turn(currentPlayer);
+    setInTurn(true);
+  } else if(loading && !inTurn){
+    setLoading(false);
+  }
   return (
     <>
       <div className="full-page">
@@ -76,10 +104,10 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
               <div className="bank">{dominos}</div>
               {/* end of bank group */}
               <div className="button-container">
-                <button className="button" onClick={DrawDomino}>
+                <button className="button" onClick={DrawDomino} disabled={drawDisabled}>
                   Draw
                 </button>
-                <button className="button" onClick={SelectADominoToPlay}>
+                <button className="button" onClick={SelectADominoToPlay} disabled={playDisabled}>
                   AddToPath
                 </button>
               </div>
@@ -140,8 +168,8 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
                 className="mexican-train"
                 src="https://cdn.builder.io/api/v1/image/assets/TEMP/2e707c1c15ef3106cc95045c56346e6166b027d11a3d59268444fa4919181093"
                 alt="Orange Train"
-              /> */}
-              <button className="finish-turn-button" onClick={finishTurn}>
+              />
+              <button className="finish-turn-button" onClick={finishTurn} disabled={finishDisabled}>
                 Finish Turn
               </button>{" "}
             </div>
@@ -155,4 +183,5 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
     </>
   );
 }
+
 export default GameChoice;
