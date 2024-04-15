@@ -17,6 +17,9 @@ export function ConvertToReact(dominos) {
       onSelect={() => handleSelectDomino(index)}
     />
   ));
+  if(selectedDomino!==null){
+    sessionStorage.setItem('Selected Domino', dominos[selectedDomino]);
+  }
   return reactDominos;
 }
 const getColor = (number) => {
@@ -48,7 +51,7 @@ const getColor = (number) => {
     case 12:
       return "#909090";
     default:
-      return 'FFFFFFF';
+      return "FFFFFFF";
   }
 };
 
@@ -74,6 +77,9 @@ function Domino({ top, bottom, isSelected, onSelect }) {
   const bottomNumberDots = {
     color: getDots(bottom),
   };
+  if(isSelected){
+    sessionStorage.setItem("SelectedDomino", JSON.stringify([0, bottom, top]));
+  }
 
   return (
     <div
