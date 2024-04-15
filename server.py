@@ -8,7 +8,7 @@ clients = set()
 session_id = None
 
 
-async def handle_client(websocket, path):
+async def handle_client(websocket):
     global session_id
     clients.add(websocket)
     print(f"New client connected: {websocket.remote_address}")
@@ -23,7 +23,7 @@ async def handle_client(websocket, path):
             if message_type == 'joinGame':
                 if data.get('sessionId') == session_id:
                     username = data.get('username')
-                    new_player = {'username': username, 'ready': False}
+                    new_player = {'username': username, 'ready': True}
                     for client in clients:
                         await client.send(json.dumps({'type': 'playerJoined', 'player': new_player}))
                 else:

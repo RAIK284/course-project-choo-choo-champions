@@ -7,6 +7,7 @@ function JoinCodePage() {
     const [joinCode, setJoinCode] = useState('');
     const [ws, setWs] = useState(null);
     const [sessionId, setSessionId] = useState(null);
+    const [joinedGame, setJoinedGame] = useState(false);
 
     useEffect(() => {
         const newWs = new WebSocket('ws://localhost:8765');
@@ -42,7 +43,8 @@ function JoinCodePage() {
         if (ws && joinCode === sessionId) {
             const username = sessionStorage.getItem('username');
             ws.send(JSON.stringify({ type: 'joinGame', sessionId: joinCode, username }));
-            setJoinCode('');
+            setJoinedGame(true);
+            alert("Wait for the host to start the game.");
         } else {
             // Alert for invalid join code
             alert("Invalid join code.");
@@ -67,11 +69,13 @@ function JoinCodePage() {
                             placeholder="Enter join code"
                             value={joinCode}
                             onChange={(e) => setJoinCode(e.target.value)}
+                            readOnly={joinedGame}
                             className="join-code-input"
                         />
                         <button
                             className="confirm-join-code"
                             onClick={handleJoinGame}
+                            disabled={joinedGame}
                         >
                             Join Game
                         </button>
@@ -79,6 +83,7 @@ function JoinCodePage() {
                     <button
                         className="join-random-game"
                         onClick={handleJoinRandomGame}
+                        disabled={joinedGame}
                     >
                         Join Random Game
                     </button>

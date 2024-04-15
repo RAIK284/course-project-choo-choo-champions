@@ -7,6 +7,7 @@ function HostGamePage() {
     const [sessionId, setSessionId] = useState(null);
     const [players, setPlayers] = useState([{ username: sessionStorage.getItem('username'), ready: true }]);
     const [ws, setWs] = useState(null);
+    const [gameStarted, setGameStarted] = useState(false);
 
     useEffect(() => {
         if (ws !== null) {
@@ -50,6 +51,8 @@ function HostGamePage() {
     }, []);
 
     const handleStartGame = () => {
+        setGameStarted(true);
+        window.location.href = "/trains";
     };
 
     return (
@@ -69,7 +72,11 @@ function HostGamePage() {
                             </div>
                         ))}
                     </div>
-                    <button className="start-game" onClick={handleStartGame}>
+                    <button
+                        className="start-game"
+                        onClick={handleStartGame}
+                        disabled={gameStarted}
+                    >
                         Start Game
                     </button>
                 </div>
