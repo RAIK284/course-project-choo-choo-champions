@@ -145,12 +145,23 @@ export function CheckIfDominoIsPlayable(player, player_list, domino) {
   }
 }
 
-export function PlayDomino(player, player_list, domino){
+export function PlayDomino(player, player_list, domino, path){
   // this runs under assumption that the call to this function will only occur on a playable path
   const playerDominos = JSON.parse(sessionStorage.getItem("Player Dominoes"));
   const playerPaths = JSON.parse(sessionStorage.getItem("Player Paths"));
   playerDominos[player].splice(playerDominos[player].indexOf(domino));
-  playerPaths[player].Dominoes.push(domino);
+  
+  // get the direction right (reverse if bottom connects to bottom)
+  if(playerPaths[path].Dominoes.length===0 && playerPaths['Starting Domino'][2]===domino[1]){
+    const temp = domino[1];
+    domino[1] = domino[2];
+    domino[2] = temp;
+  } else if(playerPaths[path].Dominoes.length !== 0 && playerPaths[path].Dominoes[playerPaths[path].Dominoes.length][2]===domino[1]){
+    const temp = domino[1];
+    domino[1] = domino[2];
+    domino[2] = temp;
+  }
+  playerPaths[path].Dominoes.push(domino);
 
   // check for double, if it is return false (signifying turn isn't ove)
   if(domino[1] === domino[2]){
