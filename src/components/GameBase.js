@@ -1,7 +1,6 @@
 import NavBar from "./NavBar";
 import Background from "./Background";
-import RedTrain from "./RedTrain";
-
+import greenTrain from "./GreenTrain";
 import {
   GenerateDominoesForPlayers,
   GeneratePathsForGame,
@@ -143,7 +142,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
                     <div className="playerOneDomino">
                       {ConvertToReact([[0, 3, 12]])}
                     </div>
-                    <div className="playerOneTrain">{RedTrain()}</div>
+                    <div className="playerOneTrain">{greenTrain()}</div>
                   </div>
                   <div className="playerFourDomino">
                     {ConvertToReact([[0, 6, 12]])}
