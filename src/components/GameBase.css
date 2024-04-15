@@ -1,23 +1,55 @@
 .playerOneTrain {
     z-index: 15;
     transform: scale(.2) rotate(-60deg);
-    padding-top: 0%;
+    margin-left: -20px;
 }
 
-.train-domino-pairing {
+.playerTwoTrain {
+    z-index: 15;
+    transform: scale(.2) rotate(-120deg);
+    margin-left: -20px;
+}
+
+.playerThreeTrain {
+    z-index: 15;
+    transform: scale(.2) rotate(120deg);
+    margin-right: -20px;
+}
+
+.playerFourTrain {
+    z-index: 15;
+    transform: scale(.2) rotate(60deg);
+    margin-right: -20px;
+}
+
+.mexicanTrain {
+    z-index: 15;
+    transform: scale(.2) rotate(0deg);
+    margin-top: -10px;
+}
+
+.train-domino-pairing-top {
     display: flex;
     flex-direction: row;
     justify-items: space-evenly;
-    align-items: center;
+    align-items: self-start;
+}
+
+.train-domino-pairing-bottom {
+    display: flex;
+    flex-direction: row;
+    justify-items: space-evenly;
+    align-items: self-end;
 }
 
 .StartingDomino {
     z-index: 15;
     rotate: 90deg;
     pointer-events: none;
-    margin: -40px;
+    margin: 0;
     transform: scale(1.1);
     opacity: 90%;
+    margin-top: -80px;
 
 }
 
@@ -31,17 +63,30 @@
     justify-content: space-evenly;
 }
 
-.rotateDominos {
+.rotateDominoTop {
     display: flex;
-    gap: 180px;
     width: auto;
     height: auto;
     align-items: center;
     flex-direction: row;
-    justify-content: space-evenly;
+    justify-content: center;
     z-index: 100;
     pointer-events: none;
+    margin-top: -180px;
 }
+
+.rotateDominoBottom {
+    display: flex;
+    width: auto;
+    height: auto;
+    align-items: center;
+    flex-direction: row;
+    justify-content: center;
+    z-index: 100;
+    pointer-events: none;
+    margin-top: -80px;
+}
+
 
 .playerOneDomino {
     transform: rotate(-60deg);

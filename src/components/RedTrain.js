@@ -6,4 +6,4 @@ function redTrain() {
     />
   );
 }
-export default redTrain;
+export { redTrain };

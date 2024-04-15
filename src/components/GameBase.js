@@ -1,6 +1,11 @@
 import NavBar from "./NavBar";
 import Background from "./Background";
 import greenTrain from "./GreenTrain";
+import { redTrain } from "./RedTrain";
+import blueTrain from "./BlueTrain";
+import purpleTrain from "./PurpleTrain";
+import orangeTrain from "./OrangeTrain";
+
 import {
   GenerateDominoesForPlayers,
   GeneratePathsForGame,
@@ -137,24 +142,34 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
                 <div className="mexicanDomino">
                   {ConvertToReact([[0, 2, 12]])}
                 </div>
-                <div className="rotateDominos">
-                  <div className="train-domino-pairing">
+                <div className="mexicanTrain">{orangeTrain()}</div>
+                <div className="rotateDominoTop">
+                  <div className="train-domino-pairing-top">
                     <div className="playerOneDomino">
                       {ConvertToReact([[0, 3, 12]])}
                     </div>
                     <div className="playerOneTrain">{greenTrain()}</div>
                   </div>
-                  <div className="playerFourDomino">
-                    {ConvertToReact([[0, 6, 12]])}
+                  <div className="train-domino-pairing-top">
+                    <div className="playerFourTrain">{redTrain()}</div>
+                    <div className="playerFourDomino">
+                      {ConvertToReact([[0, 6, 12]])}
+                    </div>
                   </div>
                 </div>
                 <div className="StartingDomino">{sDomino}</div>
-                <div className="rotateDominos">
-                  <div className="playerTwoDomino">
-                    {ConvertToReact([[0, 9, 12]])}
+                <div className="rotateDominoBottom">
+                  <div className="train-domino-pairing-bottom">
+                    <div className="playerTwoDomino">
+                      {ConvertToReact([[0, 9, 12]])}
+                    </div>
+                    <div className="playerTwoTrain">{blueTrain()}</div>
                   </div>
-                  <div className="playerThreeDomino">
-                    {ConvertToReact([[0, 11, 12]])}
+                  <div className="train-domino-pairing-bottom">
+                    <div className="playerThreeTrain">{purpleTrain()}</div>
+                    <div className="playerThreeDomino">
+                      {ConvertToReact([[0, 11, 12]])}
+                    </div>
                   </div>
                 </div>
               </div>
