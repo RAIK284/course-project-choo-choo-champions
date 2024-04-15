@@ -1,57 +1,61 @@
 .StartingDomino {
-    position: absolute;
     z-index: 15;
     rotate: 90deg;
-    top: 320px;
+    pointer-events: none;
+    margin: -40px;
+    transform: scale(1.1);
+    opacity: 90%;
+
+}
+
+.newTrainStation {
+    display: flex;
+    flex-flow: column;
+    width: auto;
+    max-height: 342px;
+    align-items: center;
+    z-index: 50;
+    justify-content: space-evenly;
+}
+
+.rotateDominos {
+    display: flex;
+    gap: 180px;
+    width: auto;
+    height: auto;
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-evenly;
+    z-index: 100;
     pointer-events: none;
 }
 
 .playerOneDomino {
-    position: relative;
+    transform: rotate(-60deg);
     z-index: 100;
-    rotate: -72deg;
-    top: 153px;
-    right: 151px;
-    pointer-events: none;
 }
 
-/* .playerTwoDomino {
-    position: relative;
+.playerTwoDomino {
+    transform: rotate(-120deg);
     z-index: 100;
-    rotate: -144deg;
-    top: 335px;
-    right: 248px;
-    pointer-events: none;
-} */
+}
 
-/* .playerThreeDomino {
-    position: relative;
+.playerThreeDomino {
     z-index: 100;
-    rotate: 144deg;
-    top: 335px;
-    right: 52px;
-    pointer-events: none;
+    transform: rotate(120deg);
 }
 
 .playerFourDomino {
-    position: relative;
+    transform: rotate(60deg);
     z-index: 100;
-    rotate: 72deg;
-    top: 177px;
-    right: 0px;
-    pointer-events: none;
 }
 
 .mexicanDomino {
-    position: relative;
     z-index: 100;
-    rotate: 0;
-    top: 0px;
-    right: 0px;
+    margin: -25px;
+    margin-bottom: -50px;
     pointer-events: none;
-} */
-
-
+}
 
 .content {
     align-items: center;
@@ -128,12 +132,10 @@
     font-weight: 1000;
     min-height: 80px;
     justify-content: center;
-    position: relative;
-    bottom: 200px;
     max-width: 200px;
     width: 200px;
     z-index: 4;
-    margin-top: -26px;
+
 }
 
 .button-container {

@@ -89,34 +89,34 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
               <h3 className="players_turn">
                 It is <strong>{players[currentPlayerIndex]}</strong>'s turn
               </h3>{" "}
-              {/* first player domino */}
-              <div className="playerOneDomino">
-                {ConvertToReact([[0, 3, 12]])}
+              <div className="newTrainStation">
+                {/* mexican train domino */}
+                <div className="mexicanDomino">
+                  {ConvertToReact([[0, 2, 12]])}
+                </div>
+                <div className="rotateDominos">
+                  <div className="playerOneDomino">
+                    {ConvertToReact([[0, 3, 12]])}
+                  </div>
+                  {/* fourth player domino */}
+                  <div className="playerFourDomino">
+                    {ConvertToReact([[0, 6, 12]])}
+                  </div>
+                </div>
+                <div className="StartingDomino">{sDomino}</div>
+                <div className="rotateDominos">
+                  {/* second player domino */}
+                  <div className="playerTwoDomino">
+                    {ConvertToReact([[0, 9, 12]])}
+                  </div>
+                  {/* third player domino */}
+                  <div className="playerThreeDomino">
+                    {ConvertToReact([[0, 11, 12]])}
+                  </div>
+                </div>
               </div>
-              {/* second player domino */}
-              {/* <div className="playerTwoDomino">
-                {ConvertToReact([[0, 9, 12]])}
-              </div> */}
-              {/* third player domino */}
-              {/* <div className="playerThreeDomino">
-                {ConvertToReact([[0, 11, 12]])}
-              </div> */}
-              {/* fourth player domino */}
-              {/* <div className="playerFourDomino">
-                {ConvertToReact([[0, 6, 12]])}
-              </div> */}
-              {/* mexican train domino */}
-              {/* <div className="playerFiveDomino">
-                {ConvertToReact([[0, 2, 12]])}
-              </div> */}
               {/* Theoretically this will all be moved to another component to not clutter gamebase, for now do not touch */}
-              <img
-                className="trainstation"
-                src="./trainstation.png"
-                alt="domino train station"
-              />
-              <div className="StartingDomino">{sDomino}</div>
-              <img
+              {/* <img
                 className="first-train"
                 src="https://cdn.builder.io/api/v1/image/assets/TEMP/d737771a839e9d3381cf8be0888aafeb9423dad94e31ce6e6b57702a2eb9bb23"
                 alt="Red Train"
@@ -140,7 +140,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
                 className="mexican-train"
                 src="https://cdn.builder.io/api/v1/image/assets/TEMP/2e707c1c15ef3106cc95045c56346e6166b027d11a3d59268444fa4919181093"
                 alt="Orange Train"
-              />
+              /> */}
               <button className="finish-turn-button" onClick={finishTurn}>
                 Finish Turn
               </button>{" "}
