@@ -45,7 +45,8 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
 
   const finishTurn = () => {
     switchToNextPlayer();
-    setInTurn(false);
+    const event = new Event('TurnEnded');
+    window.dispatchEvent(event);
   };
 
   const switchToNextPlayer = () => {
@@ -55,6 +56,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
   };
 
   const DrawDomino = () => {
+    sessionStorage.setItem("DominoDrawn", JSON.stringify(true));
     DrawADomino(currentPlayer, players);
     window.location.reload();
   };
@@ -68,28 +70,45 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
     const result = CheckIfDominoIsPlayable(currentPlayer, players, domino);
     if (result !== undefined) {
       alert("Playable Paths: " + result.toString());
-      return true;
+      const event = new Event('DominoPlayed');
+      window.dispatchEvent(event);
     }
-    return false;
   };
 
   async function Turn() {
     // timer goes here
     const options = DeterminePlayablePaths(currentPlayer, players);
-    if (options.includes("Draw")) {
+    if (options.includes("Draw") && (sessionStorage.getItem('DominoDrawn')==null || !JSON.parse(sessionStorage.getItem('DominoDrawn')))){
       setDrawDisabled(false);
-      const optionsTwo = DeterminePlayablePaths(currentPlayer, players);
-      if (!optionsTwo.includes("Draw")) {
-        setDrawDisabled(true);
-        setPlayDisabled(false);
-      }
+      await new Promise(resolve => {
+        window.addEventListener('DominoDrawn', function handler() {
+          window.removeEventListener('DominoDrawn', handler);
+          resolve();
+        });
+      });
     } else if (
       options.includes(currentPlayer) ||
       options.includes("Mexican Train")
     ) {
       setPlayDisabled(false);
+      await new Promise(resolve => {
+        window.addEventListener('DominoPlayed', function handler() {
+          window.removeEventListener('DominoPlayed', handler);
+          resolve();
+        });
+      });
+      setPlayDisabled(true);
     }
     setFinishDisabled(false);
+    await new Promise(resolve => {
+      window.addEventListener('TurnEnded', function handler() {
+        window.removeEventListener('TurnEnded', handler);
+        resolve();
+      });
+    });
+    await sessionStorage.setItem('DominoDrawn', false);
+    setFinishDisabled(true);
+    setInTurn(false);
   }
   // set up round
   const playerDominoes = JSON.parse(sessionStorage.getItem("Player Dominoes"));
