@@ -12,6 +12,7 @@ import {
   DrawADomino,
   CheckIfDominoIsPlayable,
   DeterminePlayablePaths,
+  PlayDomino,
 } from "./GameLogic";
 import { ConvertToReact } from "./Domino";
 import "./GameBase.css";
@@ -76,6 +77,15 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
     }
   };
 
+  const handleDominoSelection = (index) => {
+    const domino = JSON.parse(sessionStorage.getItem("SelectedDomino"));
+    if(isAvailable[index]){
+      PlayDomino(currentPlayer, players, domino, players[index-1]);
+      const event = new Event('DominoOnPath');
+      window.dispatchEvent(event);
+    }
+  };
+
   function loadDominos(){
     const playerPaths = JSON.parse(sessionStorage.getItem("Player Paths"));
     const lastDominos = [];
@@ -121,6 +131,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
           resolve();
         });
       });
+      //highlight available dominos
       for(let i=0;i<options.length;i++){
         if(options[i]==='Mexican Train'){
           isAvailable[0] = true;
@@ -129,8 +140,14 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
           isAvailable[players.indexOf(options[i])+1] = true;
         }
       }
-
       setPlayDisabled(true);
+      await new Promise(resolve => {
+        window.addEventListener('DominoOnPath', function handler() {
+          window.removeEventListener('DominoOnPath', handler);
+          resolve();
+        });
+      });
+      loadDominos();
     }
     setFinishDisabled(false);
     await new Promise(resolve => {
@@ -142,6 +159,9 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
     await sessionStorage.setItem('DominoDrawn', false);
     setFinishDisabled(true);
     setInTurn(false);
+    for(let i=0;i<isAvailable.length;i++){
+      isAvailable[i] = false;
+    }
   }
   // set up round
   const playerDominoes = JSON.parse(sessionStorage.getItem("Player Dominoes"));
@@ -192,20 +212,20 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
                 It is <strong>{players[currentPlayerIndex]}</strong>'s turn
               </h3>{" "}
               <div className="newTrainStation">
-              <div className={`mexicanDomino ${isAvailable[0] ? 'highlight' : ''}`}>
+              <div className={`mexicanDomino ${isAvailable[0] ? 'highlight' : ''}`} onClick={() => handleDominoSelection(0)}>
                 {lastDominos[0]}
               </div>
                 <div className="mexicanTrain">{orangeTrain()}</div>
                 <div className="rotateDominoTop">
                   <div className="train-domino-pairing-top">
-                  <div className={`playerOneDomino ${isAvailable[1] ? 'highlight' : ''}`}>
+                  <div className={`playerOneDomino ${isAvailable[1] ? 'highlight' : ''}`} onClick={() => handleDominoSelection(1)}>
                       {lastDominos[1]}
                     </div>
                     <div className="playerOneTrain">{greenTrain()}</div>
                   </div>
                   <div className="train-domino-pairing-top">
                     <div className="playerFourTrain">{redTrain()}</div>
-                    <div className={`playerFourDomino ${isAvailable[4] ? 'highlight' : ''}`}>
+                    <div className={`playerFourDomino ${isAvailable[4] ? 'highlight' : ''}`} onClick={() => handleDominoSelection(4)}>
                       {lastDominos[4]}
                     </div>
                   </div>
@@ -213,14 +233,14 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
                 <div className="StartingDomino">{sDomino}</div>
                 <div className="rotateDominoBottom">
                   <div className="train-domino-pairing-bottom">
-                    <div className={`playerTwoDomino ${isAvailable[2] ? 'highlight' : ''}`}>
+                    <div className={`playerTwoDomino ${isAvailable[2] ? 'highlight' : ''}`} onClick={() => handleDominoSelection(2)}>
                       {lastDominos[2]}
                     </div>
                     <div className="playerTwoTrain">{blueTrain()}</div>
                   </div>
                   <div className="train-domino-pairing-bottom">
                     <div className="playerThreeTrain">{purpleTrain()}</div>
-                    <div className={`playerThreeDomino ${isAvailable[3] ? 'highlight' : ''}`}>
+                    <div className={`playerThreeDomino ${isAvailable[3] ? 'highlight' : ''}`} onClick={() => handleDominoSelection(3)}>
                       {lastDominos[3]}
                     </div>
                   </div>
