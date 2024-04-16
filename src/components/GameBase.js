@@ -40,6 +40,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
   const [finishDisabled, setFinishDisabled] = useState(true);
   const [loading, setLoading] = useState(true);
   const [inTurn, setInTurn] = useState(false);
+  const [selectedDomino, setSelectedDomino] = useState(null);
   const [isAvailable] = useState([false, false, false, false, false]);
 
   // now the functions
@@ -75,7 +76,9 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
     }
     const options = CheckIfDominoIsPlayable(currentPlayer, players, domino);
     if (options !== undefined) {
-      const event = new Event("DominoPlayed");
+
+      setSelectedDomino(domino);
+      const event = new Event('DominoPlayed');
       window.dispatchEvent(event);
       //highlight available dominos
       for (let i = 0; i < options.length; i++) {
@@ -89,12 +92,12 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
   };
 
   const handleDominoSelection = (index) => {
-    const domino = JSON.parse(sessionStorage.getItem("SelectedDomino"));
-    if (isAvailable[index]) {
-      if (index === 0) {
-        PlayDomino(currentPlayer, players, domino, "Mexican Train");
-      } else {
-        PlayDomino(currentPlayer, players, domino, players[index - 1]);
+
+    if(isAvailable[index]){
+      if(index===0){
+        PlayDomino(currentPlayer, players, selectedDomino, 'Mexican Train');
+      } else{
+        PlayDomino(currentPlayer, players, selectedDomino, players[index-1]);
       }
       const event = new Event("DominoOnPath");
       sessionStorage.setItem("SelectedDomino", null);
