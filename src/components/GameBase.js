@@ -21,6 +21,7 @@ import { useEffect, useState } from "react";
 function GameChoice({ src, alt, onSelect, isSelected }) {
   // hard coded setup
   const players = ["max", "arjun", "carly"];
+  sessionStorage.setItem('Players', JSON.stringify(['Mexican Train', "max", "arjun", "carly"]));
   const startingDomino = [[90, 12, 12]];
   const currentPlayer = "max";
 
@@ -66,28 +67,34 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
   const SelectADominoToPlay = () => {
     const domino = JSON.parse(sessionStorage.getItem("SelectedDomino"));
     if (domino == null) {
-      alert("No domino selected");
       return false;
     }
-    const result = CheckIfDominoIsPlayable(currentPlayer, players, domino);
-    if (result !== undefined) {
-      alert("Playable Paths: " + result.toString());
+    const options = CheckIfDominoIsPlayable(currentPlayer, players, domino);
+    if (options !== undefined) {
       const event = new Event('DominoPlayed');
       window.dispatchEvent(event);
+      //highlight available dominos
+      for(let i=0;i<options.length;i++){
+        if(options[i]==='Mexican Train'){
+          isAvailable[0] = true;
+        }
+          else if(players.indexOf(options[i])!==-1){
+            isAvailable[players.indexOf(options[i])+1] = true;
+          }
+        }
     }
   };
 
   const handleDominoSelection = (index) => {
     const domino = JSON.parse(sessionStorage.getItem("SelectedDomino"));
-    console.log("got here");
     if(isAvailable[index]){
-      console.log("Thtat")
       if(index===0){
         PlayDomino(currentPlayer, players, domino, 'Mexican Train');
       } else{
         PlayDomino(currentPlayer, players, domino, players[index-1]);
       }
       const event = new Event('DominoOnPath');
+      sessionStorage.setItem("SelectedDomino", null);
       window.dispatchEvent(event);
     }
   };
@@ -105,7 +112,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
         if(playerPaths[players[i]].Dominoes.length===0){
           lastDominos.push(ConvertToReact([[0,13,14]]));
         } else {
-          lastDominos.push(ConvertToReact([playerPaths[players[i]].Dominoes[playerPaths[players[i]]].Dominoes.length-1]));
+          lastDominos.push(ConvertToReact([playerPaths[players[i]].Dominoes[playerPaths[players[i]].Dominoes.length-1]]));
         }
       }else{
         // i want this to be a placeholder but that fucks up the spacing for now 
@@ -137,15 +144,6 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
           resolve();
         });
       });
-      //highlight available dominos
-      for(let i=0;i<options.length;i++){
-        if(options[i]==='Mexican Train'){
-          isAvailable[0] = true;
-        }
-        else if(players.indexOf(options[i])!==-1){
-          isAvailable[players.indexOf(options[i])+1] = true;
-        }
-      }
       setPlayDisabled(true);
       await new Promise(resolve => {
         window.addEventListener('DominoOnPath', function handler() {
@@ -155,6 +153,9 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
       });
     }
     setFinishDisabled(false);
+    for(let i=0;i<isAvailable.length;i++){
+      isAvailable[i] = false;
+    }
     await new Promise(resolve => {
       window.addEventListener('TurnEnded', function handler() {
         window.removeEventListener('TurnEnded', handler);
@@ -164,9 +165,6 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
     await sessionStorage.setItem('DominoDrawn', false);
     setFinishDisabled(true);
     setInTurn(false);
-    for(let i=0;i<isAvailable.length;i++){
-      isAvailable[i] = false;
-    }
   }
   // set up round
   const playerDominoes = JSON.parse(sessionStorage.getItem("Player Dominoes"));
