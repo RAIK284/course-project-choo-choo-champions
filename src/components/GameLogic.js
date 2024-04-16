@@ -149,14 +149,20 @@ export function PlayDomino(player, player_list, domino, path){
   // this runs under assumption that the call to this function will only occur on a playable path
   const playerDominos = JSON.parse(sessionStorage.getItem("Player Dominoes"));
   const playerPaths = JSON.parse(sessionStorage.getItem("Player Paths"));
-  playerDominos[player].splice(playerDominos[player].indexOf(domino));
+  console.log(domino);
+  for(let i=0;i<playerDominos[player].length;i++){
+    if((playerDominos[player][i][1]===domino[1]&&playerDominos[player][i][2]===domino[2])||(playerDominos[player][i][2]===domino[1]&&playerDominos[player][i][1]===domino[2])){
+      playerDominos[player].splice(i,1)
+      break;
+    }
+  }
   
-  // get the direction right (reverse if bottom connects to bottom)
-  if(playerPaths[path].Dominoes.length===0 && playerPaths['Starting Domino'][2]===domino[1]){
-    const temp = domino[1];
-    domino[1] = domino[2];
-    domino[2] = temp;
-  } else if(playerPaths[path].Dominoes.length !== 0 && playerPaths[path].Dominoes[playerPaths[path].Dominoes.length][2]===domino[1]){
+  //get the direction right (reverse if top connects to bottom)
+  if(playerPaths[path].Dominoes.length===0 && playerPaths['Starting Domino'][0][2]===domino[1]){
+    const temp = domino[2];
+    domino[2] = domino[1];
+    domino[1] = temp;
+  } else if(playerPaths[path].Dominoes.length !== 0 && playerPaths[path].Dominoes[playerPaths[path].Dominoes.length-1][2]===domino[1]){
     const temp = domino[1];
     domino[1] = domino[2];
     domino[2] = temp;
@@ -170,12 +176,12 @@ export function PlayDomino(player, player_list, domino, path){
         playerPaths[player].Playable = false;
       }
     }
-    sessionStorage('Player Paths', JSON.stringify(playerPaths));
-    sessionStorage('Player Dominoes', JSON.stringify(playerDominos));
+    sessionStorage.setItem('Player Paths', JSON.stringify(playerPaths));
+    sessionStorage.setItem('Player Dominoes', JSON.stringify(playerDominos));
     return false;
   }
-  sessionStorage('Player Paths', JSON.stringify(playerPaths));
-  sessionStorage('Player Dominoes', JSON.stringify(playerDominos));
+  sessionStorage.setItem('Player Paths', JSON.stringify(playerPaths));
+  sessionStorage.setItem('Player Dominoes', JSON.stringify(playerDominos));
   return true;
 }
 

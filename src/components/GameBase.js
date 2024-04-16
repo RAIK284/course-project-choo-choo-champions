@@ -79,8 +79,14 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
 
   const handleDominoSelection = (index) => {
     const domino = JSON.parse(sessionStorage.getItem("SelectedDomino"));
+    console.log("got here");
     if(isAvailable[index]){
-      PlayDomino(currentPlayer, players, domino, players[index-1]);
+      console.log("Thtat")
+      if(index===0){
+        PlayDomino(currentPlayer, players, domino, 'Mexican Train');
+      } else{
+        PlayDomino(currentPlayer, players, domino, players[index-1]);
+      }
       const event = new Event('DominoOnPath');
       window.dispatchEvent(event);
     }
@@ -92,14 +98,14 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
     if(playerPaths['Mexican Train'].Dominoes.length===0){
       lastDominos.push(ConvertToReact([[0,13,14]]));
     } else{
-      lastDominos.push(ConvertToReact(playerPaths['Mexican Train'].Dominoes[playerPaths['Mexican Train'].Dominoes.length-1]));
+      lastDominos.push(ConvertToReact([playerPaths['Mexican Train'].Dominoes[playerPaths['Mexican Train'].Dominoes.length-1]]));
     }
     for(let i=0;i<5;i++){
       if(i<players.length){
         if(playerPaths[players[i]].Dominoes.length===0){
           lastDominos.push(ConvertToReact([[0,13,14]]));
         } else {
-          lastDominos.push(ConvertToReact(playerPaths[players[i]].Dominoes[playerPaths[players[i]]].Dominoes.length-1));
+          lastDominos.push(ConvertToReact([playerPaths[players[i]].Dominoes[playerPaths[players[i]]].Dominoes.length-1]));
         }
       }else{
         // i want this to be a placeholder but that fucks up the spacing for now 
@@ -147,7 +153,6 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
           resolve();
         });
       });
-      loadDominos();
     }
     setFinishDisabled(false);
     await new Promise(resolve => {
@@ -212,7 +217,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
                 It is <strong>{players[currentPlayerIndex]}</strong>'s turn
               </h3>{" "}
               <div className="newTrainStation">
-              <div className={`mexicanDomino ${isAvailable[0] ? 'highlight' : ''}`} onClick={() => handleDominoSelection(0)}>
+              <div className={`mexicanDomino ${isAvailable[0] ? 'highlight' : ''}`} onClick={()=>handleDominoSelection(0)}>
                 {lastDominos[0]}
               </div>
                 <div className="mexicanTrain">{orangeTrain()}</div>
@@ -225,7 +230,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
                   </div>
                   <div className="train-domino-pairing-top">
                     <div className="playerFourTrain">{redTrain()}</div>
-                    <div className={`playerFourDomino ${isAvailable[4] ? 'highlight' : ''}`} onClick={() => handleDominoSelection(4)}>
+                    <div className={`playerFourDomino ${isAvailable[4] ? 'highlight' : ''}`} onClick={()=>handleDominoSelection(4)}>
                       {lastDominos[4]}
                     </div>
                   </div>

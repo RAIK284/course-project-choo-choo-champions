@@ -17,7 +17,7 @@ export function ConvertToReact(dominos) {
       onSelect={() => handleSelectDomino(index)}
     />
   ));
-  if(selectedDomino!==null){
+  if(selectedDomino!==null && (selectedDomino[1]===13 || selectedDomino[2]===14)){
     sessionStorage.setItem('Selected Domino', dominos[selectedDomino]);
   }
   return reactDominos;
