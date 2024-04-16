@@ -38,6 +38,8 @@ function TrainSelector() {
         const { username, train } = message;
         setConfirmedTrains(prev => ({ ...prev, [username]: train }));
         setDisabledTrains(prev => [...prev, train]);
+      } else if (message.type === 'redirect' && message.url === '/gamebase') {
+        window.location.href = message.url;
       }
     };
 
@@ -57,6 +59,17 @@ function TrainSelector() {
   const selectTrain = (train) => {
     if (!confirmedTrains[sessionStorage.getItem('username')] || confirmedTrains[sessionStorage.getItem('username')] === train) {
       setPlayerSelectedTrain(train);
+    }
+  };
+
+  const handleConfirmSelection = () => {
+    const username = sessionStorage.getItem('username');
+    if (playerSelectedTrain && username) {
+      alert(`You've selected: ${playerSelectedTrain}`);
+      const message = JSON.stringify({ type: 'confirmTrain', username: username, train: playerSelectedTrain });
+      newWsRef.current.send(message);
+    } else {
+      alert("Please select a train and ensure you're logged in.");
     }
   };
 
@@ -91,15 +104,7 @@ function TrainSelector() {
             </div>
             <div
               className="confirm-selection"
-              onClick={() => {
-                if (playerSelectedTrain) {
-                  alert(`You've selected: ${playerSelectedTrain}`);
-                  const message = JSON.stringify({ type: 'confirmTrain', train: playerSelectedTrain });
-                  newWsRef.current.send(message);
-                } else {
-                  alert("Please select a train first.");
-                }
-              }}
+              onClick={handleConfirmSelection}
             >
               Confirm Selection
             </div>

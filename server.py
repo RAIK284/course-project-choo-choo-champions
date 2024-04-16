@@ -8,10 +8,11 @@ clients = set()
 session_id = None
 confirmed_train = None
 player_train_selection = {}
+confirmed_trains = {}
 
 
 async def handle_client(websocket):
-    global session_id, confirmed_train, player_train_selection
+    global session_id, confirmed_train, player_train_selection, confirmed_trains
     clients.add(websocket)
     print(f"New client connected: {websocket.remote_address}")
 
@@ -36,16 +37,21 @@ async def handle_client(websocket):
                 player_train_selection[websocket] = train
 
             elif message_type == 'confirmTrain':
+                username = data.get('username')
                 confirmed_train = data.get('train')
+                player_train_selection[username] = confirmed_train
+                confirmed_trains[username] = confirmed_train
                 for client in clients:
-                    await client.send(json.dumps({'type': 'trainConfirmed', 'train': confirmed_train}))
-                await client.send(json.dumps({'type': 'disableTrain', 'train': confirmed_train}))
+                    await client.send(json.dumps({'type': 'trainConfirmed', 'username': username, 'train': confirmed_train}))
+                if all_players_confirmed():
+                    for client in clients:
+                        await client.send(json.dumps({'type': 'redirect', 'url': '/gamebase'}))
+                print(f"Player {username} confirmed train: {confirmed_train}")
 
             elif message_type == 'startGame':
                 if websocket in clients:
                     for client in clients:
                         await client.send(json.dumps({'type': 'redirect', 'url': '/trains'}))
-
     finally:
         clients.remove(websocket)
         if websocket in player_train_selection:
@@ -64,6 +70,10 @@ async def main():
 def generate_session_id():
     characters = string.ascii_uppercase + string.digits
     return ''.join(random.choices(characters, k=6))
+
+
+def all_players_confirmed():
+    return len(confirmed_trains) == len(clients)
 
 
 asyncio.run(main())
