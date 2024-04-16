@@ -1,10 +1,11 @@
 import NavBar from "./NavBar";
 import Background from "./Background";
-import greenTrain from "./GreenTrain";
-import { redTrain } from "./RedTrain";
-import blueTrain from "./BlueTrain";
-import purpleTrain from "./PurpleTrain";
-import orangeTrain from "./OrangeTrain";
+// import greenTrain from "./GreenTrain";
+// import { redTrain } from "./RedTrain";
+// import blueTrain from "./BlueTrain";
+// import purpleTrain from "./PurpleTrain";
+// import orangeTrain from "./OrangeTrain";
+import TrainStation from "./TrainStation";
 
 import {
   GenerateDominoesForPlayers,
@@ -21,7 +22,10 @@ import { useEffect, useState } from "react";
 function GameChoice({ src, alt, onSelect, isSelected }) {
   // hard coded setup
   const players = ["max", "arjun", "carly"];
-  sessionStorage.setItem('Players', JSON.stringify(['Mexican Train', "max", "arjun", "carly"]));
+  sessionStorage.setItem(
+    "Players",
+    JSON.stringify(["Mexican Train", "max", "arjun", "carly"])
+  );
   const startingDomino = [[90, 12, 12]];
   const currentPlayer = "max";
 
@@ -48,7 +52,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
 
   const finishTurn = () => {
     switchToNextPlayer();
-    const event = new Event('TurnEnded');
+    const event = new Event("TurnEnded");
     window.dispatchEvent(event);
   };
 
@@ -71,53 +75,64 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
     }
     const options = CheckIfDominoIsPlayable(currentPlayer, players, domino);
     if (options !== undefined) {
-      const event = new Event('DominoPlayed');
+      const event = new Event("DominoPlayed");
       window.dispatchEvent(event);
       //highlight available dominos
-      for(let i=0;i<options.length;i++){
-        if(options[i]==='Mexican Train'){
+      for (let i = 0; i < options.length; i++) {
+        if (options[i] === "Mexican Train") {
           isAvailable[0] = true;
+        } else if (players.indexOf(options[i]) !== -1) {
+          isAvailable[players.indexOf(options[i]) + 1] = true;
         }
-          else if(players.indexOf(options[i])!==-1){
-            isAvailable[players.indexOf(options[i])+1] = true;
-          }
-        }
+      }
     }
   };
 
   const handleDominoSelection = (index) => {
     const domino = JSON.parse(sessionStorage.getItem("SelectedDomino"));
-    if(isAvailable[index]){
-      if(index===0){
-        PlayDomino(currentPlayer, players, domino, 'Mexican Train');
-      } else{
-        PlayDomino(currentPlayer, players, domino, players[index-1]);
+    if (isAvailable[index]) {
+      if (index === 0) {
+        PlayDomino(currentPlayer, players, domino, "Mexican Train");
+      } else {
+        PlayDomino(currentPlayer, players, domino, players[index - 1]);
       }
-      const event = new Event('DominoOnPath');
+      const event = new Event("DominoOnPath");
       sessionStorage.setItem("SelectedDomino", null);
       window.dispatchEvent(event);
     }
   };
 
-  function loadDominos(){
+  function loadDominos() {
     const playerPaths = JSON.parse(sessionStorage.getItem("Player Paths"));
     const lastDominos = [];
-    if(playerPaths['Mexican Train'].Dominoes.length===0){
-      lastDominos.push(ConvertToReact([[0,13,14]]));
-    } else{
-      lastDominos.push(ConvertToReact([playerPaths['Mexican Train'].Dominoes[playerPaths['Mexican Train'].Dominoes.length-1]]));
+    if (playerPaths["Mexican Train"].Dominoes.length === 0) {
+      lastDominos.push(ConvertToReact([[0, 13, 14]]));
+    } else {
+      lastDominos.push(
+        ConvertToReact([
+          playerPaths["Mexican Train"].Dominoes[
+            playerPaths["Mexican Train"].Dominoes.length - 1
+          ],
+        ])
+      );
     }
-    for(let i=0;i<5;i++){
-      if(i<players.length){
-        if(playerPaths[players[i]].Dominoes.length===0){
-          lastDominos.push(ConvertToReact([[0,13,14]]));
+    for (let i = 0; i < 5; i++) {
+      if (i < players.length) {
+        if (playerPaths[players[i]].Dominoes.length === 0) {
+          lastDominos.push(ConvertToReact([[0, 13, 14]]));
         } else {
-          lastDominos.push(ConvertToReact([playerPaths[players[i]].Dominoes[playerPaths[players[i]].Dominoes.length-1]]));
+          lastDominos.push(
+            ConvertToReact([
+              playerPaths[players[i]].Dominoes[
+                playerPaths[players[i]].Dominoes.length - 1
+              ],
+            ])
+          );
         }
-      }else{
-        // i want this to be a placeholder but that fucks up the spacing for now 
-        // so we will keep this ftm 
-        lastDominos.push(ConvertToReact([[0,13,14]]));
+      } else {
+        // i want this to be a placeholder but that fucks up the spacing for now
+        // so we will keep this ftm
+        lastDominos.push(ConvertToReact([[0, 13, 14]]));
       }
     }
     return lastDominos;
@@ -126,43 +141,45 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
   async function Turn() {
     // timer goes here
     const options = DeterminePlayablePaths(currentPlayer, players);
-    if (options.includes("Draw") && (sessionStorage.getItem('DominoDrawn')==null || !JSON.parse(sessionStorage.getItem('DominoDrawn')))){
+    if (
+      options.includes("Draw") &&
+      (sessionStorage.getItem("DominoDrawn") == null ||
+        !JSON.parse(sessionStorage.getItem("DominoDrawn")))
+    ) {
       setDrawDisabled(false);
-      await new Promise(resolve => {
-        window.addEventListener('DominoDrawn', function handler() {
-          window.removeEventListener('DominoDrawn', handler);
+      await new Promise((resolve) => {
+        window.addEventListener("DominoDrawn", function handler() {
+          window.removeEventListener("DominoDrawn", handler);
           resolve();
         });
       });
-    } else if (
-      (!options.includes('Draw')&&!options.includes('Pass'))
-    ) {
+    } else if (!options.includes("Draw") && !options.includes("Pass")) {
       setPlayDisabled(false);
-      await new Promise(resolve => {
-        window.addEventListener('DominoPlayed', function handler() {
-          window.removeEventListener('DominoPlayed', handler);
+      await new Promise((resolve) => {
+        window.addEventListener("DominoPlayed", function handler() {
+          window.removeEventListener("DominoPlayed", handler);
           resolve();
         });
       });
       setPlayDisabled(true);
-      await new Promise(resolve => {
-        window.addEventListener('DominoOnPath', function handler() {
-          window.removeEventListener('DominoOnPath', handler);
+      await new Promise((resolve) => {
+        window.addEventListener("DominoOnPath", function handler() {
+          window.removeEventListener("DominoOnPath", handler);
           resolve();
         });
       });
     }
     setFinishDisabled(false);
-    for(let i=0;i<isAvailable.length;i++){
+    for (let i = 0; i < isAvailable.length; i++) {
       isAvailable[i] = false;
     }
-    await new Promise(resolve => {
-      window.addEventListener('TurnEnded', function handler() {
-        window.removeEventListener('TurnEnded', handler);
+    await new Promise((resolve) => {
+      window.addEventListener("TurnEnded", function handler() {
+        window.removeEventListener("TurnEnded", handler);
         resolve();
       });
     });
-    await sessionStorage.setItem('DominoDrawn', false);
+    await sessionStorage.setItem("DominoDrawn", false);
     setFinishDisabled(true);
     setInTurn(false);
   }
@@ -214,55 +231,26 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
               <h3 className="players_turn">
                 It is <strong>{players[currentPlayerIndex]}</strong>'s turn
               </h3>{" "}
-              <div className="newTrainStation">
-              <div className={`mexicanDomino ${isAvailable[0] ? 'highlight' : ''}`} onClick={()=>handleDominoSelection(0)}>
-                {lastDominos[0]}
-              </div>
-                <div className="mexicanTrain">{orangeTrain()}</div>
-                <div className="rotateDominoTop">
-                  <div className="train-domino-pairing-top">
-                  <div className={`playerOneDomino ${isAvailable[1] ? 'highlight' : ''}`} onClick={() => handleDominoSelection(1)}>
-                      {lastDominos[1]}
-                    </div>
-                    <div className="playerOneTrain">{greenTrain()}</div>
-                  </div>
-                  <div className="train-domino-pairing-top">
-                    <div className="playerFourTrain">{redTrain()}</div>
-                    <div className={`playerFourDomino ${isAvailable[4] ? 'highlight' : ''}`} onClick={()=>handleDominoSelection(4)}>
-                      {lastDominos[4]}
-                    </div>
-                  </div>
-                </div>
-                <div className="StartingDomino">{sDomino}</div>
-                <div className="rotateDominoBottom">
-                  <div className="train-domino-pairing-bottom">
-                    <div className={`playerTwoDomino ${isAvailable[2] ? 'highlight' : ''}`} onClick={() => handleDominoSelection(2)}>
-                      {lastDominos[2]}
-                    </div>
-                    <div className="playerTwoTrain">{blueTrain()}</div>
-                  </div>
-                  <div className="train-domino-pairing-bottom">
-                    <div className="playerThreeTrain">{purpleTrain()}</div>
-                    <div className={`playerThreeDomino ${isAvailable[3] ? 'highlight' : ''}`} onClick={() => handleDominoSelection(3)}>
-                      {lastDominos[3]}
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <button
-                className="finish-turn-button"
-                onClick={finishTurn}
-                disabled={finishDisabled}
-              >
-                Finish Turn
-              </button>{" "}
+              <TrainStation
+                sDomino={sDomino}
+                handleDominoSelection={handleDominoSelection}
+                lastDominos={lastDominos}
+                isAvailable={isAvailable}
+              />
             </div>
           </div>
-          {/* end of right content  */}
-          {/* end of horizontal group */}
         </div>
-        {/* end of content */}
       </div>
+      <button
+        className="finish-turn-button"
+        onClick={finishTurn}
+        disabled={finishDisabled}
+      >
+        Finish Turn
+      </button>{" "}
+      {/* end of right content  */}
+      {/* end of horizontal group */}
+      {/* end of content */}
       <Background />
     </>
   );
