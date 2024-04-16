@@ -75,6 +75,30 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
     }
   };
 
+  function loadDominos(){
+    const playerPaths = JSON.parse(sessionStorage.getItem("Player Paths"));
+    const lastDominos = [];
+    if(playerPaths['Mexican Train'].Dominoes.length===0){
+      lastDominos.push(ConvertToReact([[0,13,14]]));
+    } else{
+      lastDominos.push(ConvertToReact(playerPaths['Mexican Train'].Dominoes[playerPaths['Mexican Train'].Dominoes.length-1]));
+    }
+    for(let i=0;i<5;i++){
+      if(i<players.length){
+        if(playerPaths[players[i]].Dominoes.length===0){
+          lastDominos.push(ConvertToReact([[0,13,14]]));
+        } else {
+          lastDominos.push(ConvertToReact(playerPaths[players[i]].Dominoes[playerPaths[players[i]]].Dominoes.length-1));
+        }
+      }else{
+        // i want this to be a placeholder but that fucks up the spacing for now 
+        // so we will keep this ftm 
+        lastDominos.push(ConvertToReact([[0,13,14]]));
+      }
+    }
+    return lastDominos;
+  }
+
   async function Turn() {
     // timer goes here
     const options = DeterminePlayablePaths(currentPlayer, players);
@@ -118,6 +142,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
   const playerPaths = JSON.parse(sessionStorage.getItem("Player Paths"));
   const dominos = ConvertToReact(playerDominoes[currentPlayer]);
   const sDomino = ConvertToReact(playerPaths["Starting Domino"]);
+  const lastDominos = loadDominos();
 
   if (!loading && !inTurn) {
     Turn(currentPlayer);
@@ -158,21 +183,21 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
                 It is <strong>{players[currentPlayerIndex]}</strong>'s turn
               </h3>{" "}
               <div className="newTrainStation">
-                <div className="mexicanDomino">
-                  {ConvertToReact([[0, 2, 12]])}
-                </div>
+              <div className="mexicanDomino">
+                {lastDominos[0]}
+              </div>
                 <div className="mexicanTrain">{orangeTrain()}</div>
                 <div className="rotateDominoTop">
                   <div className="train-domino-pairing-top">
                     <div className="playerOneDomino">
-                      {ConvertToReact([[0, 3, 12]])}
+                      {lastDominos[1]}
                     </div>
                     <div className="playerOneTrain">{greenTrain()}</div>
                   </div>
                   <div className="train-domino-pairing-top">
                     <div className="playerFourTrain">{redTrain()}</div>
                     <div className="playerFourDomino">
-                      {ConvertToReact([[0, 6, 12]])}
+                      {lastDominos[4]}
                     </div>
                   </div>
                 </div>
@@ -180,14 +205,14 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
                 <div className="rotateDominoBottom">
                   <div className="train-domino-pairing-bottom">
                     <div className="playerTwoDomino">
-                      {ConvertToReact([[0, 9, 12]])}
+                      {lastDominos[2]}
                     </div>
                     <div className="playerTwoTrain">{blueTrain()}</div>
                   </div>
                   <div className="train-domino-pairing-bottom">
                     <div className="playerThreeTrain">{purpleTrain()}</div>
                     <div className="playerThreeDomino">
-                      {ConvertToReact([[0, 11, 12]])}
+                      {lastDominos[3]}
                     </div>
                   </div>
                 </div>

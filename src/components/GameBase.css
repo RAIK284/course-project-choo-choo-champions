@@ -93,9 +93,23 @@
     z-index: 100;
 }
 
+.playerOneDomino:is[playable] {
+    border: 10px solid #000;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgb(88, 93, 236);;
+    transition: all 0.3s ease;
+}
+
 .playerTwoDomino {
     transform: rotate(-120deg);
     z-index: 100;
+}
+.playerTwoDomino:is[playable] {
+    background-color: #ffffff;
+    border: 2px solid #000;
+    border-radius: 6px;
+    box-shadow: 0 0 10px rgb(88, 93, 236);;
+    transition: all 0.3s ease;
 }
 
 .playerThreeDomino {
@@ -103,9 +117,25 @@
     transform: rotate(120deg);
 }
 
+.playerThreeDomino:is[playable] {
+    background-color: #ffffff;
+    border: 2px solid #000;
+    border-radius: 6px;
+    box-shadow: 0 0 10px rgb(88, 93, 236);;
+    transition: all 0.3s ease;
+}
+
 .playerFourDomino {
     transform: rotate(60deg);
     z-index: 100;
+}
+
+.playerFourDomino:is[playable] {
+    background-color: #ffffff;
+    border: 2px solid #000;
+    border-radius: 6px;
+    box-shadow: 0 0 10px rgb(88, 93, 236);;
+    transition: all 0.3s ease;
 }
 
 .mexicanDomino {
@@ -113,6 +143,14 @@
     margin: -25px;
     margin-bottom: -50px;
     pointer-events: none;
+}
+
+.mexicanDomino:is[playable] {
+    background-color: #ffffff;
+    border: 2px solid #000;
+    border-radius: 6px;
+    box-shadow: 0 0 10px rgb(88, 93, 236);;
+    transition: all 0.3s ease;
 }
 
 .content {
