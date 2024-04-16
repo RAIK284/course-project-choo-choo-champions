@@ -211,20 +211,29 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
               <div className="bank">{dominos}</div>
               {/* end of bank group */}
               <div className="button-container">
+                <div className="buttonTopRow">
+                  <button
+                    className="button"
+                    onClick={DrawDomino}
+                    disabled={drawDisabled}
+                  >
+                    Draw
+                  </button>
+                  <button
+                    className="button"
+                    onClick={SelectADominoToPlay}
+                    disabled={playDisabled}
+                  >
+                    AddToPath
+                  </button>
+                </div>
                 <button
-                  className="button"
-                  onClick={DrawDomino}
-                  disabled={drawDisabled}
+                  className="finish-turn-button"
+                  onClick={finishTurn}
+                  disabled={finishDisabled}
                 >
-                  Draw
-                </button>
-                <button
-                  className="button"
-                  onClick={SelectADominoToPlay}
-                  disabled={playDisabled}
-                >
-                  AddToPath
-                </button>
+                  Finish Turn
+                </button>{" "}
               </div>
             </div>
             {/* end of left content */}
@@ -240,15 +249,8 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
               />
             </div>
           </div>
-        </div>
-      </div>
-      {/* <button
-        className="finish-turn-button"
-        onClick={finishTurn}
-        disabled={finishDisabled}
-      >
-        Finish Turn
-      </button>{" "} */}
+        </div>{" "}
+      </div>{" "}
       {/* end of right content  */}
       {/* end of horizontal group */}
       {/* end of content */}
