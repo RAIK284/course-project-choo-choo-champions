@@ -6,10 +6,12 @@ import string
 
 clients = set()
 session_id = None
+selected_trains = set()
+confirmed_train = None
 
 
 async def handle_client(websocket):
-    global session_id
+    global session_id, selected_trains, confirmed_trains
     clients.add(websocket)
     print(f"New client connected: {websocket.remote_address}")
 
