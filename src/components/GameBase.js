@@ -34,6 +34,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
   const [finishDisabled, setFinishDisabled] = useState(true);
   const [loading, setLoading] = useState(true);
   const [inTurn, setInTurn] = useState(false);
+  const [isAvailable] = useState([false, false, false, false, false]);
 
   // now the functions
   useEffect(() => {
@@ -111,8 +112,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
         });
       });
     } else if (
-      options.includes(currentPlayer) ||
-      options.includes("Mexican Train")
+      (!options.includes('Draw')&&!options.includes('Pass'))
     ) {
       setPlayDisabled(false);
       await new Promise(resolve => {
@@ -121,6 +121,15 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
           resolve();
         });
       });
+      for(let i=0;i<options.length;i++){
+        if(options[i]==='Mexican Train'){
+          isAvailable[0] = true;
+        }
+        else if(players.indexOf(options[i])!==-1){
+          isAvailable[players.indexOf(options[i])+1] = true;
+        }
+      }
+
       setPlayDisabled(true);
     }
     setFinishDisabled(false);
@@ -183,20 +192,20 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
                 It is <strong>{players[currentPlayerIndex]}</strong>'s turn
               </h3>{" "}
               <div className="newTrainStation">
-              <div className="mexicanDomino">
+              <div className={`mexicanDomino ${isAvailable[0] ? 'highlight' : ''}`}>
                 {lastDominos[0]}
               </div>
                 <div className="mexicanTrain">{orangeTrain()}</div>
                 <div className="rotateDominoTop">
                   <div className="train-domino-pairing-top">
-                    <div className="playerOneDomino">
+                  <div className={`playerOneDomino ${isAvailable[1] ? 'highlight' : ''}`}>
                       {lastDominos[1]}
                     </div>
                     <div className="playerOneTrain">{greenTrain()}</div>
                   </div>
                   <div className="train-domino-pairing-top">
                     <div className="playerFourTrain">{redTrain()}</div>
-                    <div className="playerFourDomino">
+                    <div className={`playerFourDomino ${isAvailable[4] ? 'highlight' : ''}`}>
                       {lastDominos[4]}
                     </div>
                   </div>
@@ -204,14 +213,14 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
                 <div className="StartingDomino">{sDomino}</div>
                 <div className="rotateDominoBottom">
                   <div className="train-domino-pairing-bottom">
-                    <div className="playerTwoDomino">
+                    <div className={`playerTwoDomino ${isAvailable[2] ? 'highlight' : ''}`}>
                       {lastDominos[2]}
                     </div>
                     <div className="playerTwoTrain">{blueTrain()}</div>
                   </div>
                   <div className="train-domino-pairing-bottom">
                     <div className="playerThreeTrain">{purpleTrain()}</div>
-                    <div className="playerThreeDomino">
+                    <div className={`playerThreeDomino ${isAvailable[3] ? 'highlight' : ''}`}>
                       {lastDominos[3]}
                     </div>
                   </div>
