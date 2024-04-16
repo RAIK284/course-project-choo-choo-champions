@@ -39,7 +39,7 @@ export function DeterminePlayablePaths(player, player_list) {
   const playablePaths = [];
   for (let i = 0; i < playerDominos[player].length; i++) {
     for (let j = 0; j < player_list.length; j++) {
-      const pathDominoes = playerPaths[player_list[j]]["Dominoes"];
+      const pathDominoes = playerPaths[player_list[j]].Dominoes;
       // if train is playable we can check for playability
       // TODO: this if will have to be modified in the future (can keep right now)
       if (playerPaths[player_list[j]].Playable || player_list[j] === player) {
@@ -58,9 +58,9 @@ export function DeterminePlayablePaths(player, player_list) {
         // if there is we check the last value of the last domino in the list, with this dominos top value
         else if (
           pathDominoes.length !== 0 &&
-          (pathDominoes[pathDominoes.length - 1][2] ===
+          (pathDominoes[pathDominoes.length - 1][1] ===
             playerDominos[player][i][1] ||
-            pathDominoes[pathDominoes.length - 1][2] ===
+            pathDominoes[pathDominoes.length - 1][1] ===
               playerDominos[player][i][2])
         ) {
           if (!playablePaths.includes(player)) {
@@ -81,9 +81,9 @@ export function DeterminePlayablePaths(player, player_list) {
         }
       } else if (
         mexicanPath.length !== 0 &&
-        (mexicanPath[mexicanPath.length - 1][2] ===
+        (mexicanPath[mexicanPath.length - 1][1] ===
           playerDominos[player][i][1] ||
-          mexicanPath[mexicanPath.length - 1][2] ===
+          mexicanPath[mexicanPath.length - 1][1] ===
             playerDominos[player][i][2])
       ) {
         if (!playablePaths.includes("Mexican Train")) {
@@ -132,7 +132,7 @@ export function CheckIfDominoIsPlayable(player, player_list, domino) {
       }
     } else {
       const endingDomino = playerPaths[paths[i]].Dominoes[playerPaths[paths[i]].Dominoes.length - 1];
-      if(endingDomino[2] === domino[1] || endingDomino[2] === domino[2]) {
+      if(endingDomino[1] === domino[1] || endingDomino[1] === domino[2]) {
         playablePaths.push(paths[i]);
       }
     }
@@ -149,17 +149,22 @@ export function PlayDomino(player, player_list, domino, path){
   // this runs under assumption that the call to this function will only occur on a playable path
   const playerDominos = JSON.parse(sessionStorage.getItem("Player Dominoes"));
   const playerPaths = JSON.parse(sessionStorage.getItem("Player Paths"));
-  playerDominos[player].splice(playerDominos[player].indexOf(domino));
+  for(let i=0;i<playerDominos[player].length;i++){
+    if((playerDominos[player][i][1]===domino[1]&&playerDominos[player][i][2]===domino[2])||(playerDominos[player][i][2]===domino[1]&&playerDominos[player][i][1]===domino[2])){
+      playerDominos[player].splice(i,1)
+      break;
+    }
+  }
   
-  // get the direction right (reverse if bottom connects to bottom)
-  if(playerPaths[path].Dominoes.length===0 && playerPaths['Starting Domino'][2]===domino[1]){
-    const temp = domino[1];
-    domino[1] = domino[2];
-    domino[2] = temp;
-  } else if(playerPaths[path].Dominoes.length !== 0 && playerPaths[path].Dominoes[playerPaths[path].Dominoes.length][2]===domino[1]){
-    const temp = domino[1];
-    domino[1] = domino[2];
-    domino[2] = temp;
+  //get the direction right (reverse if top connects to bottom)
+  if(playerPaths[path].Dominoes.length===0 && playerPaths['Starting Domino'][0][2]===domino[1]){
+    const temp = domino[2];
+    domino[2] = domino[1];
+    domino[1] = temp;
+  } else if(playerPaths[path].Dominoes.length !== 0 && playerPaths[path].Dominoes[playerPaths[path].Dominoes.length-1][1]===domino[1]){
+    const temp = domino[2];
+    domino[2] = domino[1];
+    domino[1] = temp;
   }
   playerPaths[path].Dominoes.push(domino);
 
@@ -170,12 +175,12 @@ export function PlayDomino(player, player_list, domino, path){
         playerPaths[player].Playable = false;
       }
     }
-    sessionStorage('Player Paths', JSON.stringify(playerPaths));
-    sessionStorage('Player Dominoes', JSON.stringify(playerDominos));
+    sessionStorage.setItem('Player Paths', JSON.stringify(playerPaths));
+    sessionStorage.setItem('Player Dominoes', JSON.stringify(playerDominos));
     return false;
   }
-  sessionStorage('Player Paths', JSON.stringify(playerPaths));
-  sessionStorage('Player Dominoes', JSON.stringify(playerDominos));
+  sessionStorage.setItem('Player Paths', JSON.stringify(playerPaths));
+  sessionStorage.setItem('Player Dominoes', JSON.stringify(playerDominos));
   return true;
 }
 

@@ -93,20 +93,49 @@
     z-index: 100;
 }
 
+.playerOneDomino.highlight {
+    box-shadow: 0 0 10px rgb(88, 93, 236);
+    border: 4px solid #585DEC;
+    border-radius: 6px;
+    pointer-events: all;
+  }
+
+
 .playerTwoDomino {
     transform: rotate(-120deg);
     z-index: 100;
 }
+
+.playerTwoDomino.highlight {
+    box-shadow: 0 0 10px rgb(88, 93, 236);
+    border: 4px solid #585DEC;
+    border-radius: 6px;
+    pointer-events: all;
+  }
 
 .playerThreeDomino {
     z-index: 100;
     transform: rotate(120deg);
 }
 
+.playerThreeDomino.highlight {
+    box-shadow: 0 0 10px rgb(88, 93, 236);
+    border: 4px solid #585DEC;
+    border-radius: 6px;
+    pointer-events: all;
+  }
+
 .playerFourDomino {
     transform: rotate(60deg);
     z-index: 100;
 }
+
+.playerFourDomino.highlight {
+    box-shadow: 0 0 10px rgb(88, 93, 236);
+    border: 4px solid #585DEC;
+    border-radius: 6px;
+    pointer-events: all;
+  }
 
 .mexicanDomino {
     z-index: 100;
@@ -114,6 +143,13 @@
     margin-bottom: -50px;
     pointer-events: none;
 }
+
+.mexicanDomino.highlight {
+    box-shadow: 0 0 10px rgb(88, 93, 236);
+    border: 4px solid #585DEC;
+    border-radius: 6px;
+    pointer-events: all;
+  }
 
 .content {
     align-items: center;
