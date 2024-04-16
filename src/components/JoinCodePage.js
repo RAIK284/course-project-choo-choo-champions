@@ -21,6 +21,8 @@ function JoinCodePage() {
             const message = JSON.parse(event.data);
             if (message.type === 'sessionId') {
                 setSessionId(message.sessionId);
+            } else if (message.type === 'redirect' && message.url === '/trains') {
+                window.location.href = message.url;
             }
         };
 

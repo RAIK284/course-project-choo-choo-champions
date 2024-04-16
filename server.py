@@ -29,6 +29,11 @@ async def handle_client(websocket):
                 else:
                     await websocket.send(json.dumps({'type': 'invalidSessionId'}))
 
+            elif message_type == 'startGame':
+                if websocket in clients:
+                    for client in clients:
+                        await client.send(json.dumps({'type': 'redirect', 'url': '/trains'}))
+
     finally:
         clients.remove(websocket)
         print(f"Client disconnected: {websocket.remote_address}")

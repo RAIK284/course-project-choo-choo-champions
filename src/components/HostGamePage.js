@@ -51,6 +51,9 @@ function HostGamePage() {
     }, []);
 
     const handleStartGame = () => {
+        if (ws !== null) {
+            ws.send(JSON.stringify({ type: 'startGame' }));
+        }
         setGameStarted(true);
         window.location.href = "/trains";
     };
