@@ -99,6 +99,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
       const event = new Event("DominoOnPath");
       sessionStorage.setItem("SelectedDomino", null);
       window.dispatchEvent(event);
+      // finishTurn();
     }
   };
 
@@ -241,13 +242,13 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
           </div>
         </div>
       </div>
-      <button
+      {/* <button
         className="finish-turn-button"
         onClick={finishTurn}
         disabled={finishDisabled}
       >
         Finish Turn
-      </button>{" "}
+      </button>{" "} */}
       {/* end of right content  */}
       {/* end of horizontal group */}
       {/* end of content */}
