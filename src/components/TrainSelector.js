@@ -20,41 +20,43 @@ function GameChoice({ src, alt, onSelect, isSelected, isDisabled }) {
 }
 
 function TrainSelector() {
-  const [selectedTrain, setSelectedTrain] = useState('');
-  const [confirmedTrain, setConfirmedTrain] = useState('');
+  const [playerSelectedTrain, setPlayerSelectedTrain] = useState('');
+  const [confirmedTrains, setConfirmedTrains] = useState({});
   const newWsRef = useRef(null);
+  const [disabledTrains, setDisabledTrains] = useState([]);
 
   useEffect(() => {
     newWsRef.current = new WebSocket('ws://localhost:8765');
 
-    const newWs = newWsRef.current;
-
-    newWs.onopen = () => {
+    newWsRef.current.onopen = () => {
       console.log('WebSocket connection established');
     };
 
-    newWs.onmessage = (event) => {
+    newWsRef.current.onmessage = (event) => {
       const message = JSON.parse(event.data);
       if (message.type === 'trainConfirmed') {
-        setConfirmedTrain(message.train);
+        const { username, train } = message;
+        setConfirmedTrains(prev => ({ ...prev, [username]: train }));
+        setDisabledTrains(prev => [...prev, train]);
       }
     };
 
-    newWs.onclose = () => {
+    newWsRef.current.onclose = () => {
       console.log('WebSocket connection closed');
     };
 
-    newWs.onerror = (error) => {
+    newWsRef.current.onerror = (error) => {
       console.error('WebSocket error:', error);
     };
 
     return () => {
+      newWsRef.current.close();
     };
   }, []);
 
   const selectTrain = (train) => {
-    if (confirmedTrain === '' && selectedTrain !== train) {
-      setSelectedTrain(train);
+    if (!confirmedTrains[sessionStorage.getItem('username')] || confirmedTrains[sessionStorage.getItem('username')] === train) {
+      setPlayerSelectedTrain(train);
     }
   };
 
@@ -82,19 +84,18 @@ function TrainSelector() {
                   src={choice.src}
                   alt={choice.alt}
                   onSelect={() => selectTrain(choice.alt)}
-                  isSelected={selectedTrain === choice.alt}
-                  isDisabled={confirmedTrain !== '' && confirmedTrain !== choice.alt}
+                  isSelected={playerSelectedTrain === choice.alt}
+                  isDisabled={disabledTrains.includes(choice.alt) && confirmedTrains[sessionStorage.getItem('username')] !== choice.alt && choice.alt !== playerSelectedTrain}
                 />
               ))}
             </div>
             <div
               className="confirm-selection"
               onClick={() => {
-                if (selectedTrain) {
-                  alert(`You've selected: ${selectedTrain}`);
-                  const message = JSON.stringify({ type: 'confirmTrain', train: selectedTrain });
+                if (playerSelectedTrain) {
+                  alert(`You've selected: ${playerSelectedTrain}`);
+                  const message = JSON.stringify({ type: 'confirmTrain', train: playerSelectedTrain });
                   newWsRef.current.send(message);
-                  setConfirmedTrain(selectedTrain);
                 } else {
                   alert("Please select a train first.");
                 }

@@ -6,12 +6,12 @@ import string
 
 clients = set()
 session_id = None
-selected_trains = set()
 confirmed_train = None
+player_train_selection = {}
 
 
 async def handle_client(websocket):
-    global session_id, selected_trains, confirmed_trains
+    global session_id, confirmed_train, player_train_selection
     clients.add(websocket)
     print(f"New client connected: {websocket.remote_address}")
 
@@ -21,15 +21,25 @@ async def handle_client(websocket):
         async for message in websocket:
             data = json.loads(message)
             message_type = data.get('type')
+            username = data.get('username')
 
             if message_type == 'joinGame':
                 if data.get('sessionId') == session_id:
-                    username = data.get('username')
                     new_player = {'username': username, 'ready': True}
                     for client in clients:
                         await client.send(json.dumps({'type': 'playerJoined', 'player': new_player}))
                 else:
                     await websocket.send(json.dumps({'type': 'invalidSessionId'}))
+
+            elif message_type == 'selectTrain':
+                train = data.get('train')
+                player_train_selection[websocket] = train
+
+            elif message_type == 'confirmTrain':
+                confirmed_train = data.get('train')
+                for client in clients:
+                    await client.send(json.dumps({'type': 'trainConfirmed', 'train': confirmed_train}))
+                await client.send(json.dumps({'type': 'disableTrain', 'train': confirmed_train}))
 
             elif message_type == 'startGame':
                 if websocket in clients:
@@ -38,6 +48,8 @@ async def handle_client(websocket):
 
     finally:
         clients.remove(websocket)
+        if websocket in player_train_selection:
+            del player_train_selection[websocket]
         print(f"Client disconnected: {websocket.remote_address}")
 
 
