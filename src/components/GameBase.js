@@ -1,10 +1,5 @@
 import NavBar from "./NavBar";
 import Background from "./Background";
-// import greenTrain from "./GreenTrain";
-// import { redTrain } from "./RedTrain";
-// import blueTrain from "./BlueTrain";
-// import purpleTrain from "./PurpleTrain";
-// import orangeTrain from "./OrangeTrain";
 import TrainStation from "./TrainStation";
 
 import {
@@ -76,9 +71,8 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
     }
     const options = CheckIfDominoIsPlayable(currentPlayer, players, domino);
     if (options !== undefined) {
-
       setSelectedDomino(domino);
-      const event = new Event('DominoPlayed');
+      const event = new Event("DominoPlayed");
       window.dispatchEvent(event);
       //highlight available dominos
       for (let i = 0; i < options.length; i++) {
@@ -92,12 +86,11 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
   };
 
   const handleDominoSelection = (index) => {
-
-    if(isAvailable[index]){
-      if(index===0){
-        PlayDomino(currentPlayer, players, selectedDomino, 'Mexican Train');
-      } else{
-        PlayDomino(currentPlayer, players, selectedDomino, players[index-1]);
+    if (isAvailable[index]) {
+      if (index === 0) {
+        PlayDomino(currentPlayer, players, selectedDomino, "Mexican Train");
+      } else {
+        PlayDomino(currentPlayer, players, selectedDomino, players[index - 1]);
       }
       const event = new Event("DominoOnPath");
       sessionStorage.setItem("SelectedDomino", null);
