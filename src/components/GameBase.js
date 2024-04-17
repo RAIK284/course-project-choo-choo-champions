@@ -172,6 +172,11 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
           resolve();
         });
       });
+      if(JSON.parse(sessionStorage.getItem("Player Paths")).UnvalidatedDouble !==null){
+        await sessionStorage.setItem("DominoDrawn", false);
+        await Turn();
+        return;
+      }
     }
     setFinishDisabled(false);
     for (let i = 0; i < isAvailable.length; i++) {

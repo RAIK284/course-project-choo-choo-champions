@@ -29,6 +29,7 @@ export function GeneratePathsForGame(startingDomino, player_list) {
     gamePaths[player_list[i]] = { Dominoes: [], Playable: false };
   }
   gamePaths["Mexican Train"] = { Dominoes: [], Playable: true };
+  gamePaths['UnvalidatedDouble'] = null;
   sessionStorage.setItem("Player Paths", JSON.stringify(gamePaths));
 }
 
@@ -37,58 +38,67 @@ export function DeterminePlayablePaths(player, player_list) {
   const playerPaths = JSON.parse(sessionStorage.getItem("Player Paths"));
   const boneyard = JSON.parse(sessionStorage.getItem("Boneyard"));
   const playablePaths = [];
-  for (let i = 0; i < playerDominos[player].length; i++) {
-    for (let j = 0; j < player_list.length; j++) {
-      const pathDominoes = playerPaths[player_list[j]].Dominoes;
-      // if train is playable we can check for playability
-      // TODO: this if will have to be modified in the future (can keep right now)
-      if (playerPaths[player_list[j]].Playable || player_list[j] === player) {
-        // if there isn't a path we check the starting domino
-        if (
-          pathDominoes.length === 0 &&
-          (playerDominos[player][i][1] ===
-            playerPaths["Starting Domino"][0][2] ||
-            playerDominos[player][i][2] ===
-              playerPaths["Starting Domino"][0][2])
-        ) {
-          if (!playablePaths.includes(player)) {
-            playablePaths.push(player);
+  if(playerPaths.UnvalidatedDouble===null){
+    for (let i = 0; i < playerDominos[player].length; i++) {
+      for (let j = 0; j < player_list.length; j++) {
+        const pathDominoes = playerPaths[player_list[j]].Dominoes;
+        // if train is playable we can check for playability
+        if (playerPaths[player_list[j]].Playable || player_list[j] === player) {
+          // if there isn't a path we check the starting domino
+          if (
+            pathDominoes.length === 0 &&
+            (playerDominos[player][i][1] ===
+              playerPaths["Starting Domino"][0][2] ||
+              playerDominos[player][i][2] ===
+                playerPaths["Starting Domino"][0][2])
+          ) {
+            if (!playablePaths.includes(player)) {
+              playablePaths.push(player);
+            }
           }
-        }
-        // if there is we check the last value of the last domino in the list, with this dominos top value
-        else if (
-          pathDominoes.length !== 0 &&
-          (pathDominoes[pathDominoes.length - 1][1] ===
-            playerDominos[player][i][1] ||
-            pathDominoes[pathDominoes.length - 1][1] ===
-              playerDominos[player][i][2])
-        ) {
-          if (!playablePaths.includes(player)) {
-            playablePaths.push(player);
+          // if there is we check the last value of the last domino in the list, with this dominos top value
+          else if (
+            pathDominoes.length !== 0 &&
+            (pathDominoes[pathDominoes.length - 1][1] ===
+              playerDominos[player][i][1] ||
+              pathDominoes[pathDominoes.length - 1][1] ===
+                playerDominos[player][i][2])
+          ) {
+            if (!playablePaths.includes(player)) {
+              playablePaths.push(player);
+            }
           }
         }
       }
-    }
-    if (playerPaths["Mexican Train"].Playable) {
-      const mexicanPath = playerPaths["Mexican Train"]["Dominoes"];
-      if (
-        mexicanPath.length === 0 &&
-        (playerDominos[player][i][1] === playerPaths["Starting Domino"][0][2] ||
-          playerDominos[player][i][2] === playerPaths["Starting Domino"][0][2])
-      ) {
-        if (!playablePaths.includes("Mexican Train")) {
-          playablePaths.push("Mexican Train");
+      if (playerPaths["Mexican Train"].Playable) {
+        const mexicanPath = playerPaths["Mexican Train"]["Dominoes"];
+        if (
+          mexicanPath.length === 0 &&
+          (playerDominos[player][i][1] === playerPaths["Starting Domino"][0][2] ||
+            playerDominos[player][i][2] === playerPaths["Starting Domino"][0][2])
+        ) {
+          if (!playablePaths.includes("Mexican Train")) {
+            playablePaths.push("Mexican Train");
+          }
+        } else if (
+          mexicanPath.length !== 0 &&
+          (mexicanPath[mexicanPath.length - 1][1] ===
+            playerDominos[player][i][1] ||
+            mexicanPath[mexicanPath.length - 1][1] ===
+              playerDominos[player][i][2])
+        ) {
+          if (!playablePaths.includes("Mexican Train")) {
+            playablePaths.push("Mexican Train");
+          }
         }
-      } else if (
-        mexicanPath.length !== 0 &&
-        (mexicanPath[mexicanPath.length - 1][1] ===
-          playerDominos[player][i][1] ||
-          mexicanPath[mexicanPath.length - 1][1] ===
-            playerDominos[player][i][2])
-      ) {
-        if (!playablePaths.includes("Mexican Train")) {
-          playablePaths.push("Mexican Train");
-        }
+      }
+    } 
+  } else{
+    // handles unvalidated double
+    const lastDomino = playerPaths[playerPaths.UnvalidatedDouble].Dominoes[playerPaths[playerPaths.UnvalidatedDouble].Dominoes.length-1];
+    for (let i = 0; i < playerDominos[player].length; i++){
+      if((lastDomino[1] === playerDominos[player][i][2] || lastDomino[1]=== playerDominos[player][i][1]) && !playablePaths.includes(playerPaths.UnvalidatedDouble)){
+        playablePaths.push(playerPaths.UnvalidatedDouble);
       }
     }
   }
@@ -167,6 +177,9 @@ export function PlayDomino(player, player_list, domino, path){
     domino[1] = temp;
   }
   playerPaths[path].Dominoes.push(domino);
+  if(playerPaths.UnvalidatedDouble !== null){
+    playerPaths.UnvalidatedDouble = null;
+  }
 
   // check for double, if it is return false (signifying turn isn't ove)
   if(domino[1] === domino[2]){
@@ -175,13 +188,12 @@ export function PlayDomino(player, player_list, domino, path){
         playerPaths[player].Playable = false;
       }
     }
+    playerPaths.UnvalidatedDouble = player;
     sessionStorage.setItem('Player Paths', JSON.stringify(playerPaths));
     sessionStorage.setItem('Player Dominoes', JSON.stringify(playerDominos));
-    return false;
   }
   sessionStorage.setItem('Player Paths', JSON.stringify(playerPaths));
   sessionStorage.setItem('Player Dominoes', JSON.stringify(playerDominos));
-  return true;
 }
 
 function GameLogic() {
