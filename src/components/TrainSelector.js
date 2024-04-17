@@ -98,9 +98,17 @@ function TrainSelector() {
                   alt={choice.alt}
                   onSelect={() => selectTrain(choice.alt)}
                   isSelected={playerSelectedTrain === choice.alt}
-                  isDisabled={disabledTrains.includes(choice.alt) && confirmedTrains[sessionStorage.getItem('username')] !== choice.alt && choice.alt !== playerSelectedTrain}
+                  isDisabled={
+                    (disabledTrains.includes(choice.alt) &&
+                      confirmedTrains[sessionStorage.getItem('username')] !== choice.alt &&
+                      choice.alt !== playerSelectedTrain) ||
+                    (confirmedTrains[sessionStorage.getItem('username')] &&
+                      choice.alt !== confirmedTrains[sessionStorage.getItem('username')] &&
+                      choice.alt !== playerSelectedTrain)
+                  }
                 />
               ))}
+
             </div>
             <div
               className="confirm-selection"
