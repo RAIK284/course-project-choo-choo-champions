@@ -52,8 +52,8 @@ export function DeterminePlayablePaths(player, player_list) {
               playerDominos[player][i][2] ===
                 playerPaths["Starting Domino"][0][2])
           ) {
-            if (!playablePaths.includes(player)) {
-              playablePaths.push(player);
+            if (!playablePaths.includes(player_list[j])) {
+              playablePaths.push(player_list[j]);
             }
           }
           // if there is we check the last value of the last domino in the list, with this dominos top value
@@ -64,8 +64,8 @@ export function DeterminePlayablePaths(player, player_list) {
               pathDominoes[pathDominoes.length - 1][1] ===
                 playerDominos[player][i][2])
           ) {
-            if (!playablePaths.includes(player)) {
-              playablePaths.push(player);
+            if (!playablePaths.includes(player_list[j])) {
+              playablePaths.push(player_list[j]);
             }
           }
         }
@@ -101,7 +101,6 @@ export function DeterminePlayablePaths(player, player_list) {
         playablePaths.push(playerPaths.UnvalidatedDouble);
       }
     }
-    console.log(playablePaths);
   }
   if (playablePaths.length === 0 && boneyard.length !== 0) {
     playablePaths.push("Draw");
@@ -128,7 +127,7 @@ export function DrawADomino(player, player_list) {
     sessionStorage.setItem("Player Dominoes", JSON.stringify(playerDominos));
     sessionStorage.setItem("Player Paths", JSON.stringify(playerPaths));
     const newPaths = DeterminePlayablePaths(player, player_list);
-    if(newPaths.includes('Draw') || newPaths.includes('Pass')){
+    if(newPaths.includes("Draw") || newPaths.includes("Pass")){
       playerPaths[player].Playable = true;
       console.log(playerPaths[player].Playable);
       sessionStorage.setItem("Player Paths", JSON.stringify(playerPaths));
@@ -190,7 +189,7 @@ export function PlayDomino(player, player_list, domino, path){
     playerPaths.UnvalidatedDouble = null;
   }
 
-  // check for double, if it is return false (signifying turn isn't ove)
+  // check for double
   if(domino[1] === domino[2]){
     playerPaths.UnvalidatedDouble = path;
   } else if(player === path){

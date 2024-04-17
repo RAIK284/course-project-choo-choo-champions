@@ -148,7 +148,6 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
   async function Turn() {
     // timer goes here
     const options = DeterminePlayablePaths(players[currentPlayerIndex], players);
-    console.log(players[currentPlayerIndex], options);
     if (
       options.includes("Draw") &&
       (sessionStorage.getItem("DominoDrawn") == null ||
