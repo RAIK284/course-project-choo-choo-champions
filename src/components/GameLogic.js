@@ -115,6 +115,7 @@ export function DrawADomino(player, player_list) {
   const paths = DeterminePlayablePaths(player, player_list);
   const boneyard = JSON.parse(sessionStorage.getItem("Boneyard"));
   const playerDominos = JSON.parse(sessionStorage.getItem("Player Dominoes"));
+  const playerPaths = JSON.parse(sessionStorage.getItem("Player Paths"));
   if (boneyard.length === 0) {
     alert("Cannot draw domino. There are no dominoes available!");
   }
@@ -124,6 +125,11 @@ export function DrawADomino(player, player_list) {
     );
     sessionStorage.setItem("Boneyard", JSON.stringify(boneyard));
     sessionStorage.setItem("Player Dominoes", JSON.stringify(playerDominos));
+    const newPaths = DeterminePlayablePaths(player, player_list);
+    if(newPaths.includes('Draw') || newPaths.includes('Pass')){
+      playerPaths[player].Playable = true;
+      sessionStorage.setItem("Player Paths", JSON.stringify(playerPaths));
+    }
     return true;
   } else {
     alert("Cannot draw domino. There are playable dominoes!");
@@ -183,14 +189,9 @@ export function PlayDomino(player, player_list, domino, path){
 
   // check for double, if it is return false (signifying turn isn't ove)
   if(domino[1] === domino[2]){
-    for(let i=0;i<player_list.length;i++){
-      if(player !== player_list[i]){
-        playerPaths[player].Playable = false;
-      }
-    }
     playerPaths.UnvalidatedDouble = player;
-    sessionStorage.setItem('Player Paths', JSON.stringify(playerPaths));
-    sessionStorage.setItem('Player Dominoes', JSON.stringify(playerDominos));
+  } else if(player === path){
+    playerPaths[player].Playable = false;
   }
   sessionStorage.setItem('Player Paths', JSON.stringify(playerPaths));
   sessionStorage.setItem('Player Dominoes', JSON.stringify(playerDominos));
