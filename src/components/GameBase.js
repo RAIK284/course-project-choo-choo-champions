@@ -27,14 +27,17 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
     JSON.stringify(["Mexican Train", "max", "arjun", "carly"])
   );
   const startingDomino = [[90, 12, 12]];
-  const currentPlayer = "max";
 
   if (sessionStorage.getItem("Player Dominoes") == null) {
     GenerateDominoesForPlayers(players, startingDomino);
   }
 
   // a bunch of booleans that we will use within
-  const [currentPlayerIndex, setCurrentPlayerIndex] = useState(0);
+  const [currentPlayerIndex, setCurrentPlayerIndex] = useState(
+    sessionStorage.getItem("currentPlayerIndex") !== null
+      ? parseInt(sessionStorage.getItem("currentPlayerIndex"))
+      : 0
+  );
   const [drawDisabled, setDrawDisabled] = useState(true);
   const [playDisabled, setPlayDisabled] = useState(true);
   const [finishDisabled, setFinishDisabled] = useState(true);
@@ -65,7 +68,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
 
   const DrawDomino = () => {
     sessionStorage.setItem("DominoDrawn", JSON.stringify(true));
-    DrawADomino(currentPlayer, players);
+    DrawADomino(players[currentPlayerIndex], players);
     window.location.reload();
   };
 
@@ -74,7 +77,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
     if (domino == null) {
       return false;
     }
-    const options = CheckIfDominoIsPlayable(currentPlayer, players, domino);
+    const options = CheckIfDominoIsPlayable(players[currentPlayerIndex], players, domino);
     if (options !== undefined) {
 
       setSelectedDomino(domino);
@@ -95,9 +98,9 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
 
     if(isAvailable[index]){
       if(index===0){
-        PlayDomino(currentPlayer, players, selectedDomino, 'Mexican Train');
+        PlayDomino(players[currentPlayerIndex], players, selectedDomino, 'Mexican Train');
       } else{
-        PlayDomino(currentPlayer, players, selectedDomino, players[index-1]);
+        PlayDomino(players[currentPlayerIndex], players, selectedDomino, players[index-1]);
       }
       const event = new Event("DominoOnPath");
       sessionStorage.setItem("SelectedDomino", null);
@@ -144,7 +147,8 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
 
   async function Turn() {
     // timer goes here
-    const options = DeterminePlayablePaths(currentPlayer, players);
+    const options = DeterminePlayablePaths(players[currentPlayerIndex], players);
+    console.log(players[currentPlayerIndex], options);
     if (
       options.includes("Draw") &&
       (sessionStorage.getItem("DominoDrawn") == null ||
@@ -174,7 +178,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
       });
       if(JSON.parse(sessionStorage.getItem("Player Paths")).UnvalidatedDouble !==null){
         await sessionStorage.setItem("DominoDrawn", false);
-        await Turn();
+        await Turn(players[currentPlayerIndex]);
         return;
       }
     }
@@ -198,12 +202,12 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
     GeneratePathsForGame(startingDomino, players);
   }
   const playerPaths = JSON.parse(sessionStorage.getItem("Player Paths"));
-  const dominos = ConvertToReact(playerDominoes[currentPlayer]);
+  const dominos = ConvertToReact(playerDominoes[players[currentPlayerIndex]]);
   const sDomino = ConvertToReact(playerPaths["Starting Domino"]);
   const lastDominos = loadDominos();
 
   if (!loading && !inTurn) {
-    Turn(currentPlayer);
+    Turn(players[currentPlayerIndex]);
     setInTurn(true);
   } else if (loading && !inTurn) {
     setLoading(false);

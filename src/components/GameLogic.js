@@ -38,7 +38,7 @@ export function DeterminePlayablePaths(player, player_list) {
   const playerPaths = JSON.parse(sessionStorage.getItem("Player Paths"));
   const boneyard = JSON.parse(sessionStorage.getItem("Boneyard"));
   const playablePaths = [];
-  if(playerPaths.UnvalidatedDouble===null){
+  if(playerPaths.UnvalidatedDouble === null){
     for (let i = 0; i < playerDominos[player].length; i++) {
       for (let j = 0; j < player_list.length; j++) {
         const pathDominoes = playerPaths[player_list[j]].Dominoes;
@@ -101,6 +101,7 @@ export function DeterminePlayablePaths(player, player_list) {
         playablePaths.push(playerPaths.UnvalidatedDouble);
       }
     }
+    console.log(playablePaths);
   }
   if (playablePaths.length === 0 && boneyard.length !== 0) {
     playablePaths.push("Draw");
@@ -125,9 +126,11 @@ export function DrawADomino(player, player_list) {
     );
     sessionStorage.setItem("Boneyard", JSON.stringify(boneyard));
     sessionStorage.setItem("Player Dominoes", JSON.stringify(playerDominos));
+    sessionStorage.setItem("Player Paths", JSON.stringify(playerPaths));
     const newPaths = DeterminePlayablePaths(player, player_list);
     if(newPaths.includes('Draw') || newPaths.includes('Pass')){
       playerPaths[player].Playable = true;
+      console.log(playerPaths[player].Playable);
       sessionStorage.setItem("Player Paths", JSON.stringify(playerPaths));
     }
     return true;
@@ -189,7 +192,7 @@ export function PlayDomino(player, player_list, domino, path){
 
   // check for double, if it is return false (signifying turn isn't ove)
   if(domino[1] === domino[2]){
-    playerPaths.UnvalidatedDouble = player;
+    playerPaths.UnvalidatedDouble = path;
   } else if(player === path){
     playerPaths[player].Playable = false;
   }
