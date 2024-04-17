@@ -99,3 +99,15 @@
     margin-top: 100px;
     justify-content: center;
 }
+
+.confirm-join-code:disabled,
+.join-random-game:disabled {
+    background-color: #ccc;
+    color: #666;
+    cursor: not-allowed;
+}
+
+.confirm-join-code:disabled:hover,
+.join-random-game:disabled:hover {
+    background-color: #ccc;
+}

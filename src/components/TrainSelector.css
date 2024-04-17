@@ -21,6 +21,12 @@
     z-index: 1;
 }
 
+.game-image-choice.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+
 .choose-your-train {
     font-size: 48px;
     color: white;
