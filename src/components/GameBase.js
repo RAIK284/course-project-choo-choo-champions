@@ -21,10 +21,10 @@ import { useEffect, useState } from "react";
 
 function GameChoice({ src, alt, onSelect, isSelected }) {
   // hard coded setup
-  const players = ["max", "arjun", "carly"];
+const players = ["max", "arjun", "carly"/*, "alison"*/];
   sessionStorage.setItem(
     "Players",
-    JSON.stringify(["Mexican Train", "max", "arjun", "carly"])
+    JSON.stringify(["Mexican Train", "max", "arjun", "carly"/*, "alison"*/])
   );
   const startingDomino = [[90, 12, 12]];
 
