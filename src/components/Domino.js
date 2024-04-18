@@ -1,21 +1,26 @@
 import React, { useState } from "react";
 import "./Domino.css";
 
-
-function DetermineIfDominoIsSelectable(domino){
-  if(JSON.parse(sessionStorage.getItem('Player Paths')!=null) && domino !== undefined){
-    const paths = JSON.parse(sessionStorage.getItem('Player Paths'))
-    const players = JSON.parse(sessionStorage.getItem('Players'));
-    for(let i=0;i<players.length;i++){
+export function DetermineIfDominoIsSelectable(domino) {
+  if (
+    JSON.parse(sessionStorage.getItem("Player Paths") != null) &&
+    domino !== undefined
+  ) {
+    const paths = JSON.parse(sessionStorage.getItem("Player Paths"));
+    const players = JSON.parse(sessionStorage.getItem("Players"));
+    for (let i = 0; i < players.length; i++) {
       const path = paths[players[i]].Dominoes;
-      for(let j=0;j<path.length;j++){
-        if((path[j][1]===domino[1]&&path[j][2]===domino[2])||(path[j][1]===domino[2]&&path[j][2]===domino[1])){
+      for (let j = 0; j < path.length; j++) {
+        if (
+          (path[j][1] === domino[1] && path[j][2] === domino[2]) ||
+          (path[j][1] === domino[2] && path[j][2] === domino[1])
+        ) {
           return false;
         }
       }
     }
   }
-  if(domino!==undefined && (domino[1]===13||domino[2]===14)){
+  if (domino !== undefined && (domino[1] === 13 || domino[2] === 14)) {
     return false;
   }
   return true;
@@ -37,8 +42,11 @@ export function ConvertToReact(dominos) {
       onSelect={() => handleSelectDomino(index)}
     />
   ));
-  if(selectedDomino!==null && DetermineIfDominoIsSelectable(dominos[selectedDomino])){
-    sessionStorage.setItem('Selected Domino', dominos[selectedDomino]);
+  if (
+    selectedDomino !== null &&
+    DetermineIfDominoIsSelectable(dominos[selectedDomino])
+  ) {
+    sessionStorage.setItem("Selected Domino", dominos[selectedDomino]);
   }
   return reactDominos;
 }
@@ -97,7 +105,7 @@ function Domino({ top, bottom, isSelected, onSelect }) {
   const bottomNumberDots = {
     color: getDots(bottom),
   };
-  if(isSelected && DetermineIfDominoIsSelectable([0, bottom, top])){
+  if (isSelected && DetermineIfDominoIsSelectable([0, bottom, top])) {
     sessionStorage.setItem("SelectedDomino", JSON.stringify([0, bottom, top]));
   }
 
