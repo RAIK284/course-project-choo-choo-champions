@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPencilAlt } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
-
 import './Profile.css';
 
 function ProfilePage() {
@@ -44,7 +43,6 @@ function ProfilePage() {
             window.location.href = '/';
         }
     };
-
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
@@ -120,8 +118,6 @@ function ProfilePage() {
         }
     };
 
-
-
     return (
         <div className="profile-page full-page">
             <Background />
@@ -143,10 +139,13 @@ function ProfilePage() {
                         </label>
                         <div className="navigation-buttons">
                             <Link to="/dashboard" className="button-link">Dashboard</Link>
-                        <label style={{ color: 'black' }}>
-                            <input type="checkbox" checked={colorblind} onChange={handleColorblindToggle}/>Numbered Version
-                        </label>
                             <Link to="/changepassword" className="button-link">Change Password</Link>
+                            <div className="button-link">
+                                <label>
+                                    <input type="checkbox" checked={colorblind} onChange={handleColorblindToggle} />
+                                    Colorblind
+                                </label>
+                            </div>
                             <Link to="/" className="button-link">Log Out</Link>
                         </div>
                     </div>
