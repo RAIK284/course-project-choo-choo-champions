@@ -6,7 +6,6 @@ import './JoinCodePage.css';
 function JoinCodePage() {
     const [joinCode, setJoinCode] = useState('');
     const [ws, setWs] = useState(null);
-    const [sessionId, setSessionId] = useState(null);
     const [joinedGame, setJoinedGame] = useState(false);
 
     useEffect(() => {
@@ -19,9 +18,7 @@ function JoinCodePage() {
 
         newWs.onmessage = (event) => {
             const message = JSON.parse(event.data);
-            if (message.type === 'sessionId') {
-                setSessionId(message.sessionId);
-            } else if (message.type === 'redirect' && message.url === '/trains') {
+            if (message.type === 'redirect' && message.url === '/trains') {
                 window.location.href = message.url;
             }
         };
@@ -42,7 +39,7 @@ function JoinCodePage() {
     }, []);
 
     const handleJoinGame = () => {
-        if (ws && joinCode === sessionId) {
+        if (ws && joinCode.length == 6) {
             const username = sessionStorage.getItem('username');
             ws.send(JSON.stringify({ type: 'joinGame', sessionId: joinCode, username }));
             setJoinedGame(true);
