@@ -49,15 +49,19 @@ async def handle_client(websocket):
 
             elif message_type == 'confirmTrain':
                 username = data.get('username')
-                if username not in session_players[requested_session_id]:
-                    session_players[requested_session_id].append(username)
+                confirmed_train = data.get('train')
+                if username in session_players[requested_session_id]:
+                    session_players[requested_session_id][session_players[requested_session_id].index(
+                        username)] = {'username': username, 'train': confirmed_train}
+                else:
+                    session_players[requested_session_id].append(
+                        {'username': username, 'train': confirmed_train})
                     session_players[requested_session_id].pop(0)
                 print(session_players)
-                confirmed_train = data.get('train')
                 confirmed_trains[username] = confirmed_train
                 for client in clients:
                     await client.send(json.dumps({'type': 'trainConfirmed', 'username': username, 'train': confirmed_train}))
-                if all_players_confirmed(player_session_ids[websocket]):
+                if all_players_confirmed(requested_session_id):
                     for client in clients:
                         await client.send(json.dumps({'type': 'redirect', 'url': '/gamebase'}))
                 print(f"Player {username} confirmed train: {confirmed_train}")
@@ -93,9 +97,12 @@ def generate_session_id():
     return ''.join(random.choices(characters, k=6))
 
 
-def all_players_confirmed(session_id):
-    players = session_players.get(session_id, [])
-    return all(player in confirmed_trains for player in players)
+def all_players_confirmed(requested_session_id):
+    players = session_players.get(requested_session_id, [])
+    for player in players:
+        if 'username' not in player or 'train' not in player:
+            return False
+    return True
 
 
 asyncio.run(main())
