@@ -116,6 +116,7 @@ function Domino({ top, bottom, isSelected, onSelect }) {
     <div
       className={`domino ${isSelected ? "selected" : ""}`}
       onClick={onSelect}
+      data-testid="domino"
     >
       <img
         className="dominoImageTop"

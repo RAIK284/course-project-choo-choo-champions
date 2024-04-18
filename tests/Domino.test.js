@@ -6,8 +6,12 @@ import { screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { DetermineIfDominoIsSelectable } from "../src/components/Domino";
 
-// domino component (2)
+// domino component (3)
 describe("Domino Component", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    sessionStorage.clear();
+  });
   it("renders without crashing", () => {
     render(<Domino />);
   });
@@ -22,6 +26,23 @@ describe("Domino Component", () => {
     });
     expect(topImage).toHaveAttribute("src", "./assets/dots1.png");
     expect(bottomImage).toHaveAttribute("src", "./assets/dots1.png");
+  });
+  it("correctly handles selecting a selectable domino", () => {
+    const domino = [0, 0, 1];
+    render(
+      <Domino
+        top={domino[1]}
+        bottom={domino[0]}
+        isSelected={true}
+        onSelect={() => {}}
+      />
+    );
+
+    console.log(JSON.stringify(domino));
+    console.log(sessionStorage.getItem("SelectedDomino"));
+    expect(sessionStorage.getItem("SelectedDomino")).toEqual(
+      JSON.stringify(domino)
+    );
   });
 });
 
@@ -96,25 +117,31 @@ describe("getColor function", () => {
   });
 });
 
-// convert to react (2)
-describe("ConvertToReact function", () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-    sessionStorage.clear();
-  });
-  it("correctly sets selected domino in session storage", () => {
-    const dominos = [
-      [1, 2],
-      [3, 4],
-      [5, 6],
-    ];
-    const selectedDominoIndex = 1;
-    sessionStorage.clear();
-    const setSelectedDomino = jest.fn();
-    jest.spyOn(React, "useState").mockReturnValue([null, setSelectedDomino]);
-    ConvertToReact(dominos, null);
+//onSelect(2)
+it("calls onSelect when clicked", () => {
+  const onSelectMock = jest.fn();
+  render(<Domino top={3} bottom={4} onSelect={onSelectMock} />);
+  const domino = screen.getByTestId("domino");
+  fireEvent.click(domino);
+  expect(onSelectMock).toHaveBeenCalledTimes(1);
+});
+it("renders selected class when isSelected is true", () => {
+  render(<Domino top={3} bottom={4} isSelected />);
+  const domino = screen.getByTestId("domino");
+  expect(domino).toHaveClass("selected");
+});
 
-    const expectedDomino = JSON.stringify(dominos[selectedDominoIndex]);
-    expect(sessionStorage.getItem("Selected Domino")).toEqual(expectedDomino);
+// convert to react (2)
+describe("ConvertToReact Function", () => {
+  it("renders an array of Domino components", () => {
+    const dominos = [
+      [1, 2, 3],
+      [4, 5, 6],
+    ];
+    render(<ConvertToReact dominos={dominos} />);
+    expect(screen.getByAltText(`Top dots representing 1`)).toBeInTheDocument();
+    expect(
+      screen.getByAltText(`Bottom dots representing 2`)
+    ).toBeInTheDocument();
   });
 });
