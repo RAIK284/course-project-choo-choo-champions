@@ -12,7 +12,10 @@ function ProfilePage() {
     const [email, setEmail] = useState('');
     const [username, setUsername] = useState('');
     const [profileImage, setProfileImage] = useState('https://upload.wikimedia.org/wikipedia/en/thumb/d/dc/Thomas_Tank_Engine_1.JPG/220px-Thomas_Tank_Engine_1.JPG');
-
+    const [colorblind, setColorblind] = useState(() => {
+        const storedColorblind = sessionStorage.getItem('colorblind');
+        return storedColorblind ? JSON.parse(storedColorblind) : false;
+    });
     useEffect(() => {
         const token = sessionStorage.getItem('token');
         const storedUsername = sessionStorage.getItem('username');
@@ -47,6 +50,12 @@ function ProfilePage() {
         const file = e.target.files[0];
         setProfileImage(URL.createObjectURL(file));
     };
+
+    const handleColorblindToggle = () => {
+        const updatedColorblind = !colorblind; // Toggle the colorblind state
+        setColorblind(updatedColorblind); // Update the colorblind state
+        sessionStorage.setItem("colorblind", updatedColorblind); // Store the updated state in sessionStorage
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -134,7 +143,7 @@ function ProfilePage() {
                         </label>
                         <div className="navigation-buttons">
                             <Link to="/dashboard" className="button-link">Dashboard</Link>
-                            <Link to="/profile" className="button-link">Account Details</Link>
+                            <input type="checkbox" checked={colorblind} onChange={handleColorblindToggle}/>
                             <Link to="/changepassword" className="button-link">Change Password</Link>
                             <Link to="/" className="button-link">Log Out</Link>
                         </div>
