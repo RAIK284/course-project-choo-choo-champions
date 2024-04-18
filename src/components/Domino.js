@@ -46,7 +46,10 @@ export function ConvertToReact(dominos) {
     selectedDomino !== null &&
     DetermineIfDominoIsSelectable(dominos[selectedDomino])
   ) {
-    sessionStorage.setItem("Selected Domino", dominos[selectedDomino]);
+    sessionStorage.setItem(
+      "Selected Domino",
+      JSON.stringify(dominos[selectedDomino])
+    );
   }
   return reactDominos;
 }
