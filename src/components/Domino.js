@@ -106,17 +106,31 @@ function Domino({ top, bottom, isSelected, onSelect }) {
       className={`domino ${isSelected ? "selected" : ""}`}
       onClick={onSelect}
     >
-      <img
-        className="dominoImageTop"
-        src={topNumberDots.color}
-        alt="Top dots representing a number"
-      />
-      <div className="line" aria-hidden="true"></div>
-      <img
-        className="dominoImageBottom"
-        src={bottomNumberDots.color}
-        alt="Bottom dots representing a number"
-      />
+      {sessionStorage.getItem('colorblind') === "true" ? (
+        <>
+          <div className="topnumber" style={topNumberStyle}>
+            {top}
+          </div>
+          <div className="line"></div>
+          <div className="bottomnumber" style={bottomNumberStyle}>
+            {bottom}
+          </div>
+        </>
+      ) : (
+        <>
+          <img
+            className="dominoImageTop"
+            src={topNumberDots.color}
+            alt="Top dots representing a number"
+          />
+          <div className="line" aria-hidden="true"></div>
+          <img
+            className="dominoImageBottom"
+            src={bottomNumberDots.color}
+            alt="Bottom dots representing a number"
+          />
+        </>
+      )}
     </div>
   );
 
