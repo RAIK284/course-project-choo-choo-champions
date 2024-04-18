@@ -42,7 +42,7 @@ function JoinCodePage() {
     }, []);
 
     const handleJoinGame = () => {
-        if (ws && joinCode === sessionId) {
+        if (ws) {
             const username = sessionStorage.getItem('username');
             ws.send(JSON.stringify({ type: 'joinGame', sessionId: joinCode, username }));
             setJoinedGame(true);

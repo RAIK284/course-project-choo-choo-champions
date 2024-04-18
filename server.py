@@ -9,12 +9,16 @@ session_id = None
 confirmed_train = None
 player_train_selection = {}
 confirmed_trains = {}
+player_session_ids = {}
 
 
 async def handle_client(websocket):
-    global session_id, confirmed_train, player_train_selection, confirmed_trains
+    global confirmed_train, player_train_selection, confirmed_trains, player_session_ids
     clients.add(websocket)
     print(f"New client connected: {websocket.remote_address}")
+
+    session_id = generate_session_id_for_client()
+    player_session_ids[websocket] = session_id
 
     await websocket.send(json.dumps({'type': 'sessionId', 'sessionId': session_id}))
 
@@ -25,7 +29,8 @@ async def handle_client(websocket):
             username = data.get('username')
 
             if message_type == 'joinGame':
-                if data.get('sessionId') == session_id:
+                requested_session_id = data.get('sessionId')
+                if requested_session_id in player_session_ids.values():
                     new_player = {'username': username, 'ready': True}
                     for client in clients:
                         await client.send(json.dumps({'type': 'playerJoined', 'player': new_player}))
@@ -65,6 +70,13 @@ async def main():
     async with websockets.serve(handle_client, "localhost", 8765):
         print("WebSocket server started. Listening on port 8765...")
         await asyncio.Future()
+
+
+def generate_session_id_for_client():
+    session_id = generate_session_id()
+    while session_id in player_session_ids.values():
+        session_id = generate_session_id()
+    return session_id
 
 
 def generate_session_id():
