@@ -143,7 +143,9 @@ function ProfilePage() {
                         </label>
                         <div className="navigation-buttons">
                             <Link to="/dashboard" className="button-link">Dashboard</Link>
-                            <input type="checkbox" checked={colorblind} onChange={handleColorblindToggle}/>
+                        <label style={{ color: 'black' }}>
+                            <input type="checkbox" checked={colorblind} onChange={handleColorblindToggle}/>Numbered Version
+                        </label>
                             <Link to="/changepassword" className="button-link">Change Password</Link>
                             <Link to="/" className="button-link">Log Out</Link>
                         </div>
