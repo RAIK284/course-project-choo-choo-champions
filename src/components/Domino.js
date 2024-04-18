@@ -106,7 +106,7 @@ function Domino({ top, bottom, isSelected, onSelect }) {
       className={`domino ${isSelected ? "selected" : ""}`}
       onClick={onSelect}
     >
-      {sessionStorage.getItem('colorblind') ? (
+      {sessionStorage.getItem('colorblind') === "true" ? (
         <>
           <div className="topnumber" style={topNumberStyle}>
             {top}
