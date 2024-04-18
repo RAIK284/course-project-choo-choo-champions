@@ -53,7 +53,7 @@ export function ConvertToReact(dominos) {
   }
   return reactDominos;
 }
-const getColor = (number) => {
+export const getColor = (number) => {
   switch (number) {
     case 0:
       return "black";

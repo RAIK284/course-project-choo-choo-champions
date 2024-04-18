@@ -1,7 +1,7 @@
 import React from "react";
-import { render } from "@testing-library/react";
+import { render, fireEvent } from "@testing-library/react";
 import Domino from "../src/components/Domino";
-import { ConvertToReact } from "../src/components/Domino";
+import { ConvertToReact, getColor } from "../src/components/Domino";
 import { screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { DetermineIfDominoIsSelectable } from "../src/components/Domino";
@@ -68,8 +68,40 @@ jest.mock("react", () => ({
   useState: jest.fn(),
 }));
 
+//getColor (13)
+describe("getColor function", () => {
+  it('returns "black" for input 0', () => {
+    const color = getColor(0);
+    expect(color).toBe("black");
+  });
+
+  it('returns "#61A7CF" for input 1', () => {
+    const color = getColor(1);
+    expect(color).toBe("#61A7CF");
+  });
+
+  it('returns "#6DD477" for input 2', () => {
+    const color = getColor(2);
+    expect(color).toBe("#6DD477");
+  });
+
+  it('returns "#909090" for input 12', () => {
+    const color = getColor(12);
+    expect(color).toBe("#909090");
+  });
+
+  it('returns "FFFFFFF" for any other input', () => {
+    const color = getColor(13);
+    expect(color).toBe("FFFFFFF");
+  });
+});
+
 // convert to react (2)
 describe("ConvertToReact function", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    sessionStorage.clear();
+  });
   it("correctly sets selected domino in session storage", () => {
     const dominos = [
       [1, 2],
@@ -78,13 +110,11 @@ describe("ConvertToReact function", () => {
     ];
     const selectedDominoIndex = 1;
     sessionStorage.clear();
-    const setSelectedDomino = 1;
+    const setSelectedDomino = jest.fn();
     jest.spyOn(React, "useState").mockReturnValue([null, setSelectedDomino]);
     ConvertToReact(dominos, null);
 
-    const expectedDomino = dominos[selectedDominoIndex];
-    console.log(JSON.stringify(expectedDomino));
-    console.log(sessionStorage.getItem("Selected Domino"));
-    expect(sessionStorage.getItem("Selected Domino")).toEqual(null);
+    const expectedDomino = JSON.stringify(dominos[selectedDominoIndex]);
+    expect(sessionStorage.getItem("Selected Domino")).toEqual(expectedDomino);
   });
 });
