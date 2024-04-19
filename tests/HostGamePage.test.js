@@ -44,3 +44,24 @@ test("calls handleStartGame when Start Game button is clicked", () => {
 
   expect(handleStartGameMock).not.toHaveBeenCalled();
 });
+
+test("handles WebSocket onopen event correctly", () => {
+  // Setup
+  const mockWebSocket = {
+    onopen: null,
+    close: jest.fn(),
+  };
+  global.WebSocket = jest.fn(() => mockWebSocket);
+
+  // Execute
+  act(() => {
+    render(
+      <Router>
+        <HostGamePage />
+      </Router>
+    );
+  });
+
+  // Test
+  expect(mockWebSocket.onopen).not.toBeNull();
+});
