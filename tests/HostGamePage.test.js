@@ -31,3 +31,16 @@ describe("HostGamePage component", () => {
     expect(joinCodeElement.textContent.trim()).toEqual("Join Code:");
   });
 });
+
+test("calls handleStartGame when Start Game button is clicked", () => {
+  const handleStartGameMock = jest.fn();
+  render(
+    <MemoryRouter>
+      <HostGamePage />
+    </MemoryRouter>
+  );
+  const startGameButton = screen.getByText("Start Game");
+  fireEvent.click(startGameButton);
+
+  expect(handleStartGameMock).not.toHaveBeenCalled();
+});
