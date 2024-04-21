@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import NavBar from "./NavBar";
-import Background from "./Background";
+import NavBar from "../universal/NavBar";
+import Background from "../universal/Background";
 import "./z_DRAFT_GameBase.module.css";
 
 function GameChoice() {

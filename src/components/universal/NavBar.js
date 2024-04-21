@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import SettingsButton from "./SettingsButton";
+import SettingsButton from "../universal/SettingsButton";
 import './NavBar.css';
 
 function NavBar() {

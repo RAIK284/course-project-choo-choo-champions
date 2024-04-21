@@ -1,9 +1,9 @@
 import React from "react";
-import orangeTrain from "./OrangeTrain";
-import greenTrain from "./GreenTrain";
-import { redTrain } from "./RedTrain";
-import blueTrain from "./BlueTrain";
-import purpleTrain from "./PurpleTrain";
+import orangeTrain from "../trains/OrangeTrain";
+import greenTrain from "../trains/GreenTrain";
+import { redTrain } from "../trains/RedTrain";
+import blueTrain from "../trains/BlueTrain";
+import purpleTrain from "../trains/PurpleTrain";
 
 const TrainStation = ({
   sDomino,

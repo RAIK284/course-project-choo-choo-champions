@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import NavBar from './NavBar';
-import Background from './Background';
+import NavBar from '../universal/NavBar';
+import Background from '../universal/Background';
 import { Link } from "react-router-dom";
 import axios from 'axios';
 import './DashboardPage.css';

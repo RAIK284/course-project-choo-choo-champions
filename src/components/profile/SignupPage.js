@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import Background from './Background';
+import Background from '../universal/Background';
 import './SignupPage.css';
 
 function SignupPage() {

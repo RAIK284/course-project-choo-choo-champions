@@ -1,8 +1,8 @@
 import React from "react";
-import NavBar from "./NavBar";
-import Background from "./Background";
+import NavBar from "../../universal/NavBar";
+import Background from "../../universal/Background";
 import "./DominoBank.css";
-import {ConvertToReact} from "./Domino";
+import { ConvertToReact } from "./Domino";
 
 function GenerateDominoBank() {
   const dominoJSON = [];
@@ -13,7 +13,7 @@ function GenerateDominoBank() {
       // Start bottom from top to ensure uniqueness
       const key = index;
       index++;
-      dominoJSON.push([key,top,bottom]);
+      dominoJSON.push([key, top, bottom]);
     }
   }
   sessionStorage.setItem("Domino", JSON.stringify(dominoJSON));

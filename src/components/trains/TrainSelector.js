@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import NavBar from './NavBar';
-import Background from './Background';
+import NavBar from '../universal/NavBar';
+import Background from '../universal/Background';
 import './TrainSelector.css';
 
 function GameChoice({ src, alt, onSelect, isSelected, isDisabled }) {

@@ -1,23 +1,23 @@
 // App.js
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import HomePage from "./components/HomePage";
-import SignUpPage from "./components/SignupPage"; // Correct the import path
-import TrainSelector from "./components/TrainSelector";
-import NavBar from "./components/NavBar";
-import Background from "./components/Background";
-import SettingsButton from "./components/SettingsButton";
-import JoinCodePage from "./components/JoinCodePage";
-import Profile from "./components/Profile";
-import ChangePassword from "./components/ChangePassword";
-import DashboardPage from "./components/DashboardPage";
-import DominoBank from "./components/DominoBank";
-import Domino from "./components/Domino";
-import GameBase from "./components/GameBase";
-import EmailVerification from "./components/EmailVerification";
-import GameLogic from "./components/GameLogic";
-import DraftGameBase from "./components/z_DRAFT_GameBase"
-import HostGamePage from "./components/HostGamePage";
+import HomePage from "./components/login/HomePage";
+import SignUpPage from "./components/profile/SignupPage";
+import TrainSelector from "./components/trains/TrainSelector";
+import NavBar from "./components/universal/NavBar";
+import Background from "./components/universal/Background";
+import SettingsButton from "./components/universal/SettingsButton";
+import JoinCodePage from "./components/gameplay/join/JoinCodePage";
+import Profile from "./components/profile/Profile";
+import ChangePassword from "./components/profile/ChangePassword";
+import DashboardPage from "./components/profile/DashboardPage";
+import DominoBank from "./components/gameplay/dominoes/DominoBank";
+import Domino from "./components/gameplay/dominoes/Domino";
+import GameBase from "./components/gameplay/GameBase";
+import EmailVerification from "./components/profile/EmailVerification";
+import GameLogic from "./components/gameplay/GameLogic";
+import DraftGameBase from "./components/gameplay/z_DRAFT_GameBase"
+import HostGamePage from "./components/gameplay/host/HostGamePage";
 
 function App() {
   return (

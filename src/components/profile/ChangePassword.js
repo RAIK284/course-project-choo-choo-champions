@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import NavBar from './NavBar';
-import Background from './Background';
+import NavBar from '../universal/NavBar';
+import Background from '../universal/Background';
 import './ChangePassword.css';
 
 function ChangePassword() {

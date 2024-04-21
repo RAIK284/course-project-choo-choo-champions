@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, fireEvent, act } from '@testing-library/react';
 import { BrowserRouter as Router } from 'react-router-dom';
-import TrainSelector from '../src/components/TrainSelector';
+import TrainSelector from '../src/components/trains/TrainSelector';
 
 window.alert = jest.fn();
 
