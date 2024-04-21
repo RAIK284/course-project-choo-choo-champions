@@ -3,7 +3,11 @@ import { GenerateDominoBankForGame } from "./DominoBank";
 export function GenerateDominoesForPlayers(player_list, startingDomino) {
   GenerateDominoBankForGame();
   const dominos = JSON.parse(sessionStorage.getItem("Domino"));
-  dominos.splice(dominos.indexOf(startingDomino));
+  for(let i=0;i<dominos.length;i++){
+    if(dominos[i][1]===startingDomino[0][1] && dominos[i][2]===startingDomino[0][2]){
+      dominos.splice(i,1);
+    }
+  }
   // generate the "dictionaries"
   const playerDominoes = {};
   for (let k = 0; k < player_list.length; k++) {
@@ -197,6 +201,17 @@ export function PlayDomino(player, player_list, domino, path){
   }
   sessionStorage.setItem('Player Paths', JSON.stringify(playerPaths));
   sessionStorage.setItem('Player Dominoes', JSON.stringify(playerDominos));
+}
+
+export function CheckWinner(player_list){
+  const playerDominos = JSON.parse(sessionStorage.getItem("Player Dominoes"));
+  for(let i=0;i<player_list.length;i++){
+    if(playerDominos[player_list[i]].length===0){
+      console.log(player_list[i]);
+      return player_list[i];
+    }
+  }
+  return false;
 }
 
 function GameLogic() {

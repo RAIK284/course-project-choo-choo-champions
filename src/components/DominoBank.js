@@ -24,6 +24,7 @@ export function GenerateDominoBankForGame() {
 }
 
 function DominoBank() {
+  GenerateDominoBank();
   const dominos = ConvertToReact(JSON.parse(sessionStorage.getItem("Domino")))
   return (
     <div className="domino-page full-page">
