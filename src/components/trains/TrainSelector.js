@@ -3,6 +3,7 @@ import NavBar from '../universal/NavBar';
 import Background from '../universal/Background';
 import './TrainSelector.css';
 
+// Represents an individual train choice
 function GameChoice({ src, alt, onSelect, isSelected, isDisabled }) {
   return (
     <img
@@ -19,6 +20,7 @@ function GameChoice({ src, alt, onSelect, isSelected, isDisabled }) {
   );
 }
 
+// Main component for train selection interface
 function TrainSelector() {
   const [playerSelectedTrain, setPlayerSelectedTrain] = useState('');
   const [confirmedTrains, setConfirmedTrains] = useState({});
@@ -26,8 +28,10 @@ function TrainSelector() {
   const [disabledTrains, setDisabledTrains] = useState([]);
 
   useEffect(() => {
+    // Create WebSocket connection
     newWsRef.current = new WebSocket('ws://localhost:8765');
 
+    // WebSocket event handlers
     newWsRef.current.onopen = () => {
       console.log('WebSocket connection established');
     };
@@ -35,6 +39,7 @@ function TrainSelector() {
     newWsRef.current.onmessage = (event) => {
       const message = JSON.parse(event.data);
       if (message.type === 'trainConfirmed') {
+        // Update confirmed trains and disable the selected train
         const { username, train } = message;
         setConfirmedTrains(prev => ({ ...prev, [username]: train }));
         setDisabledTrains(prev => [...prev, train]);
@@ -51,20 +56,26 @@ function TrainSelector() {
       console.error('WebSocket error:', error);
     };
 
+    // Close WebSocket connection when component unmounts
     return () => {
       newWsRef.current.close();
     };
   }, []);
 
+  // Function to handle train selection
   const selectTrain = (train) => {
-    if (!confirmedTrains[sessionStorage.getItem('username')] || confirmedTrains[sessionStorage.getItem('username')] === train) {
+    const username = sessionStorage.getItem('username');
+    // Allow selection if not confirmed or already selected by the user
+    if (!confirmedTrains[username] || confirmedTrains[username] === train) {
       setPlayerSelectedTrain(train);
     }
   };
 
+  // Function to handle confirmation of train selection
   const handleConfirmSelection = () => {
     const username = sessionStorage.getItem('username');
     if (playerSelectedTrain && username) {
+      // Alert user about selected train and send confirmation message via WebSocket
       alert(`You've selected: ${playerSelectedTrain}`);
       const message = JSON.stringify({ type: 'confirmTrain', username: username, train: playerSelectedTrain });
       newWsRef.current.send(message);
@@ -73,6 +84,7 @@ function TrainSelector() {
     }
   };
 
+  // Array of train choices with image URLs and alternate text
   const gameChoices = [
     { src: "https://cdn.builder.io/api/v1/image/assets/TEMP/d737771a839e9d3381cf8be0888aafeb9423dad94e31ce6e6b57702a2eb9bb23", alt: "Red Train" },
     { src: "https://cdn.builder.io/api/v1/image/assets/TEMP/6f86f2b40e7a9d4e455f9a504dc5e366503ace6cf85fc3fb36aac70ac88a8fdf", alt: "Green Train" },
@@ -92,12 +104,14 @@ function TrainSelector() {
           <div className="selection-container">
             <div className="game-choices-container">
               {gameChoices.map((choice) => (
+                // Render each train choice using GameChoice component
                 <GameChoice
                   key={choice.src}
                   src={choice.src}
                   alt={choice.alt}
                   onSelect={() => selectTrain(choice.alt)}
                   isSelected={playerSelectedTrain === choice.alt}
+                  // Determine if choice is disabled based on selected and confirmed trains
                   isDisabled={
                     (disabledTrains.includes(choice.alt) &&
                       confirmedTrains[sessionStorage.getItem('username')] !== choice.alt &&
@@ -108,8 +122,8 @@ function TrainSelector() {
                   }
                 />
               ))}
-
             </div>
+            {/* Button to confirm train selection */}
             <div
               className="confirm-selection"
               onClick={handleConfirmSelection}
