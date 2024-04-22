@@ -54,6 +54,7 @@ function HostGamePage() {
                 newWs.close();
             }
         };
+        // eslint-disable-next-line
     }, []);
 
     // Function to handle starting the game

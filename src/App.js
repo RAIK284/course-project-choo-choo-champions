@@ -31,7 +31,7 @@ function App() {
         <Route path="/settingsbutton" element={<SettingsButton />} />
         <Route path="/join" element={<JoinCodePage />} />
         <Route path="/profile" element={<Profile />} />
-        <Route path="/changepassword" element={<ChangePassword />} />
+        <Route path="/change-password" element={<ChangePassword />} />
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/dominobank" element={<DominoBank />} />
         <Route path="/domino" element={<Domino />} />

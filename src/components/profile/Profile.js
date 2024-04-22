@@ -139,7 +139,7 @@ function ProfilePage() {
                         </label>
                         <div className="navigation-buttons">
                             <Link to="/dashboard" className="button-link">Dashboard</Link>
-                            <Link to="/changepassword" className="button-link">Change Password</Link>
+                            <Link to="/change-password" className="button-link">Change Password</Link>
                             <div className="button-link">
                                 <label>
                                     <input type="checkbox" checked={colorblind} onChange={handleColorblindToggle} />
