@@ -110,6 +110,8 @@ export function DeterminePlayablePaths(player, player_list) {
     playablePaths.push("Draw");
   } else if (playablePaths.length === 0 && boneyard.length === 0) {
     playablePaths.push("Pass");
+    playerPaths[player].Playable = true;
+    sessionStorage.setItem("Player Paths", JSON.stringify(playerPaths));
   }
   return playablePaths;
 }
@@ -133,7 +135,6 @@ export function DrawADomino(player, player_list) {
     const newPaths = DeterminePlayablePaths(player, player_list);
     if(newPaths.includes("Draw") || newPaths.includes("Pass")){
       playerPaths[player].Playable = true;
-      console.log(playerPaths[player].Playable);
       sessionStorage.setItem("Player Paths", JSON.stringify(playerPaths));
     }
     return true;
@@ -207,11 +208,36 @@ export function CheckWinner(player_list){
   const playerDominos = JSON.parse(sessionStorage.getItem("Player Dominoes"));
   for(let i=0;i<player_list.length;i++){
     if(playerDominos[player_list[i]].length===0){
-      console.log(player_list[i]);
       return player_list[i];
     }
   }
   return false;
+}
+
+export function SetUpGame(player_list, num_rounds){
+  const game = {"Scores":[], "Round": 12, "Counted": false, "RoundsLeft": num_rounds};
+  for(let i=0;i<player_list.length;i++){
+    game.Scores.push(0);
+  }
+  sessionStorage.setItem("Game", JSON.stringify(game));
+}
+
+export function CalculateScores(player_list){
+  const playerDominos = JSON.parse(sessionStorage.getItem("Player Dominoes"));
+  const returnList = [];
+  for(let i=0;i<player_list.length;i++){
+    const dominos = playerDominos[player_list[i]];
+    if(dominos.length===0){
+      returnList.push(0);
+    } else{
+      let sum = 0;
+      for(let j=0;j<dominos.length;j++){
+        sum += dominos[j][1] + dominos[j][2];
+      }
+      returnList.push(sum);
+    }
+  }
+  return returnList;
 }
 
 function GameLogic() {

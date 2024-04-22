@@ -14,7 +14,8 @@ import {
   CheckIfDominoIsPlayable,
   DeterminePlayablePaths,
   PlayDomino,
-  CheckWinner
+  CheckWinner,
+  CalculateScores
 } from "./GameLogic";
 import { ConvertToReact } from "./Domino";
 import "./GameBase.css";
@@ -54,6 +55,8 @@ const players = ["max", "arjun", "carly"/*, "alison"*/];
 
   // round setup function
   function SetUpRound(){
+    sessionStorage.setItem("currentRound",currentRound-1);
+    sessionStorage.setItem("Scored", JSON.stringify(false));
     setStartingDomino([startingDominoList[currentRound]]);
     GenerateDominoesForPlayers(players, startingDomino);
     GeneratePathsForGame(startingDomino, players);
@@ -129,6 +132,21 @@ const players = ["max", "arjun", "carly"/*, "alison"*/];
 
   const checkForWinner = () => {
     if(CheckWinner(players) !== false){
+      if(!JSON.parse(sessionStorage.getItem("Scored"))){
+        sessionStorage.setItem("Scored", true);
+        const scores = CalculateScores(players);
+        if(sessionStorage.getItem("Scores")===null || sessionStorage.getItem("Scores")===undefined){
+          sessionStorage.setItem("Scores", JSON.stringify(scores))
+          setDisplayModal(true);
+          return;
+        } else{
+          for(let i=0;i<players.length;i++){
+            const totals = JSON.parse(sessionStorage.getItem("Scores"));
+            totals[i] += scores[i];
+            sessionStorage.setItem("Scores", JSON.stringify(totals));
+          }
+        }
+      }
       setDisplayModal(true);
     }
   }
@@ -311,8 +329,8 @@ const players = ["max", "arjun", "carly"/*, "alison"*/];
       {displayModal && <GameEndWinModal
             onClose={closeModal}
             players={players}
-            roundScores={[0,0,0]}
-            cumulativeScores={[0,0,0]} />}
+            roundScores={CalculateScores(players)}
+            cumulativeScores={JSON.parse(sessionStorage.getItem("Scores"))} />}
       <Background />
     </>
   );
