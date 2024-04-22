@@ -14,10 +14,15 @@ import {
   CheckIfDominoIsPlayable,
   DeterminePlayablePaths,
   PlayDomino,
+  CheckWinner,
+  CalculateScores
 } from "./GameLogic";
 import { ConvertToReact } from "./dominoes/Domino";
 import "./GameBase.css";
-import { useEffect, useState } from "react";
+import { useEffect, useState} from "react";
+import RoundEndModal from "./RoundEndModal";
+
+const startingDominoList = [[0,0,0],[13,1,1],[25,2,2],[36,3,3],[46,4,4],[55,5,5],[63,6,6],[70,7,7],[76,8,8],[81,9,9],[85,10,10],[88,11,11],[90,12,12]];
 
 function GameChoice({ src, alt, onSelect, isSelected }) {
   // hard coded setup
@@ -26,17 +31,17 @@ const players = ["max", "arjun", "carly"/*, "alison"*/];
     "Players",
     JSON.stringify(["Mexican Train", "max", "arjun", "carly"/*, "alison"*/])
   );
-  const startingDomino = [[90, 12, 12]];
-
-  if (sessionStorage.getItem("Player Dominoes") == null) {
-    GenerateDominoesForPlayers(players, startingDomino);
-  }
 
   // a bunch of booleans that we will use within
   const [currentPlayerIndex, setCurrentPlayerIndex] = useState(
     sessionStorage.getItem("currentPlayerIndex") !== null
       ? parseInt(sessionStorage.getItem("currentPlayerIndex"))
       : 0
+  );
+  const [currentRound, setCurrentRound] = useState(
+    sessionStorage.getItem("currentRound") !== null
+      ? parseInt(sessionStorage.getItem("currentRound"))
+      : 12
   );
   const [drawDisabled, setDrawDisabled] = useState(true);
   const [playDisabled, setPlayDisabled] = useState(true);
@@ -45,8 +50,24 @@ const players = ["max", "arjun", "carly"/*, "alison"*/];
   const [inTurn, setInTurn] = useState(false);
   const [selectedDomino, setSelectedDomino] = useState(null);
   const [isAvailable] = useState([false, false, false, false, false]);
+  const [startingDomino,setStartingDomino] = useState([startingDominoList[currentRound]]);
+  const [displayModal, setDisplayModal] = useState(false);
 
-  // now the functions
+  // round setup function
+  function SetUpRound(){
+    sessionStorage.setItem("currentRound",currentRound-1);
+    sessionStorage.setItem("Scored", JSON.stringify(false));
+    setStartingDomino([startingDominoList[currentRound]]);
+    GenerateDominoesForPlayers(players, startingDomino);
+    GeneratePathsForGame(startingDomino, players);
+  }
+  
+  if (sessionStorage.getItem("Player Dominoes") == null) {
+    SetUpRound();
+  }
+
+
+  // now the react functions
   useEffect(() => {
     const storedIndex = sessionStorage.getItem("currentPlayerIndex");
     if (storedIndex !== null) {
@@ -109,6 +130,32 @@ const players = ["max", "arjun", "carly"/*, "alison"*/];
     }
   };
 
+  const checkForWinner = () => {
+    if(CheckWinner(players) !== false){
+      if(!JSON.parse(sessionStorage.getItem("Scored"))){
+        sessionStorage.setItem("Scored", true);
+        const scores = CalculateScores(players);
+        if(sessionStorage.getItem("Scores")===null || sessionStorage.getItem("Scores")===undefined){
+          sessionStorage.setItem("Scores", JSON.stringify(scores))
+          setDisplayModal(true);
+          return;
+        } else{
+          for(let i=0;i<players.length;i++){
+            const totals = JSON.parse(sessionStorage.getItem("Scores"));
+            totals[i] += scores[i];
+            sessionStorage.setItem("Scores", JSON.stringify(totals));
+          }
+        }
+      }
+      setDisplayModal(true);
+    }
+  }
+
+  const closeModal = () => {
+    setDisplayModal(false);
+    FinishRound()
+  };
+
   function loadDominos() {
     const playerPaths = JSON.parse(sessionStorage.getItem("Player Paths"));
     const lastDominos = [];
@@ -145,6 +192,7 @@ const players = ["max", "arjun", "carly"/*, "alison"*/];
     return lastDominos;
   }
 
+  // turn and finish round functions
   async function Turn() {
     // timer goes here
     const options = DeterminePlayablePaths(players[currentPlayerIndex], players);
@@ -194,12 +242,25 @@ const players = ["max", "arjun", "carly"/*, "alison"*/];
     await sessionStorage.setItem("DominoDrawn", false);
     setFinishDisabled(true);
     setInTurn(false);
+
+    // this will trigger a reset
+    checkForWinner();
   }
-  // set up round
+
+  // finishes the round
+  function FinishRound(){
+    // this would have more in the future
+    const newRound = currentRound-1;
+    setCurrentRound(newRound);
+    console.log(currentRound);
+    sessionStorage.setItem("currentRound", newRound);
+    // log scores here in the future
+    SetUpRound();
+    window.location.reload();
+  }
+
+  // load the round objects
   const playerDominoes = JSON.parse(sessionStorage.getItem("Player Dominoes"));
-  if (sessionStorage.getItem("Player Paths") == null) {
-    GeneratePathsForGame(startingDomino, players);
-  }
   const playerPaths = JSON.parse(sessionStorage.getItem("Player Paths"));
   const dominos = ConvertToReact(playerDominoes[players[currentPlayerIndex]]);
   const sDomino = ConvertToReact(playerPaths["Starting Domino"]);
@@ -265,6 +326,12 @@ const players = ["max", "arjun", "carly"/*, "alison"*/];
       {/* end of right content  */}
       {/* end of horizontal group */}
       {/* end of content */}
+      {displayModal && <RoundEndModal
+            onClose={closeModal}
+            winner={CheckWinner(players)}
+            players={players}
+            roundScores={CalculateScores(players)}
+            cumulativeScores={JSON.parse(sessionStorage.getItem("Scores"))} />}
       <Background />
     </>
   );
