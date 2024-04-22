@@ -20,7 +20,7 @@ import {
 import { ConvertToReact } from "./Domino";
 import "./GameBase.css";
 import { useEffect, useState} from "react";
-import GameEndWinModal from "./GameEndWinModal";
+import RoundEndModal from "./RoundEndModal";
 
 const startingDominoList = [[0,0,0],[13,1,1],[25,2,2],[36,3,3],[46,4,4],[55,5,5],[63,6,6],[70,7,7],[76,8,8],[81,9,9],[85,10,10],[88,11,11],[90,12,12]];
 
@@ -326,8 +326,9 @@ const players = ["max", "arjun", "carly"/*, "alison"*/];
       {/* end of right content  */}
       {/* end of horizontal group */}
       {/* end of content */}
-      {displayModal && <GameEndWinModal
+      {displayModal && <RoundEndModal
             onClose={closeModal}
+            winner={CheckWinner(players)}
             players={players}
             roundScores={CalculateScores(players)}
             cumulativeScores={JSON.parse(sessionStorage.getItem("Scores"))} />}
