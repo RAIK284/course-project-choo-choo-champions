@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import NavBar from './NavBar';
-import Background from './Background';
+import NavBar from '../universal/NavBar';
+import Background from '../universal/Background';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPencilAlt } from '@fortawesome/free-solid-svg-icons';
@@ -139,7 +139,7 @@ function ProfilePage() {
                         </label>
                         <div className="navigation-buttons">
                             <Link to="/dashboard" className="button-link">Dashboard</Link>
-                            <Link to="/changepassword" className="button-link">Change Password</Link>
+                            <Link to="/change-password" className="button-link">Change Password</Link>
                             <div className="button-link">
                                 <label>
                                     <input type="checkbox" checked={colorblind} onChange={handleColorblindToggle} />

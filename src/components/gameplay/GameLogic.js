@@ -1,4 +1,4 @@
-import { GenerateDominoBankForGame } from "./DominoBank";
+import { GenerateDominoBankForGame } from "./dominoes/DominoBank";
 
 export function GenerateDominoesForPlayers(player_list, startingDomino) {
   GenerateDominoBankForGame();

@@ -1,7 +1,7 @@
 import React from "react";
 import { screen, render, fireEvent, act } from "@testing-library/react";
 import { BrowserRouter as Router } from "react-router-dom";
-import HostGamePage from "../src/components/HostGamePage";
+import HostGamePage from "../src/components/gameplay/host/HostGamePage";
 import { MemoryRouter } from "react-router-dom";
 
 describe("HostGamePage component", () => {

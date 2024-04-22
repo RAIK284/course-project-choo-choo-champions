@@ -1,5 +1,5 @@
-import NavBar from "./NavBar";
-import Background from "./Background";
+import NavBar from "../universal/NavBar";
+import Background from "../universal/Background";
 // import greenTrain from "./GreenTrain";
 // import { redTrain } from "./RedTrain";
 // import blueTrain from "./BlueTrain";
@@ -15,7 +15,7 @@ import {
   DeterminePlayablePaths,
   PlayDomino,
 } from "./GameLogic";
-import { ConvertToReact } from "./Domino";
+import { ConvertToReact } from "./dominoes/Domino";
 import "./GameBase.css";
 import { useEffect, useState } from "react";
 

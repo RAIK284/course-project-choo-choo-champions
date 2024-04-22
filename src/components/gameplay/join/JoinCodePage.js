@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import NavBar from './NavBar';
-import Background from './Background';
+import NavBar from '../../universal/NavBar';
+import Background from '../../universal/Background';
 import './JoinCodePage.css';
 
 function JoinCodePage() {
@@ -36,9 +36,11 @@ function JoinCodePage() {
                 ws.close();
             }
         };
+        // eslint-disable-next-line
     }, []);
 
     const handleJoinGame = () => {
+        // eslint-disable-next-line
         if (ws && joinCode.length == 6) {
             const username = sessionStorage.getItem('username');
             ws.send(JSON.stringify({ type: 'joinGame', sessionId: joinCode, username }));
