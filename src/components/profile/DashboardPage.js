@@ -68,6 +68,9 @@ function DashboardPage() {
 
                             </div>
                             <div className="button-row">
+                                <Link to="/how-to-play" className="button-link">Play Locally</Link>
+                            </div>
+                            <div className="button-row">
                                 <Link to="/how-to-play" className="button-link">How to Play</Link>
                             </div>
                         </div>
