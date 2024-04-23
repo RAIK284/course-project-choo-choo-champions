@@ -94,13 +94,27 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
     switchToNextPlayer();
     const event = new Event("TurnEnded");
     window.dispatchEvent(event);
-    console.log("Turn Ended");
   };
 
   const switchToNextPlayer = () => {
     const nextIndex = (currentPlayerIndex + 1) % players.length;
     setCurrentPlayerIndex(nextIndex);
     sessionStorage.setItem("currentPlayerIndex", nextIndex.toString());
+  };
+
+  const getColor = (index) => {
+    switch (index) {
+      case 0:
+        return "green";
+      case 1:
+        return "blue";
+      case 2:
+        return "purple";
+      case 3:
+        return "red";
+      default:
+        return "white";
+    }
   };
 
   const DrawDomino = () => {
@@ -342,7 +356,14 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
             {/* end of left content */}
             <div className="inner-content">
               <h3 className="players_turn">
-                It is <strong>{players[currentPlayerIndex]}</strong>'s turn
+                It is{" "}
+                <strong
+                  className="player-color"
+                  style={{ color: getColor(currentPlayerIndex) }}
+                >
+                  {players[currentPlayerIndex]}
+                </strong>
+                's turn
               </h3>{" "}
               <TrainStation
                 sDomino={sDomino}
