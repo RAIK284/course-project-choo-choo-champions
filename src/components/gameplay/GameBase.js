@@ -100,9 +100,8 @@ const players = ["max", "arjun", "carly"/*, "alison"*/];
     }
     const options = CheckIfDominoIsPlayable(players[currentPlayerIndex], players, domino);
     if (options !== undefined) {
-
       setSelectedDomino(domino);
-      const event = new Event('DominoPlayed');
+      const event = new Event("DominoPlayed");
       window.dispatchEvent(event);
       //highlight available dominos
       for (let i = 0; i < options.length; i++) {
@@ -184,7 +183,7 @@ const players = ["max", "arjun", "carly"/*, "alison"*/];
           );
         }
       } else {
-        // i want this to be a placeholder but that fucks up the spacing for now
+        // i want this to be a placeholder but that mess up the spacing for now
         // so we will keep this ftm
         lastDominos.push(ConvertToReact([[0, 13, 14]]));
       }
