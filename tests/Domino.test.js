@@ -1,10 +1,10 @@
 import React from "react";
 import { render, fireEvent } from "@testing-library/react";
-import Domino from "../src/components/Domino";
-import { ConvertToReact, getColor } from "../src/components/Domino";
+import Domino from "../src/components/gameplay/dominoes/Domino";
+import { ConvertToReact, getColor } from "../src/components/gameplay/dominoes/Domino";
 import { screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import { DetermineIfDominoIsSelectable } from "../src/components/Domino";
+import { DetermineIfDominoIsSelectable } from "../src/components/gameplay/dominoes/Domino";
 
 // domino component (3)
 describe("Domino Component", () => {
