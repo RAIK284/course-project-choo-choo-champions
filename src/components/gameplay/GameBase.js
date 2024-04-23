@@ -1,10 +1,5 @@
 import NavBar from "../universal/NavBar";
 import Background from "../universal/Background";
-// import greenTrain from "./GreenTrain";
-// import { redTrain } from "./RedTrain";
-// import blueTrain from "./BlueTrain";
-// import purpleTrain from "./PurpleTrain";
-// import orangeTrain from "./OrangeTrain";
 import TrainStation from "./TrainStation";
 
 import {
@@ -105,13 +100,20 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
   const getColor = (index) => {
     switch (index) {
       case 0:
-        return "green";
+        //green
+        return "rgb(30,214,86)";
       case 1:
-        return "blue";
+        //blue
+        return "rgb(66,148,194)";
       case 2:
-        return "purple";
+        //purple
+        return "rgb(146,28,193)";
       case 3:
-        return "red";
+        //orange
+        return "rgb(232,133,4)";
+      case 4:
+        //red
+        return "rgb(179,47,38)";
       default:
         return "white";
     }
