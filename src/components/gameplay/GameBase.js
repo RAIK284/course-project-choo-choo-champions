@@ -27,12 +27,18 @@ const startingDominoList = [[0,0,0],[13,1,1],[25,2,2],[36,3,3],[46,4,4],[55,5,5]
 
 function GameChoice({ src, alt, onSelect, isSelected }) {
   // hard coded setup
-const players = ["max", "arjun", "carly"/*, "alison"*/];
+  const urlParams = new URLSearchParams(window.location.search);
+  const playerCount = parseInt(urlParams.get('playerCount')); // Get player count from URL parameter
+  
+  const players = [];
+  for (let i = 1; i <= playerCount; i++) {
+    players.push(`Player ${i}`);
+  }
+  
   sessionStorage.setItem(
     "Players",
-    JSON.stringify(["Mexican Train", "max", "arjun", "carly"/*, "alison"*/])
+    JSON.stringify(["Mexican Train", ...players])
   );
-
   // a bunch of booleans that we will use within
   const [currentPlayerIndex, setCurrentPlayerIndex] = useState(
     sessionStorage.getItem("game") !== null
