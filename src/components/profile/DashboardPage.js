@@ -15,6 +15,7 @@ function DashboardPage() {
         winRanking: 0,
         pointsRanking: 0
     });
+    // eslint-disable-next-line
     const [localGamePlayerCount, setLocalGamePlayerCount] = useState(null);
 
     useEffect(() => {
