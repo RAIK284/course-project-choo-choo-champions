@@ -46,7 +46,7 @@ function TrainSelector() {
         const { username, train } = message;
         setConfirmedTrains(prev => ({ ...prev, [username]: train }));
         setDisabledTrains(prev => [...prev, train]);
-      } else if (message.type === 'redirect' && message.url === '/gamebase') {
+      } else if (message.type === 'redirect' && message.url === '/multiplayer') {
         window.location.href = message.url;
       }
     };

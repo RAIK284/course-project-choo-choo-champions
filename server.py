@@ -77,7 +77,7 @@ async def handle_client(websocket):
                     await client.send(json.dumps({'type': 'trainConfirmed', 'username': username, 'train': confirmed_train}))
                 if all_players_confirmed(requested_session_id):
                     for client in clients:
-                        await client.send(json.dumps({'type': 'redirect', 'url': '/gamebase'}))
+                        await client.send(json.dumps({'type': 'redirect', 'url': '/multiplayer'}))
                 print(f"Player {username} confirmed train: {confirmed_train}")
 
             elif message_type == 'startGame':
