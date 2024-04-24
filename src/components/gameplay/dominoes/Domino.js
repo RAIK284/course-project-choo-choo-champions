@@ -25,7 +25,6 @@ function DetermineIfDominoIsSelectable(domino){
 }
 
 export function ConvertToReact(dominos) {
-  console.log(dominos);
   const [selectedDomino, setSelectedDomino] = useState(null);
 
   const handleSelectDomino = (index) => {
