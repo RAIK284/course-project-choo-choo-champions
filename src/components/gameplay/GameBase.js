@@ -211,6 +211,7 @@ const players = ["max", "arjun", "carly"/*, "alison"*/];
   const closeEndModal = () => {
     setDisplayEndModal(false);
     // route them to home screen idk
+    window.location.href = `/dashboard`;
   };
 
   function loadDominos() {
