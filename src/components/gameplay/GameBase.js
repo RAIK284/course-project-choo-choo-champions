@@ -34,13 +34,13 @@ const players = ["max", "arjun", "carly"/*, "alison"*/];
 
   // a bunch of booleans that we will use within
   const [currentPlayerIndex, setCurrentPlayerIndex] = useState(
-    sessionStorage.getItem("currentPlayerIndex") !== null
-      ? parseInt(sessionStorage.getItem("currentPlayerIndex"))
+    sessionStorage.getItem("game") !== null
+      ? JSON.parse(sessionStorage.getItem("game")).TurnIndex
       : 0
   );
   const [currentRound, setCurrentRound] = useState(
-    sessionStorage.getItem("currentRound") !== null
-      ? parseInt(sessionStorage.getItem("currentRound"))
+      sessionStorage.getItem("game") !== null
+      ? JSON.parse(sessionStorage.getItem("game")).CurrentRound
       : 12
   );
   const [drawDisabled, setDrawDisabled] = useState(true);
@@ -52,14 +52,32 @@ const players = ["max", "arjun", "carly"/*, "alison"*/];
   const [isAvailable] = useState([false, false, false, false, false]);
   const [startingDomino,setStartingDomino] = useState([startingDominoList[currentRound]]);
   const [displayModal, setDisplayModal] = useState(false);
+  const [roundsLeft, setRoundsLeft] = useState(sessionStorage.getItem("game") !== null
+  ? JSON.parse(sessionStorage.getItem("game")).GamesLeft
+  : 4);
 
   // round setup function
   function SetUpRound(){
-    sessionStorage.setItem("currentRound",currentRound-1);
-    sessionStorage.setItem("Scored", JSON.stringify(false));
     setStartingDomino([startingDominoList[currentRound]]);
     GenerateDominoesForPlayers(players, startingDomino);
     GeneratePathsForGame(startingDomino, players);
+    const scores = sessionStorage.getItem("game") !== null 
+      ? JSON.parse(sessionStorage.getItem("game")).Scores
+      : null;
+      // create the super crazy game
+    setRoundsLeft(roundsLeft-1)
+    const game ={
+      "Player Dominoes": JSON.parse(sessionStorage.getItem("Player Dominoes")),
+      "Player Paths": JSON.parse(sessionStorage.getItem("Player Paths")),
+      "Dominoes": JSON.parse(sessionStorage.getItem("Domino")),
+      "Boneyard": JSON.parse(sessionStorage.getItem("Boneyard")),
+      "TurnIndex": currentPlayerIndex,
+      "CurrentRound": currentRound-1,
+      "GamesLeft": roundsLeft,
+      "Scores": scores,
+      "Scored": false
+    }
+    sessionStorage.setItem("game", JSON.stringify(game));
   }
   
   if (sessionStorage.getItem("Player Dominoes") == null) {
@@ -69,9 +87,9 @@ const players = ["max", "arjun", "carly"/*, "alison"*/];
 
   // now the react functions
   useEffect(() => {
-    const storedIndex = sessionStorage.getItem("currentPlayerIndex");
-    if (storedIndex !== null) {
-      setCurrentPlayerIndex(parseInt(storedIndex));
+    const storedGame = sessionStorage.getItem("game");
+    if (storedGame !== null) {
+      setCurrentPlayerIndex(JSON.parse(storedGame).TurnIndex);
     }
   }, []);
 
@@ -84,7 +102,9 @@ const players = ["max", "arjun", "carly"/*, "alison"*/];
   const switchToNextPlayer = () => {
     const nextIndex = (currentPlayerIndex + 1) % players.length;
     setCurrentPlayerIndex(nextIndex);
-    sessionStorage.setItem("currentPlayerIndex", nextIndex.toString());
+    const game = JSON.parse(sessionStorage.getItem("game"));
+    game.TurnIndex = nextIndex.toString();
+    sessionStorage.setItem("game", JSON.stringify(game));
   };
 
   const DrawDomino = () => {
@@ -131,18 +151,22 @@ const players = ["max", "arjun", "carly"/*, "alison"*/];
 
   const checkForWinner = () => {
     if(CheckWinner(players) !== false){
-      if(!JSON.parse(sessionStorage.getItem("Scored"))){
-        sessionStorage.setItem("Scored", true);
+      const game = JSON.parse(sessionStorage.getItem("game"));
+      if(!game.Scored){
+        game.Scored = true;
+        sessionStorage.setItem("game", JSON.stringify(game));
         const scores = CalculateScores(players);
-        if(sessionStorage.getItem("Scores")===null || sessionStorage.getItem("Scores")===undefined){
-          sessionStorage.setItem("Scores", JSON.stringify(scores))
+        if(game.Scores ===null){
+          game.Scores = scores;
+          sessionStorage.setItem("game", JSON.stringify(game));
           setDisplayModal(true);
           return;
         } else{
           for(let i=0;i<players.length;i++){
-            const totals = JSON.parse(sessionStorage.getItem("Scores"));
+            const totals = game.Scores;
             totals[i] += scores[i];
-            sessionStorage.setItem("Scores", JSON.stringify(totals));
+            game.Scores = totals;
+            sessionStorage.setItem("game", JSON.stringify(game));
           }
         }
       }
@@ -156,7 +180,7 @@ const players = ["max", "arjun", "carly"/*, "alison"*/];
   };
 
   function loadDominos() {
-    const playerPaths = JSON.parse(sessionStorage.getItem("Player Paths"));
+    const playerPaths = JSON.parse(sessionStorage.getItem("game"))['Player Paths'];
     const lastDominos = [];
     if (playerPaths["Mexican Train"].Dominoes.length === 0) {
       lastDominos.push(ConvertToReact([[0, 13, 14]]));
@@ -222,7 +246,7 @@ const players = ["max", "arjun", "carly"/*, "alison"*/];
           resolve();
         });
       });
-      if(JSON.parse(sessionStorage.getItem("Player Paths")).UnvalidatedDouble !==null){
+      if(JSON.parse(sessionStorage.getItem("game"))['Player Paths'].UnvalidatedDouble !==null){
         await sessionStorage.setItem("DominoDrawn", false);
         await Turn(players[currentPlayerIndex]);
         return;
@@ -251,16 +275,17 @@ const players = ["max", "arjun", "carly"/*, "alison"*/];
     // this would have more in the future
     const newRound = currentRound-1;
     setCurrentRound(newRound);
-    console.log(currentRound);
-    sessionStorage.setItem("currentRound", newRound);
+    // console.log(currentRound);
+    // sessionStorage.setItem("currentRound", newRound);
     // log scores here in the future
     SetUpRound();
     window.location.reload();
   }
 
   // load the round objects
-  const playerDominoes = JSON.parse(sessionStorage.getItem("Player Dominoes"));
-  const playerPaths = JSON.parse(sessionStorage.getItem("Player Paths"));
+  const playerDominoes = JSON.parse(sessionStorage.getItem("game"))["Player Dominoes"];
+  console.log(currentPlayerIndex);
+  const playerPaths = JSON.parse(sessionStorage.getItem("game"))["Player Paths"];
   const dominos = ConvertToReact(playerDominoes[players[currentPlayerIndex]]);
   const sDomino = ConvertToReact(playerPaths["Starting Domino"]);
   const lastDominos = loadDominos();
@@ -330,7 +355,7 @@ const players = ["max", "arjun", "carly"/*, "alison"*/];
             winner={CheckWinner(players)}
             players={players}
             roundScores={CalculateScores(players)}
-            cumulativeScores={JSON.parse(sessionStorage.getItem("Scores"))} />}
+            cumulativeScores={JSON.parse(sessionStorage.getItem("game")).Scores} />}
       <Background />
     </>
   );
