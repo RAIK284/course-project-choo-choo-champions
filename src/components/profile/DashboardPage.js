@@ -68,7 +68,7 @@ function DashboardPage() {
 
                             </div>
                             <div className="button-row">
-                                <Link to="https://docs.google.com/document/d/1AGaAbECzBxydmu3vCk0By3uPImKF7AH5BWFk7AajLGE/edit?usp=sharing" className="button-link">How to Play</Link>
+                                <Link to="https://docs.google.com/document/d/1AGaAbECzBxydmu3vCk0By3uPImKF7AH5BWFk7AajLGE/edit?usp=sharing" target="_blank" rel="noopener noreferrer" className="button-link">How to Play</Link>
                             </div>
                         </div>
                     </div>
