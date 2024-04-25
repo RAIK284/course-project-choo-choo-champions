@@ -16,6 +16,7 @@ import { ConvertToReact } from "./dominoes/Domino";
 import "./GameBase.css";
 import { useEffect, useState } from "react";
 import RoundEndModal from "./modals/RoundEndModal";
+import GameEndWinModal from "./modals/GameEndWinModal";
 
 const startingDominoList = [
   [0, 0, 0],
@@ -35,21 +36,27 @@ const startingDominoList = [
 
 function GameChoice({ src, alt, onSelect, isSelected }) {
   // hard coded setup
-  const players = ["max", "arjun", "carly" /*, "alison"*/];
+  const urlParams = new URLSearchParams(window.location.search);
+  const playerCount = parseInt(urlParams.get('playerCount')); // Get player count from URL parameter
+  
+  const players = [];
+  for (let i = 1; i <= playerCount; i++) {
+    players.push(`Player ${i}`);
+  }
+  
   sessionStorage.setItem(
     "Players",
-    JSON.stringify(["Mexican Train", "max", "arjun", "carly" /*, "alison"*/])
+    JSON.stringify(["Mexican Train", ...players])
   );
-
   // a bunch of booleans that we will use within
   const [currentPlayerIndex, setCurrentPlayerIndex] = useState(
-    sessionStorage.getItem("currentPlayerIndex") !== null
-      ? parseInt(sessionStorage.getItem("currentPlayerIndex"))
+    sessionStorage.getItem("game") !== null
+      ? JSON.parse(sessionStorage.getItem("game")).TurnIndex
       : 0
   );
   const [currentRound, setCurrentRound] = useState(
-    sessionStorage.getItem("currentRound") !== null
-      ? parseInt(sessionStorage.getItem("currentRound"))
+      sessionStorage.getItem("game") !== null
+      ? JSON.parse(sessionStorage.getItem("game")).CurrentRound
       : 12
   );
   const [drawDisabled, setDrawDisabled] = useState(true);
@@ -58,18 +65,36 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
   const [inTurn, setInTurn] = useState(false);
   const [selectedDomino, setSelectedDomino] = useState(null);
   const [isAvailable] = useState([false, false, false, false, false]);
-  const [startingDomino, setStartingDomino] = useState([
-    startingDominoList[currentRound],
-  ]);
-  const [displayModal, setDisplayModal] = useState(false);
+  const [startingDomino,setStartingDomino] = useState([startingDominoList[currentRound]]);
+  const [displayRoundModal, setDisplayRoundModal] = useState(false);
+  const [displayEndModal, setDisplayEndModal] = useState(false);
+  const [roundsLeft, setRoundsLeft] = useState(sessionStorage.getItem("game") !== null
+  ? JSON.parse(sessionStorage.getItem("game")).GamesLeft
+  : 3);
 
   // round setup function
-  function SetUpRound() {
-    sessionStorage.setItem("currentRound", currentRound - 1);
-    sessionStorage.setItem("Scored", JSON.stringify(false));
+  function SetUpRound(){
     setStartingDomino([startingDominoList[currentRound]]);
     GenerateDominoesForPlayers(players, startingDomino);
     GeneratePathsForGame(startingDomino, players);
+    const scores = sessionStorage.getItem("game") !== null 
+      ? JSON.parse(sessionStorage.getItem("game")).Scores
+      : null;
+      // create the super crazy game
+    setRoundsLeft(roundsLeft-1)
+    const game ={
+      "Player Dominoes": JSON.parse(sessionStorage.getItem("Player Dominoes")),
+      "Player Paths": JSON.parse(sessionStorage.getItem("Player Paths")),
+      "Dominoes": JSON.parse(sessionStorage.getItem("Domino")),
+      "Boneyard": JSON.parse(sessionStorage.getItem("Boneyard")),
+      "TurnIndex": currentPlayerIndex,
+      "CurrentRound": currentRound-1,
+      "GamesLeft": roundsLeft-1,
+      "Scores": scores,
+      "Scored": false
+    }
+    sessionStorage.setItem("game", JSON.stringify(game));
+    console.log(JSON.parse(sessionStorage.getItem("game")));
   }
 
   if (sessionStorage.getItem("Player Dominoes") == null) {
@@ -78,9 +103,9 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
 
   // now the react functions
   useEffect(() => {
-    const storedIndex = sessionStorage.getItem("currentPlayerIndex");
-    if (storedIndex !== null) {
-      setCurrentPlayerIndex(parseInt(storedIndex));
+    const storedGame = sessionStorage.getItem("game");
+    if (storedGame !== null) {
+      setCurrentPlayerIndex(JSON.parse(storedGame).TurnIndex);
     }
   }, []);
 
@@ -93,7 +118,9 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
   const switchToNextPlayer = () => {
     const nextIndex = (currentPlayerIndex + 1) % players.length;
     setCurrentPlayerIndex(nextIndex);
-    sessionStorage.setItem("currentPlayerIndex", nextIndex.toString());
+    const game = JSON.parse(sessionStorage.getItem("game"));
+    game.TurnIndex = nextIndex.toString();
+    sessionStorage.setItem("game", JSON.stringify(game));
   };
 
   const getColor = (index) => {
@@ -174,36 +201,69 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
   };
 
   const checkForWinner = () => {
-    if (CheckWinner(players) !== false) {
-      if (!JSON.parse(sessionStorage.getItem("Scored"))) {
-        sessionStorage.setItem("Scored", true);
+    if(CheckWinner(players) !== false && roundsLeft !== 0){
+      const game = JSON.parse(sessionStorage.getItem("game"));
+      if(!game.Scored){
+        game.Scored = true;
+        sessionStorage.setItem("game", JSON.stringify(game));
         const scores = CalculateScores(players);
-        if (
-          sessionStorage.getItem("Scores") === null ||
-          sessionStorage.getItem("Scores") === undefined
-        ) {
-          sessionStorage.setItem("Scores", JSON.stringify(scores));
-          setDisplayModal(true);
+        if(game.Scores ===null){
+          game.Scores = scores;
+          sessionStorage.setItem("game", JSON.stringify(game));
+          setDisplayRoundModal(true);
           return;
-        } else {
-          for (let i = 0; i < players.length; i++) {
-            const totals = JSON.parse(sessionStorage.getItem("Scores"));
+        } else{
+          for(let i=0;i<players.length;i++){
+            const totals = game.Scores;
             totals[i] += scores[i];
-            sessionStorage.setItem("Scores", JSON.stringify(totals));
+            game.Scores = totals;
+            sessionStorage.setItem("game", JSON.stringify(game));
           }
         }
       }
-      setDisplayModal(true);
+      setDisplayRoundModal(true);
+    }
+  }
+
+  const checkForGameOver = () => {
+    if(CheckWinner(players) !== false && roundsLeft <= 0){
+      console.log("Got here");
+      const game = JSON.parse(sessionStorage.getItem("game"));
+      if(!game.Scored){
+        game.Scored = true;
+        sessionStorage.setItem("game", JSON.stringify(game));
+        const scores = CalculateScores(players);
+        if(game.Scores ===null){
+          game.Scores = scores;
+          sessionStorage.setItem("game", JSON.stringify(game));
+          setDisplayEndModal(true);
+          return;
+        } else{
+          for(let i=0;i<players.length;i++){
+            const totals = game.Scores;
+            totals[i] += scores[i];
+            game.Scores = totals;
+            sessionStorage.setItem("game", JSON.stringify(game));
+          }
+        }
+      }
+      setDisplayEndModal(true);
     }
   };
 
-  const closeModal = () => {
-    setDisplayModal(false);
+  const closeRoundModal = () => {
+    setDisplayRoundModal(false);
     FinishRound();
   };
 
+  const closeEndModal = () => {
+    setDisplayEndModal(false);
+    // route them to home screen idk
+    window.location.href = `/dashboard`;
+  };
+
   function loadDominos() {
-    const playerPaths = JSON.parse(sessionStorage.getItem("Player Paths"));
+    const playerPaths = JSON.parse(sessionStorage.getItem("game"))['Player Paths'];
     const lastDominos = [];
     if (playerPaths["Mexican Train"].Dominoes.length === 0) {
       lastDominos.push(ConvertToReact([[0, 13, 14]]));
@@ -230,7 +290,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
           );
         }
       } else {
-        // i want this to be a placeholder but that fucks up the spacing for now
+        // i want this to be a placeholder but that mess up the spacing for now
         // so we will keep this ftm
         lastDominos.push(ConvertToReact([[0, 13, 14]]));
       }
@@ -273,10 +333,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
           resolve();
         });
       });
-      if (
-        JSON.parse(sessionStorage.getItem("Player Paths")).UnvalidatedDouble !==
-        null
-      ) {
+      if(JSON.parse(sessionStorage.getItem("game"))['Player Paths'].UnvalidatedDouble !==null){
         for (let i = 0; i < isAvailable.length; i++) {
           isAvailable[i] = false;
         }
@@ -293,6 +350,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
 
     // this will trigger a reset
     checkForWinner();
+    checkForGameOver();
   }
 
   // finishes the round
@@ -300,16 +358,16 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
     // this would have more in the future
     const newRound = currentRound - 1;
     setCurrentRound(newRound);
-    console.log(currentRound);
-    sessionStorage.setItem("currentRound", newRound);
+    // console.log(currentRound);
+    // sessionStorage.setItem("currentRound", newRound);
     // log scores here in the future
     SetUpRound();
     window.location.reload();
   }
 
   // load the round objects
-  const playerDominoes = JSON.parse(sessionStorage.getItem("Player Dominoes"));
-  const playerPaths = JSON.parse(sessionStorage.getItem("Player Paths"));
+  const playerDominoes = JSON.parse(sessionStorage.getItem("game"))["Player Dominoes"];
+  const playerPaths = JSON.parse(sessionStorage.getItem("game"))["Player Paths"];
   const dominos = ConvertToReact(playerDominoes[players[currentPlayerIndex]]);
   const sDomino = ConvertToReact(playerPaths["Starting Domino"]);
   const lastDominos = loadDominos();
@@ -374,15 +432,17 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
       {/* end of right content  */}
       {/* end of horizontal group */}
       {/* end of content */}
-      {displayModal && (
-        <RoundEndModal
-          onClose={closeModal}
-          winner={CheckWinner(players)}
-          players={players}
-          roundScores={CalculateScores(players)}
-          cumulativeScores={JSON.parse(sessionStorage.getItem("Scores"))}
-        />
-      )}
+      {displayRoundModal && <RoundEndModal
+            onClose={closeRoundModal}
+            winner={CheckWinner(players)}
+            players={players}
+            roundScores={CalculateScores(players)}
+            cumulativeScores={JSON.parse(sessionStorage.getItem("game")).Scores} />}
+      {displayEndModal && <GameEndWinModal
+            onClose={closeEndModal}
+            players={players}
+            roundScores={CalculateScores(players)}
+            cumulativeScores={JSON.parse(sessionStorage.getItem("game")).Scores} />}
       <Background />
     </>
   );

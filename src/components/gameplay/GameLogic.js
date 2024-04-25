@@ -38,9 +38,10 @@ export function GeneratePathsForGame(startingDomino, player_list) {
 }
 
 export function DeterminePlayablePaths(player, player_list) {
-  const playerDominos = JSON.parse(sessionStorage.getItem("Player Dominoes"));
-  const playerPaths = JSON.parse(sessionStorage.getItem("Player Paths"));
-  const boneyard = JSON.parse(sessionStorage.getItem("Boneyard"));
+  const game = JSON.parse(sessionStorage.getItem("game"));
+  const playerDominos = game['Player Dominoes'];
+  const playerPaths = game['Player Paths'];
+  const boneyard = game.Boneyard;
   const playablePaths = [];
   if(playerPaths.UnvalidatedDouble === null){
     for (let i = 0; i < playerDominos[player].length; i++) {
@@ -111,31 +112,32 @@ export function DeterminePlayablePaths(player, player_list) {
   } else if (playablePaths.length === 0 && boneyard.length === 0) {
     playablePaths.push("Pass");
     playerPaths[player].Playable = true;
-    sessionStorage.setItem("Player Paths", JSON.stringify(playerPaths));
+    game['Playable Paths'] = playerPaths;
+    sessionStorage.setItem("game", JSON.stringify(game));
   }
   return playablePaths;
 }
 
 
 export function DrawADomino(player, player_list) {
+  const game = JSON.parse(sessionStorage.getItem("game"))
   const paths = DeterminePlayablePaths(player, player_list);
-  const boneyard = JSON.parse(sessionStorage.getItem("Boneyard"));
-  const playerDominos = JSON.parse(sessionStorage.getItem("Player Dominoes"));
-  const playerPaths = JSON.parse(sessionStorage.getItem("Player Paths"));
-  if (boneyard.length === 0) {
-    alert("Cannot draw domino. There are no dominoes available!");
-  }
+  const boneyard = game.Boneyard;
+  const playerDominos = game['Player Dominoes'];
+  const playerPaths = game['Player Paths'];
   if (paths.includes("Draw")) {
     playerDominos[player].push(
       boneyard.splice(Math.floor(Math.random() * boneyard.length), 1)[0]
     );
-    sessionStorage.setItem("Boneyard", JSON.stringify(boneyard));
-    sessionStorage.setItem("Player Dominoes", JSON.stringify(playerDominos));
-    sessionStorage.setItem("Player Paths", JSON.stringify(playerPaths));
+    game.Boneyard = boneyard
+    game['Player Dominoes'] = playerDominos;
+    game['Player Paths'] = playerPaths;
+    sessionStorage.setItem("game", JSON.stringify(game));
     const newPaths = DeterminePlayablePaths(player, player_list);
     if(newPaths.includes("Draw") || newPaths.includes("Pass")){
       playerPaths[player].Playable = true;
-      sessionStorage.setItem("Player Paths", JSON.stringify(playerPaths));
+      game['Player Paths'] = playerPaths;
+      sessionStorage.setItem("game", JSON.stringify(game));
     }
     return true;
   } else {
@@ -145,8 +147,9 @@ export function DrawADomino(player, player_list) {
 }
 
 export function CheckIfDominoIsPlayable(player, player_list, domino) {
+  const game = JSON.parse(sessionStorage.getItem("game"));
   const paths = DeterminePlayablePaths(player, player_list);
-  const playerPaths = JSON.parse(sessionStorage.getItem("Player Paths"));
+  const playerPaths = game['Player Paths'];
   const playablePaths = [];
   for(let i = 0; i < paths.length; i++) {
     if(playerPaths[paths[i]].Dominoes.length === 0) {
@@ -170,8 +173,9 @@ export function CheckIfDominoIsPlayable(player, player_list, domino) {
 
 export function PlayDomino(player, player_list, domino, path){
   // this runs under assumption that the call to this function will only occur on a playable path
-  const playerDominos = JSON.parse(sessionStorage.getItem("Player Dominoes"));
-  const playerPaths = JSON.parse(sessionStorage.getItem("Player Paths"));
+  const game = JSON.parse(sessionStorage.getItem("game"));
+  const playerDominos = game["Player Dominoes"];
+  const playerPaths = game["Player Paths"];
   for(let i=0;i<playerDominos[player].length;i++){
     if((playerDominos[player][i][1]===domino[1]&&playerDominos[player][i][2]===domino[2])||(playerDominos[player][i][2]===domino[1]&&playerDominos[player][i][1]===domino[2])){
       playerDominos[player].splice(i,1)
@@ -200,12 +204,13 @@ export function PlayDomino(player, player_list, domino, path){
   } else if(player === path){
     playerPaths[player].Playable = false;
   }
-  sessionStorage.setItem('Player Paths', JSON.stringify(playerPaths));
-  sessionStorage.setItem('Player Dominoes', JSON.stringify(playerDominos));
+  game['Player Paths'] = playerPaths;
+  game['Player Dominoes'] = playerDominos
+  sessionStorage.setItem('game', JSON.stringify(game));
 }
 
 export function CheckWinner(player_list){
-  const playerDominos = JSON.parse(sessionStorage.getItem("Player Dominoes"));
+  const playerDominos = JSON.parse(sessionStorage.getItem("game"))['Player Dominoes'];
   for(let i=0;i<player_list.length;i++){
     if(playerDominos[player_list[i]].length===0){
       return player_list[i];
@@ -214,16 +219,8 @@ export function CheckWinner(player_list){
   return false;
 }
 
-export function SetUpGame(player_list, num_rounds){
-  const game = {"Scores":[], "Round": 12, "Counted": false, "RoundsLeft": num_rounds};
-  for(let i=0;i<player_list.length;i++){
-    game.Scores.push(0);
-  }
-  sessionStorage.setItem("Game", JSON.stringify(game));
-}
-
 export function CalculateScores(player_list){
-  const playerDominos = JSON.parse(sessionStorage.getItem("Player Dominoes"));
+  const playerDominos = JSON.parse(sessionStorage.getItem("game"))["Player Dominoes"];
   const returnList = [];
   for(let i=0;i<player_list.length;i++){
     const dominos = playerDominos[player_list[i]];

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import NavBar from '../universal/NavBar';
-import Background from '../universal/Background';
-import { Link } from "react-router-dom";
 import axios from 'axios';
+import NavBar from '../universal/NavBar';
+import { Link } from "react-router-dom";
+import Background from '../universal/Background';
 import './DashboardPage.css';
 
 function DashboardPage() {
@@ -15,6 +15,8 @@ function DashboardPage() {
         winRanking: 0,
         pointsRanking: 0
     });
+    // eslint-disable-next-line
+    const [localGamePlayerCount, setLocalGamePlayerCount] = useState(null);
 
     useEffect(() => {
         fetchUserStats();
@@ -48,6 +50,19 @@ function DashboardPage() {
         return value !== 0 ? value : '-';
     };
 
+    const handleLocalGameStart = () => {
+        // Open modal for inputting player count
+        const playerCount = window.prompt('How many total players would you like in your local game? (2-4)');
+        const parsedCount = parseInt(playerCount);
+        if (!isNaN(parsedCount) && parsedCount >= 2 && parsedCount <= 4) {
+            setLocalGamePlayerCount(parsedCount);
+            // Redirect to game base with player count parameter
+            window.location.href = `/gamebase?playerCount=${parsedCount}`;
+        } else {
+            alert('Please enter a valid number between 2 and 4.');
+        }
+    };
+
     return (
         <div className="dashboard-page full-page">
             <Background />
@@ -68,7 +83,10 @@ function DashboardPage() {
 
                             </div>
                             <div className="button-row">
-                                <Link to="/how-to-play" className="button-link">How to Play</Link>
+                                <Link className="button-link" onClick={handleLocalGameStart}>Play Locally</Link>
+                            </div>
+                            <div className="button-row">
+                                <Link to="https://docs.google.com/document/d/1AGaAbECzBxydmu3vCk0By3uPImKF7AH5BWFk7AajLGE/edit?usp=sharing" target="_blank" rel="noopener noreferrer" className="button-link">How to Play</Link>
                             </div>
                         </div>
                     </div>
