@@ -29,10 +29,10 @@ function TrainSelector() {
 
   useEffect(() => {
     // LocalHost
-    // newWsRef.current = new WebSocket('ws://localhost:8765');
+    newWsRef.current = new WebSocket('ws://localhost:8765');
     // Create WebSocket connection
     // Production
-    newWsRef.current = new WebSocket('ws://34.125.63.8:3389');
+    // newWsRef.current = new WebSocket('ws://34.125.63.8:3389');
 
     // WebSocket event handlers
     newWsRef.current.onopen = () => {
@@ -47,7 +47,9 @@ function TrainSelector() {
         setConfirmedTrains(prev => ({ ...prev, [username]: train }));
         setDisabledTrains(prev => [...prev, train]);
       } else if (message.type === 'redirect' && message.url === '/multiplayer') {
-        window.location.href = message.url;
+        const players = message.players;
+        // Redirect to multiplayer page with list of players
+        window.location.href = `/multiplayer?players=${JSON.stringify(players)}`
       }
     };
 

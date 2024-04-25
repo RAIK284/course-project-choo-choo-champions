@@ -19,7 +19,7 @@ import {
 } from "./GameLogic";
 import { ConvertToReact } from "./dominoes/Domino";
 import "./GameBase.css";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import RoundEndModal from "./modals/RoundEndModal";
 import GameEndWinModal from "./modals/GameEndWinModal";
 
@@ -27,10 +27,19 @@ const startingDominoList = [[0, 0, 0], [13, 1, 1], [25, 2, 2], [36, 3, 3], [46, 
 
 function GameChoice({ src, alt, onSelect, isSelected }) {
     // hard coded setup
-    const players = ["max", "arjun", "carly"/*, "alison"*/];
+    // const players = ["max", "arjun", "carly"/*, "alison"*/];
+    // sessionStorage.setItem(
+    //     "Players",
+    //     JSON.stringify(["Mexican Train", "max", "arjun", "carly"/*, "alison"*/])
+    // );
+
+    const searchParams = new URLSearchParams(window.location.search);
+    const playersParam = searchParams.get('players');
+    const players = playersParam ? JSON.parse(playersParam) : [];
+
     sessionStorage.setItem(
         "Players",
-        JSON.stringify(["Mexican Train", "max", "arjun", "carly"/*, "alison"*/])
+        JSON.stringify(["Mexican Train", ...players])
     );
 
     // a bunch of booleans that we will use within
@@ -101,6 +110,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
         const event = new Event("TurnEnded");
         window.dispatchEvent(event);
     };
+
 
     const switchToNextPlayer = () => {
         const nextIndex = (currentPlayerIndex + 1) % players.length;
