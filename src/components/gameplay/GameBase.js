@@ -1,10 +1,5 @@
 import NavBar from "../universal/NavBar";
 import Background from "../universal/Background";
-// import greenTrain from "./GreenTrain";
-// import { redTrain } from "./RedTrain";
-// import blueTrain from "./BlueTrain";
-// import purpleTrain from "./PurpleTrain";
-// import orangeTrain from "./OrangeTrain";
 import TrainStation from "./TrainStation";
 
 import {
@@ -15,15 +10,29 @@ import {
   DeterminePlayablePaths,
   PlayDomino,
   CheckWinner,
-  CalculateScores
+  CalculateScores,
 } from "./GameLogic";
 import { ConvertToReact } from "./dominoes/Domino";
 import "./GameBase.css";
-import { useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import RoundEndModal from "./modals/RoundEndModal";
 import GameEndWinModal from "./modals/GameEndWinModal";
 
-const startingDominoList = [[0,0,0],[13,1,1],[25,2,2],[36,3,3],[46,4,4],[55,5,5],[63,6,6],[70,7,7],[76,8,8],[81,9,9],[85,10,10],[88,11,11],[90,12,12]];
+const startingDominoList = [
+  [0, 0, 0],
+  [13, 1, 1],
+  [25, 2, 2],
+  [36, 3, 3],
+  [46, 4, 4],
+  [55, 5, 5],
+  [63, 6, 6],
+  [70, 7, 7],
+  [76, 8, 8],
+  [81, 9, 9],
+  [85, 10, 10],
+  [88, 11, 11],
+  [90, 12, 12],
+];
 
 function GameChoice({ src, alt, onSelect, isSelected }) {
   // hard coded setup
@@ -52,7 +61,6 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
   );
   const [drawDisabled, setDrawDisabled] = useState(true);
   const [playDisabled, setPlayDisabled] = useState(true);
-  const [finishDisabled, setFinishDisabled] = useState(true);
   const [loading, setLoading] = useState(true);
   const [inTurn, setInTurn] = useState(false);
   const [selectedDomino, setSelectedDomino] = useState(null);
@@ -88,11 +96,10 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
     sessionStorage.setItem("game", JSON.stringify(game));
     console.log(JSON.parse(sessionStorage.getItem("game")));
   }
-  
+
   if (sessionStorage.getItem("Player Dominoes") == null) {
     SetUpRound();
   }
-
 
   // now the react functions
   useEffect(() => {
@@ -116,6 +123,28 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
     sessionStorage.setItem("game", JSON.stringify(game));
   };
 
+  const getColor = (index) => {
+    switch (index) {
+      case 0:
+        //green
+        return "rgb(30,214,86)";
+      case 1:
+        //blue
+        return "rgb(66,148,194)";
+      case 2:
+        //purple
+        return "rgb(146,28,193)";
+      case 3:
+        //orange
+        return "rgb(232,133,4)";
+      case 4:
+        //red
+        return "rgb(179,47,38)";
+      default:
+        return "white";
+    }
+  };
+
   const DrawDomino = () => {
     sessionStorage.setItem("DominoDrawn", JSON.stringify(true));
     DrawADomino(players[currentPlayerIndex], players);
@@ -127,7 +156,11 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
     if (domino == null) {
       return false;
     }
-    const options = CheckIfDominoIsPlayable(players[currentPlayerIndex], players, domino);
+    const options = CheckIfDominoIsPlayable(
+      players[currentPlayerIndex],
+      players,
+      domino
+    );
     if (options !== undefined) {
       setSelectedDomino(domino);
       const event = new Event("DominoPlayed");
@@ -144,17 +177,26 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
   };
 
   const handleDominoSelection = (index) => {
-
-    if(isAvailable[index]){
-      if(index===0){
-        PlayDomino(players[currentPlayerIndex], players, selectedDomino, 'Mexican Train');
-      } else{
-        PlayDomino(players[currentPlayerIndex], players, selectedDomino, players[index-1]);
+    if (isAvailable[index]) {
+      if (index === 0) {
+        PlayDomino(
+          players[currentPlayerIndex],
+          players,
+          selectedDomino,
+          "Mexican Train"
+        );
+      } else {
+        PlayDomino(
+          players[currentPlayerIndex],
+          players,
+          selectedDomino,
+          players[index - 1]
+        );
       }
       const event = new Event("DominoOnPath");
       sessionStorage.setItem("SelectedDomino", null);
+      setPlayDisabled(false);
       window.dispatchEvent(event);
-      // finishTurn();
     }
   };
 
@@ -207,11 +249,11 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
       }
       setDisplayEndModal(true);
     }
-  }
+  };
 
   const closeRoundModal = () => {
     setDisplayRoundModal(false);
-    FinishRound()
+    FinishRound();
   };
 
   const closeEndModal = () => {
@@ -259,13 +301,17 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
   // turn and finish round functions
   async function Turn() {
     // timer goes here
-    const options = DeterminePlayablePaths(players[currentPlayerIndex], players);
+    const options = DeterminePlayablePaths(
+      players[currentPlayerIndex],
+      players
+    );
     if (
       options.includes("Draw") &&
       (sessionStorage.getItem("DominoDrawn") == null ||
         !JSON.parse(sessionStorage.getItem("DominoDrawn")))
     ) {
       setDrawDisabled(false);
+      setPlayDisabled(true);
       await new Promise((resolve) => {
         window.addEventListener("DominoDrawn", function handler() {
           window.removeEventListener("DominoDrawn", handler);
@@ -288,23 +334,18 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
         });
       });
       if(JSON.parse(sessionStorage.getItem("game"))['Player Paths'].UnvalidatedDouble !==null){
+        for (let i = 0; i < isAvailable.length; i++) {
+          isAvailable[i] = false;
+        }
         await sessionStorage.setItem("DominoDrawn", false);
         await Turn(players[currentPlayerIndex]);
         return;
       }
-    }
-    setFinishDisabled(false);
-    for (let i = 0; i < isAvailable.length; i++) {
+    } for (let i = 0; i < isAvailable.length; i++) {
       isAvailable[i] = false;
     }
-    await new Promise((resolve) => {
-      window.addEventListener("TurnEnded", function handler() {
-        window.removeEventListener("TurnEnded", handler);
-        resolve();
-      });
-    });
+    finishTurn();
     await sessionStorage.setItem("DominoDrawn", false);
-    setFinishDisabled(true);
     setInTurn(false);
 
     // this will trigger a reset
@@ -313,9 +354,9 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
   }
 
   // finishes the round
-  function FinishRound(){
+  function FinishRound() {
     // this would have more in the future
-    const newRound = currentRound-1;
+    const newRound = currentRound - 1;
     setCurrentRound(newRound);
     // console.log(currentRound);
     // sessionStorage.setItem("currentRound", newRound);
@@ -361,22 +402,22 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
                     onClick={SelectADominoToPlay}
                     disabled={playDisabled}
                   >
-                    AddToPath
+                    Place Domino
                   </button>
                 </div>
-                <button
-                  className="finish-turn-button"
-                  onClick={finishTurn}
-                  disabled={finishDisabled}
-                >
-                  Finish Turn
-                </button>{" "}
               </div>
             </div>
             {/* end of left content */}
             <div className="inner-content">
               <h3 className="players_turn">
-                It is <strong>{players[currentPlayerIndex]}</strong>'s turn
+                It is{" "}
+                <strong
+                  className="player-color"
+                  style={{ color: getColor(currentPlayerIndex) }}
+                >
+                  {players[currentPlayerIndex]}
+                </strong>
+                's turn
               </h3>{" "}
               <TrainStation
                 sDomino={sDomino}
