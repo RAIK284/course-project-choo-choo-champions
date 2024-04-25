@@ -54,7 +54,6 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
   );
   const [drawDisabled, setDrawDisabled] = useState(true);
   const [playDisabled, setPlayDisabled] = useState(true);
-  const [finishDisabled, setFinishDisabled] = useState(true);
   const [loading, setLoading] = useState(true);
   const [inTurn, setInTurn] = useState(false);
   const [selectedDomino, setSelectedDomino] = useState(null);
@@ -169,7 +168,6 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
       }
       const event = new Event("DominoOnPath");
       sessionStorage.setItem("SelectedDomino", null);
-      finishTurn();
       setPlayDisabled(false);
       window.dispatchEvent(event);
     }
@@ -253,6 +251,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
         !JSON.parse(sessionStorage.getItem("DominoDrawn")))
     ) {
       setDrawDisabled(false);
+      setPlayDisabled(true);
       await new Promise((resolve) => {
         window.addEventListener("DominoDrawn", function handler() {
           window.removeEventListener("DominoDrawn", handler);
@@ -278,23 +277,18 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
         JSON.parse(sessionStorage.getItem("Player Paths")).UnvalidatedDouble !==
         null
       ) {
+        for (let i = 0; i < isAvailable.length; i++) {
+          isAvailable[i] = false;
+        }
         await sessionStorage.setItem("DominoDrawn", false);
         await Turn(players[currentPlayerIndex]);
         return;
       }
-    }
-    setFinishDisabled(false);
-    for (let i = 0; i < isAvailable.length; i++) {
+    } for (let i = 0; i < isAvailable.length; i++) {
       isAvailable[i] = false;
     }
-    await new Promise((resolve) => {
-      window.addEventListener("TurnEnded", function handler() {
-        window.removeEventListener("TurnEnded", handler);
-        resolve();
-      });
-    });
+    finishTurn();
     await sessionStorage.setItem("DominoDrawn", false);
-    setFinishDisabled(true);
     setInTurn(false);
 
     // this will trigger a reset
