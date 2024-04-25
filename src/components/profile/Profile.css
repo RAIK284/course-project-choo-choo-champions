@@ -18,27 +18,28 @@
 
 .profile-page .container {
     display: flex;
-    justify-content: flex-start;
+    justify-content: center;
     flex-direction: row;
+    gap: calc(80%/3)
 }
 
 .profile-page .profile-section {
-    padding: 20px;
     flex-grow: 1;
 }
 
 .profile-page .profile-section.left {
-    width: calc(100% / 3);
+    width: auto;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
+    margin-left: 20%;
 }
 
 .profile-page .profile-section.right {
-    width: calc(2 * 100% / 3);
+    width: auto;
     justify-content: flex-start;
-    padding-left: 400px;
+    margin-right: 20%;
 }
 
 .profile-page h2 {
@@ -90,7 +91,8 @@
     padding: 20px;
     border-radius: 10px;
     background-color: white;
-    width: fit-content; /* Adjust the width to fit the content */
+    width: fit-content;
+    /* Adjust the width to fit the content */
 }
 
 .profile-page .navigation-buttons .button-link {
@@ -103,8 +105,11 @@
     margin-top: 10px;
     cursor: pointer;
     font-size: 18px;
-    text-decoration: none; /* Remove default underline for links */
-    text-align: center; /* Center the text */
+    font-weight: 500;
+    text-decoration: none;
+    /* Remove default underline for links */
+    text-align: center;
+    /* Center the text */
 }
 
 .profile-page .navigation-buttons .button-link:hover {
@@ -136,7 +141,7 @@
     border-radius: 5px;
     border: 1px solid #ccc;
     box-sizing: border-box;
-    width: 100%;
+    min-width: 100%;
 }
 
 .profile-page input[type='text']:focus,
@@ -148,6 +153,7 @@
 .profile-page .save-button {
     background-color: white;
     color: black;
+    font-weight: 1000;
     border: none;
     padding: 15px 30px;
     border-radius: 5px;
