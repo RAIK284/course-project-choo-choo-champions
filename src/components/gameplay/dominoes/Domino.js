@@ -1,14 +1,12 @@
 import React, { useState } from "react";
 import "./Domino.css";
 
-export function DetermineIfDominoIsSelectable(domino) {
-  if (
-    JSON.parse(sessionStorage.getItem("Player Paths") != null) &&
-    domino !== undefined
-  ) {
-    const paths = JSON.parse(sessionStorage.getItem("Player Paths"));
-    const players = JSON.parse(sessionStorage.getItem("Players"));
-    for (let i = 0; i < players.length; i++) {
+
+function DetermineIfDominoIsSelectable(domino){
+  if(JSON.parse(sessionStorage.getItem('game'))['Player Paths']!=null && domino !== undefined){
+    const paths = JSON.parse(sessionStorage.getItem('game'))['Player Paths']
+    const players = JSON.parse(sessionStorage.getItem('Players'));
+    for(let i=0;i<players.length;i++){
       const path = paths[players[i]].Dominoes;
       for (let j = 0; j < path.length; j++) {
         if (
@@ -27,7 +25,6 @@ export function DetermineIfDominoIsSelectable(domino) {
 }
 
 export function ConvertToReact(dominos) {
-  console.log(dominos);
   const [selectedDomino, setSelectedDomino] = useState(null);
 
   const handleSelectDomino = (index) => {
