@@ -92,7 +92,6 @@
     border-radius: 10px;
     background-color: white;
     width: fit-content;
-    /* Adjust the width to fit the content */
 }
 
 .profile-page .navigation-buttons .button-link {
@@ -107,9 +106,22 @@
     font-size: 18px;
     font-weight: 500;
     text-decoration: none;
-    /* Remove default underline for links */
     text-align: center;
-    /* Center the text */
+}
+
+.profile-page .navigation-buttons .button-link-toggle {
+    display: block;
+    background-color: black;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 5px;
+    margin-top: 10px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: 500;
+    text-decoration: none;
+    text-align: center;
 }
 
 .profile-page .navigation-buttons .button-link:hover {
@@ -127,9 +139,7 @@
 .profile-page .input-wrapper label {
     margin-bottom: 5px;
     font-size: 28px;
-    /* Larger font size for labels */
     font-weight: bold;
-    /* Bold font weight for labels */
     width: 300px;
     text-align: left;
 }
