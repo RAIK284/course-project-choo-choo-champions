@@ -77,7 +77,7 @@ async def handle_client(websocket):
                     await client.send(json.dumps({'type': 'trainConfirmed', 'username': username, 'train': confirmed_train}))
                 if all_players_confirmed(requested_session_id):
                     for client in clients:
-                        await client.send(json.dumps({'type': 'redirect', 'url': '/gamebase'}))
+                        await client.send(json.dumps({'type': 'redirect', 'url': '/multiplayer'}))
                 print(f"Player {username} confirmed train: {confirmed_train}")
 
             elif message_type == 'startGame':
@@ -94,12 +94,11 @@ async def handle_client(websocket):
 
 # Main function to run the WebSocket server
 
-
 async def main():
     global session_id
     session_id = generate_session_id()
-    async with websockets.serve(handle_client, "localhost", 8765):
-        print("WebSocket server started. Listening on port 8765...")
+    async with websockets.serve(handle_client, "0.0.0.0", 3389):
+        print("WebSocket server started. Listening on port 3389...")
         await asyncio.Future()
 
 # Function to generate a unique session ID for a client

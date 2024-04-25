@@ -18,6 +18,7 @@ import EmailVerification from "./components/profile/EmailVerification";
 import GameLogic from "./components/gameplay/GameLogic";
 import DraftGameBase from "./components/gameplay/z_DRAFT_GameBase"
 import HostGamePage from "./components/gameplay/host/HostGamePage";
+import MultiGameBase from "./components/gameplay/MultiGameBase";
 
 function App() {
   return (
@@ -40,6 +41,7 @@ function App() {
         <Route path="/gamelogic" element={<GameLogic />} />
         <Route path="/draftgamebase" element={<DraftGameBase />} />
         <Route path="/host" element={<HostGamePage />} />
+        <Route path="/multiplayer" element={<MultiGameBase />} />
       </Routes>
     </Router>
   );
