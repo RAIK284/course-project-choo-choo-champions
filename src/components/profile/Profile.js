@@ -150,16 +150,23 @@ function ProfilePage() {
               <Link to="/change-password" className="button-link">
                 Change Password
               </Link>
+              {/* toggle */}
               <div className="button-link-toggle">
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={colorblind}
-                    onChange={handleColorblindToggle}
-                  />
-                  Colorblind
-                </label>
+                <div className="toggle-wrapper">
+                  <label htmlFor="colorblind">Colorblind</label>
+                  <label className="toggle-slider">
+                    <input
+                      type="checkbox"
+                      id="colorblind"
+                      checked={colorblind}
+                      onChange={handleColorblindToggle}
+                    />
+                    <span className="slider"></span>
+                  </label>
+                </div>
               </div>
+
+              {/* toggle */}
               <Link to="/" className="button-link">
                 Log Out
               </Link>
