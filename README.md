@@ -6,7 +6,7 @@ There is also the REST API backend which is in place in the JavaScript files and
 
 ### Deployment:
 
-Our app is deployed at [https://mexicantraindomino.web.app/](https://mexicantraindomino.web.app/).
+Our app is deployed via [Google Firebase](https://firebase.google.com/) at [https://mexicantraindomino.web.app/](https://mexicantraindomino.web.app/).
 
 
 To run the application locally, follow these steps.
@@ -15,7 +15,7 @@ To run the application locally, follow these steps.
 
 Step 0:
 
-Ensure that you have node.js downloaded from [https://nodejs.org/en/download](https://nodejs.org/en/download).
+Ensure that you have Node.js downloaded from [https://nodejs.org/en/download](https://nodejs.org/en/download).
 
 Step 1:
 
