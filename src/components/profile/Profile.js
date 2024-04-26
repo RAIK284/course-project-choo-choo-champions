@@ -27,6 +27,12 @@ function ProfilePage() {
       setUsername(storedUsername);
       setEmail(storedEmail);
       fetchUserDetails(token, storedUsername);
+      const imageUrl = fetchProfileImage(usernameParam, token);
+        if (imageUrl) {
+          const blob = new Blob([imageUrl], { type: 'image/jpeg' });
+          const url = URL.createObjectURL(blob);
+          setProfileImage(url);
+      }
     }
   }, []);
 
@@ -49,10 +55,34 @@ function ProfilePage() {
     }
   };
 
-  const handleImageChange = (e) => {
+  // Function to handle profile image upload
+  const handleImageChange = async(e) => {
     const file = e.target.files[0];
-    setProfileImage(URL.createObjectURL(file));
-  };
+    const formData = new FormData();
+    formData.append('image', file);
+    const token = sessionStorage.getItem('token');
+    try {
+        const response = await axios.post(
+            'https://choochoochampionsapi.azurewebsites.net/user/UpdateProfileImage',
+            formData,
+            {
+                params: {
+                    username: username,
+                },
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
+        console.log(response);
+        setProfileImage(response.data['imageLink']);
+    } catch (error) {
+        console.error('Error uploading image.', error);
+        alert('Error uploading image.');
+    }
+
+};
 
   const handleColorblindToggle = () => {
     const updatedColorblind = !colorblind; // Toggle the colorblind state
