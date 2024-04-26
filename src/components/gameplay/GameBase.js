@@ -292,7 +292,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
       } else {
         // i want this to be a placeholder but that mess up the spacing for now
         // so we will keep this ftm
-        lastDominos.push(ConvertToReact([[0, 13, 14]]));
+        lastDominos.push(ConvertToReact([[0, 13, 15]]));
       }
     }
     return lastDominos;
