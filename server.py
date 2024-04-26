@@ -17,6 +17,8 @@ session_players = {}
 requested_session_id = None
 
 # Function to handle each client connection
+
+
 async def handle_client(websocket, path):
     global confirmed_train, player_train_selection, confirmed_trains, player_session_ids, session_id
     # Add client to the set of clients
@@ -82,9 +84,7 @@ async def handle_client(websocket, path):
 
             elif message_type == 'gameState':
                 # Broadcast game state to all clients except the sender
-                for client in clients:
-                    if client != websocket:
-                        await client.send(json.dumps({'gameState': data['gameState']}))
+                await asyncio.wait([client.send(message) for client in clients if client != websocket])
 
             elif message_type == 'startGame':
                 # Start the game and redirect clients to the game page
@@ -100,6 +100,8 @@ async def handle_client(websocket, path):
         print(f"Client disconnected: {websocket.remote_address}")
 
 # Function to generate a unique session ID for a client
+
+
 def generate_session_id_for_client():
     session_id = generate_session_id()
     while session_id in player_session_ids.values():
@@ -107,11 +109,15 @@ def generate_session_id_for_client():
     return session_id
 
 # Function to generate a session ID
+
+
 def generate_session_id():
     characters = string.ascii_uppercase + string.digits
     return ''.join(random.choices(characters, k=6))
 
 # Function to check if all players in a session have confirmed their train selection
+
+
 def all_players_confirmed(requested_session_id):
     players = session_players.get(requested_session_id, [])
     for player in players:
@@ -120,6 +126,8 @@ def all_players_confirmed(requested_session_id):
     return True
 
 # Main function to run the WebSocket server
+
+
 async def main():
     global session_id
     session_id = generate_session_id()

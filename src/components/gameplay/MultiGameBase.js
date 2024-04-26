@@ -19,6 +19,7 @@ import {
 } from "./GameLogic";
 import { ConvertToReact } from "./dominoes/Domino";
 import "./GameBase.css";
+// eslint-disable-next-line
 import { useEffect, useState, useRef } from "react";
 import RoundEndModal from "./modals/RoundEndModal";
 import GameEndWinModal from "./modals/GameEndWinModal";
@@ -41,6 +42,36 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
         "Players",
         JSON.stringify(["Mexican Train", ...players])
     );
+
+    const [webSocket, setWebSocket] = useState(null);
+    // eslint-disable-next-line
+    const [gameState, setGameState] = useState(() => JSON.parse(sessionStorage.getItem("game")) || {});
+
+    useEffect(() => {
+        function connectWebSocket() {
+            const ws = new WebSocket('ws://localhost:8765');
+            ws.onopen = () => console.log("Connected to WebSocket server");
+            ws.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+                if (data.type === 'gameState') {
+                    sessionStorage.setItem("game", JSON.stringify(data.gameState));
+                    setGameState(data.gameState);
+                }
+            };
+            ws.onclose = () => {
+                console.log("WebSocket closed unexpectedly, attempting to reconnect...");
+                setTimeout(connectWebSocket, 2000);
+            };
+            setWebSocket(ws);
+        }
+
+        connectWebSocket();
+        return () => {
+            if (webSocket) webSocket.close();
+        };
+        // eslint-disable-next-line
+    }, []);
+
 
     // a bunch of booleans that we will use within
     const [currentPlayerIndex, setCurrentPlayerIndex] = useState(
@@ -107,9 +138,27 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
 
     const finishTurn = () => {
         switchToNextPlayer();
+        const game = JSON.parse(sessionStorage.getItem("game"));
+        webSocket.send(JSON.stringify({ type: 'gameState', gameState: game }));
         const event = new Event("TurnEnded");
         window.dispatchEvent(event);
     };
+
+    // function updateGameState() {
+    //     const game = {
+    //         "Player Dominoes": JSON.parse(sessionStorage.getItem("Player Dominoes")),
+    //         "Player Paths": JSON.parse(sessionStorage.getItem("Player Paths")),
+    //         "Dominoes": JSON.parse(sessionStorage.getItem("Domino")),
+    //         "Boneyard": JSON.parse(sessionStorage.getItem("Boneyard")),
+    //         "TurnIndex": currentPlayerIndex,
+    //         "CurrentRound": currentRound - 1,
+    //         "GamesLeft": roundsLeft - 1,
+    //         "Scores": JSON.parse(sessionStorage.getItem("game"))?.Scores || {},
+    //         "Scored": false
+    //     };
+    //     sessionStorage.setItem("game", JSON.stringify(game));
+    //     webSocket.send(JSON.stringify({ type: 'gameState', gameState: game }));
+    // }
 
 
     const switchToNextPlayer = () => {
