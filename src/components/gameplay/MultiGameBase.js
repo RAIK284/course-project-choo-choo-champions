@@ -26,6 +26,7 @@ import GameEndWinModal from "./modals/GameEndWinModal";
 
 const startingDominoList = [[0, 0, 0], [13, 1, 1], [25, 2, 2], [36, 3, 3], [46, 4, 4], [55, 5, 5], [63, 6, 6], [70, 7, 7], [76, 8, 8], [81, 9, 9], [85, 10, 10], [88, 11, 11], [90, 12, 12]];
 
+
 function GameChoice({ src, alt, onSelect, isSelected }) {
     // hard coded setup
     // const players = ["max", "arjun", "carly"/*, "alison"*/];
@@ -43,10 +44,17 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
         JSON.stringify(["Mexican Train", ...players])
     );
 
+    // eslint-disable-next-line
     const [webSocket, setWebSocket] = useState(null);
     // eslint-disable-next-line
     const [gameState, setGameState] = useState(() => JSON.parse(sessionStorage.getItem("game")) || {});
-
+      // eslint-disable-next-line
+    const storedGame = JSON.parse(sessionStorage.getItem("game") || "{}");
+    const [currentPlayerIndex, setCurrentPlayerIndex] = useState(() => {
+        const initialGame = JSON.parse(sessionStorage.getItem("game") || "{}");
+        return initialGame.TurnIndex || 0;
+    });
+    
     useEffect(() => {
         function connectWebSocket() {
             const ws = new WebSocket('ws://localhost:8765');
@@ -56,6 +64,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
                 if (data.type === 'gameState') {
                     sessionStorage.setItem("game", JSON.stringify(data.gameState));
                     setGameState(data.gameState);
+                    setCurrentPlayerIndex(data.gameState.TurnIndex);  // Ensure this is correctly parsed as a number if necessary
                 }
             };
             ws.onclose = () => {
@@ -63,22 +72,22 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
                 setTimeout(connectWebSocket, 2000);
             };
             setWebSocket(ws);
+            return () => {
+                ws.close();
+            };
         }
-
+   
         connectWebSocket();
-        return () => {
-            if (webSocket) webSocket.close();
-        };
-        // eslint-disable-next-line
+        //eslint-disable-next-line
     }, []);
 
 
-    // a bunch of booleans that we will use within
-    const [currentPlayerIndex, setCurrentPlayerIndex] = useState(
-        sessionStorage.getItem("game") !== null
-            ? JSON.parse(sessionStorage.getItem("game")).TurnIndex
-            : 0
-    );
+    // // a bunch of booleans that we will use within
+    // const [currentPlayerIndex, setCurrentPlayerIndex] = useState(
+    //     sessionStorage.getItem("game") !== null
+    //         ? JSON.parse(sessionStorage.getItem("game")).TurnIndex
+    //         : 0
+    // );
     const [currentRound, setCurrentRound] = useState(
         sessionStorage.getItem("game") !== null
             ? JSON.parse(sessionStorage.getItem("game")).CurrentRound
@@ -128,21 +137,36 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
     }
 
 
-    // now the react functions
-    useEffect(() => {
-        const storedGame = sessionStorage.getItem("game");
-        if (storedGame !== null) {
-            setCurrentPlayerIndex(JSON.parse(storedGame).TurnIndex);
-        }
-    }, []);
-
     const finishTurn = () => {
-        switchToNextPlayer();
-        const game = JSON.parse(sessionStorage.getItem("game"));
-        webSocket.send(JSON.stringify({ type: 'gameState', gameState: game }));
+        const nextIndex = (currentPlayerIndex + 1) % players.length;
+        const updatedGameState = {
+            ...JSON.parse(sessionStorage.getItem("game")),
+            TurnIndex: nextIndex,
+        };
+    
+        // Update the sessionStorage immediately
+        sessionStorage.setItem("game", JSON.stringify(updatedGameState));
+        setCurrentPlayerIndex(nextIndex);  // Update the state to trigger re-render
+    
+        // Broadcast the new state to all clients
+        webSocket.send(JSON.stringify({
+            type: 'gameState',
+            gameState: updatedGameState
+        }));
+    
+        // This can be used to trigger any additional actions needed at turn end
         const event = new Event("TurnEnded");
         window.dispatchEvent(event);
     };
+
+    useEffect(() => {
+        const storedGame = sessionStorage.getItem("game");
+        if (storedGame !== null) {
+            const game = JSON.parse(storedGame);
+            setCurrentPlayerIndex(game.TurnIndex);
+            setGameState(game);
+        }
+    }, []);
 
     // function updateGameState() {
     //     const game = {
@@ -161,13 +185,13 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
     // }
 
 
-    const switchToNextPlayer = () => {
-        const nextIndex = (currentPlayerIndex + 1) % players.length;
-        setCurrentPlayerIndex(nextIndex);
-        const game = JSON.parse(sessionStorage.getItem("game"));
-        game.TurnIndex = nextIndex.toString();
-        sessionStorage.setItem("game", JSON.stringify(game));
-    };
+    // const switchToNextPlayer = () => {
+    //     const nextIndex = (currentPlayerIndex + 1) % players.length;
+    //     setCurrentPlayerIndex(nextIndex);
+    //     const game = JSON.parse(sessionStorage.getItem("game"));
+    //     game.TurnIndex = nextIndex.toString();
+    //     sessionStorage.setItem("game", JSON.stringify(game));
+    // };
 
     const DrawDomino = () => {
         sessionStorage.setItem("DominoDrawn", JSON.stringify(true));
