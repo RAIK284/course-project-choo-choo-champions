@@ -111,6 +111,9 @@ export function DeterminePlayablePaths(player, player_list) {
     playablePaths.push("Draw");
   } else if (playablePaths.length === 0 && boneyard.length === 0) {
     playablePaths.push("Pass");
+    if(!playerPaths[player].Playable){
+      alert(player + " has gone choo choo! Their path is now playable.");
+    }
     playerPaths[player].Playable = true;
     game['Playable Paths'] = playerPaths;
     sessionStorage.setItem("game", JSON.stringify(game));
@@ -135,6 +138,9 @@ export function DrawADomino(player, player_list) {
     sessionStorage.setItem("game", JSON.stringify(game));
     const newPaths = DeterminePlayablePaths(player, player_list);
     if(newPaths.includes("Draw") || newPaths.includes("Pass")){
+      if(!playerPaths[player].Playable){
+        alert(player + " has gone choo choo! Their path is now playable.");
+      }
       playerPaths[player].Playable = true;
       game['Player Paths'] = playerPaths;
       sessionStorage.setItem("game", JSON.stringify(game));
@@ -196,13 +202,16 @@ export function PlayDomino(player, player_list, domino, path){
   playerPaths[path].Dominoes.push(domino);
   if(playerPaths.UnvalidatedDouble !== null){
     playerPaths.UnvalidatedDouble = null;
+    alert(player + " has validated the double!");
   }
 
   // check for double
   if(domino[1] === domino[2]){
     playerPaths.UnvalidatedDouble = path;
-  } else if(player === path){
+    alert(player + " has played an unvalidated double!");
+  } else if(player === path && playerPaths[player].Playable){
     playerPaths[player].Playable = false;
+    alert(player + " has gone ooch ooch! Their path is no longer playable.");
   }
   game['Player Paths'] = playerPaths;
   game['Player Dominoes'] = playerDominos
