@@ -64,6 +64,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
                     sessionStorage.setItem("game", JSON.stringify(data.gameState));
                     setGameState(data.gameState);
                     setCurrentPlayerIndex(data.gameState.TurnIndex);  // Ensure this is correctly parsed as a number if necessary
+                    window.location.reload();
                 }
             };
             ws.onclose = () => {
@@ -162,23 +163,6 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
             setGameState(game);
         }
     }, []);
-
-    // function updateGameState() {
-    //     const game = {
-    //         "Player Dominoes": JSON.parse(sessionStorage.getItem("Player Dominoes")),
-    //         "Player Paths": JSON.parse(sessionStorage.getItem("Player Paths")),
-    //         "Dominoes": JSON.parse(sessionStorage.getItem("Domino")),
-    //         "Boneyard": JSON.parse(sessionStorage.getItem("Boneyard")),
-    //         "TurnIndex": currentPlayerIndex,
-    //         "CurrentRound": currentRound - 1,
-    //         "GamesLeft": roundsLeft - 1,
-    //         "Scores": JSON.parse(sessionStorage.getItem("game"))?.Scores || {},
-    //         "Scored": false
-    //     };
-    //     sessionStorage.setItem("game", JSON.stringify(game));
-    //     webSocket.send(JSON.stringify({ type: 'gameState', gameState: game }));
-    // }
-
 
     // const switchToNextPlayer = () => {
     //     const nextIndex = (currentPlayerIndex + 1) % players.length;
@@ -396,6 +380,29 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
         window.location.reload();
     }
 
+    const getPlayerColor = (index) => {
+        switch (index) {
+            case 0:
+                //green
+                return "rgb(30,214,86)";
+            case 1:
+                //blue
+                return "rgb(66,148,194)";
+            case 2:
+                //purple
+                return "rgb(146,28,193)";
+            case 3:
+                //orange
+                return "rgb(232,133,4)";
+            case 4:
+                //red
+                return "rgb(179,47,38)";
+            default:
+                return "white";
+        }
+    };
+
+
     // load the round objects
     const playerDominoes = JSON.parse(sessionStorage.getItem("game"))["Player Dominoes"];
     const playerPaths = JSON.parse(sessionStorage.getItem("game"))["Player Paths"];
@@ -450,7 +457,14 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
                         {/* end of left content */}
                         <div className="inner-content">
                             <h3 className="players_turn">
-                                It is <strong>{players[currentPlayerIndex]}</strong>'s turn
+                                It is{" "}
+                                <strong
+                                    className="player-color"
+                                    style={{ color: getPlayerColor(currentPlayerIndex) }}
+                                >
+                                    {players[currentPlayerIndex]}
+                                </strong>
+                                's turn
                             </h3>{" "}
                             <TrainStation
                                 sDomino={sDomino}
