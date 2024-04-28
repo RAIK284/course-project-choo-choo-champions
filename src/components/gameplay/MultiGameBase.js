@@ -48,13 +48,12 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
     const [webSocket, setWebSocket] = useState(null);
     // eslint-disable-next-line
     const [gameState, setGameState] = useState(() => JSON.parse(sessionStorage.getItem("game")) || {});
-      // eslint-disable-next-line
+    // eslint-disable-next-line
     const storedGame = JSON.parse(sessionStorage.getItem("game") || "{}");
     const [currentPlayerIndex, setCurrentPlayerIndex] = useState(() => {
         const initialGame = JSON.parse(sessionStorage.getItem("game") || "{}");
         return initialGame.TurnIndex || 0;
     });
-    
     useEffect(() => {
         function connectWebSocket() {
             const ws = new WebSocket('ws://localhost:8765');
@@ -76,7 +75,6 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
                 ws.close();
             };
         }
-   
         connectWebSocket();
         //eslint-disable-next-line
     }, []);
@@ -143,17 +141,14 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
             ...JSON.parse(sessionStorage.getItem("game")),
             TurnIndex: nextIndex,
         };
-    
         // Update the sessionStorage immediately
         sessionStorage.setItem("game", JSON.stringify(updatedGameState));
         setCurrentPlayerIndex(nextIndex);  // Update the state to trigger re-render
-    
         // Broadcast the new state to all clients
         webSocket.send(JSON.stringify({
             type: 'gameState',
             gameState: updatedGameState
         }));
-    
         // This can be used to trigger any additional actions needed at turn end
         const event = new Event("TurnEnded");
         window.dispatchEvent(event);
@@ -404,7 +399,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
     // load the round objects
     const playerDominoes = JSON.parse(sessionStorage.getItem("game"))["Player Dominoes"];
     const playerPaths = JSON.parse(sessionStorage.getItem("game"))["Player Paths"];
-    const dominos = ConvertToReact(playerDominoes[players[currentPlayerIndex]]);
+    //const dominos = ConvertToReact(playerDominoes[players[currentPlayerIndex]]);
     const sDomino = ConvertToReact(playerPaths["Starting Domino"]);
     const lastDominos = loadDominos();
 
@@ -422,33 +417,35 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
                     <div className="sidegroup">
                         <div className="inner-content">
                             <h1 className="banktitle">Bank</h1>
-                            <div className="bank">{dominos}</div>
+                            <div className="bank">{ConvertToReact(playerDominoes[players[players.indexOf(sessionStorage.getItem("username"))]])}</div>
                             {/* end of bank group */}
-                            <div className="button-container">
-                                <div className="buttonTopRow">
+                            {players[currentPlayerIndex] === sessionStorage.getItem("username") && (
+                                <div className="button-container">
+                                    <div className="buttonTopRow">
+                                        <button
+                                            className="button"
+                                            onClick={DrawDomino}
+                                            disabled={drawDisabled}
+                                        >
+                                            Draw
+                                        </button>
+                                        <button
+                                            className="button"
+                                            onClick={SelectADominoToPlay}
+                                            disabled={playDisabled}
+                                        >
+                                            AddToPath
+                                        </button>
+                                    </div>
                                     <button
-                                        className="button"
-                                        onClick={DrawDomino}
-                                        disabled={drawDisabled}
+                                        className="finish-turn-button"
+                                        onClick={finishTurn}
+                                        disabled={finishDisabled}
                                     >
-                                        Draw
-                                    </button>
-                                    <button
-                                        className="button"
-                                        onClick={SelectADominoToPlay}
-                                        disabled={playDisabled}
-                                    >
-                                        AddToPath
-                                    </button>
+                                        Finish Turn
+                                    </button>{" "}
                                 </div>
-                                <button
-                                    className="finish-turn-button"
-                                    onClick={finishTurn}
-                                    disabled={finishDisabled}
-                                >
-                                    Finish Turn
-                                </button>{" "}
-                            </div>
+                            )}
                         </div>
                         {/* end of left content */}
                         <div className="inner-content">
