@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { getStorage, ref, uploadBytes, getDownloadURL} from "firebase/storage";
+import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject} from "firebase/storage";
 import NavBar from "../universal/NavBar";
 import Background from "../universal/Background";
 import { Link } from "react-router-dom";
@@ -102,6 +102,12 @@ function ProfilePage() {
           }
         );
         if (responseUsername.status === 200) {
+          if(profileImage !== "https://upload.wikimedia.org/wikipedia/en/thumb/d/dc/Thomas_Tank_Engine_1.JPG/220px-Thomas_Tank_Engine_1.JPG"){
+            const pathReference = ref(storage, currentUsername);
+            await deleteObject(pathReference).then(() => {
+              console.log("Profile Image Deleted Successfully!");
+            })
+          }
           alert("Username changed successfully!");
           sessionStorage.setItem("username", username);
         } else {
