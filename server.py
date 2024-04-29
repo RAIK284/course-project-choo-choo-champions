@@ -131,8 +131,8 @@ def all_players_confirmed(requested_session_id):
 async def main():
     global session_id
     session_id = generate_session_id()
-    async with websockets.serve(handle_client, "0.0.0.0", 3389):
-    # async with websockets.serve(handle_client, "localhost", 8765):
+    #async with websockets.serve(handle_client, "0.0.0.0", 3389):
+    async with websockets.serve(handle_client, "localhost", 8765):
         print("WebSocket server started. Listening on port 3389...")
         await asyncio.Future()
 

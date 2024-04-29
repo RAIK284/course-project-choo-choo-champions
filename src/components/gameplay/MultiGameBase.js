@@ -56,8 +56,8 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
     });
     useEffect(() => {
         function connectWebSocket() {
-            //const ws = new WebSocket('ws://localhost:8765');
-            const ws = new WebSocket('ws://34.125.63.8:3389');
+            const ws = new WebSocket('ws://localhost:8765');
+            // const ws = new WebSocket('ws://34.125.63.8:3389');
             ws.onopen = () => console.log("Connected to WebSocket server");
             ws.onmessage = (event) => {
                 const data = JSON.parse(event.data);
