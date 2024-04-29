@@ -138,22 +138,27 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
 
 
     const finishTurn = () => {
-        const nextIndex = (currentPlayerIndex + 1) % players.length;
-        const updatedGameState = {
-            ...JSON.parse(sessionStorage.getItem("game")),
-            TurnIndex: nextIndex,
-        };
-        // Update the sessionStorage immediately
-        sessionStorage.setItem("game", JSON.stringify(updatedGameState));
-        setCurrentPlayerIndex(nextIndex);  // Update the state to trigger re-render
-        // Broadcast the new state to all clients
-        webSocket.send(JSON.stringify({
-            type: 'gameState',
-            gameState: updatedGameState
-        }));
-        // This can be used to trigger any additional actions needed at turn end
-        const event = new Event("TurnEnded");
-        window.dispatchEvent(event);
+        const game = JSON.parse(sessionStorage.getItem("game"));
+        if (game["Player Dominoes"][players[currentPlayerIndex]].length === 0) {
+            FinishRound();
+        } else {
+            const nextIndex = (currentPlayerIndex + 1) % players.length;
+            const updatedGameState = {
+                ...game,
+                TurnIndex: nextIndex,
+            };
+            // Update the sessionStorage immediately
+            sessionStorage.setItem("game", JSON.stringify(updatedGameState));
+            setCurrentPlayerIndex(nextIndex);  // Update the state to trigger re-render
+            // Broadcast the new state to all clients
+            webSocket.send(JSON.stringify({
+                type: 'gameState',
+                gameState: updatedGameState
+            }));
+            // This can be used to trigger any additional actions needed at turn end
+            const event = new Event("TurnEnded");
+            window.dispatchEvent(event);
+        }
     };
 
     useEffect(() => {
@@ -225,6 +230,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
                 if (game.Scores === null) {
                     game.Scores = scores;
                     sessionStorage.setItem("game", JSON.stringify(game));
+
                     setDisplayRoundModal(true);
                     return;
                 } else {
