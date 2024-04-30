@@ -94,6 +94,10 @@ async def handle_client(websocket, path):
                 # Broadcast game state to all clients except the sender
                 await asyncio.gather(*(client.send(message) for client in clients if client != websocket))
 
+            elif message_type == 'gameOver':
+                # Broadcast game state to all clients except the sender
+                await asyncio.gather(*(client.send(message) for client in clients if client != websocket))
+
             elif message_type == 'startGame':
                 # Start the game and redirect clients to the game page
                 if websocket in clients:

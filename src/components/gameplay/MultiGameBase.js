@@ -94,6 +94,9 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
                         });
                         setBroadcastDisplayEndModal(true);
                         break;
+                    case 'gameOver':
+                        window.location.href("/dashboard");
+                        break;
                     default:
                         break;
                 }
@@ -314,6 +317,9 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
                 }
             }
             setDisplayEndModal(true);
+            webSocket.send(JSON.stringify({
+                type: 'gameOver'
+            }));
         }
     }
 
@@ -554,6 +560,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
             {broadcastDisplayEndModal && (
                 <GameEndWinModal
                     onClose={() => setBroadcastDisplayEndModal(false)}
+                    winner={modalData.winner}
                     players={modalData.players}
                     roundScores={modalData.roundScores}
                     cumulativeScores={modalData.cumulativeScores}
