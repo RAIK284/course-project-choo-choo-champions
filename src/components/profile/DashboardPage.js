@@ -37,9 +37,7 @@ function DashboardPage() {
                 averagePPR: userData.averagePointsPerRound,
                 totalGamesWon: userData.totalGameWins,
                 totalRoundsWon: userData.totalRoundWins,
-                totalPoints: userData.totalPoints,
-                winRanking: userData.winRanking,
-                pointsRanking: userData.pointRanking
+                totalPoints: userData.totalPoints
             });
         } catch (error) {
             console.error('Error fetching user stats:', error);
@@ -99,8 +97,6 @@ function DashboardPage() {
                                 <div className="stat-item">Total Games Won: {renderStatValue(stats.totalGamesWon)}</div>
                                 <div className="stat-item">Total Rounds Won: {renderStatValue(stats.totalRoundsWon)}</div>
                                 <div className="stat-item">Total Points: {renderStatValue(stats.totalPoints)}</div>
-                                <div className="stat-item">Win Ranking: #{renderStatValue(stats.winRanking)}</div>
-                                <div className="stat-item">Points Ranking: #{renderStatValue(stats.pointsRanking)}</div>
                             </div>
                         </div>
                     </div>
