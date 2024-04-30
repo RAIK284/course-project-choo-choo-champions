@@ -31,7 +31,7 @@ function HostGamePage() {
             console.log('Message received:', event.data);
             // Parse incoming message
             const message = JSON.parse(event.data);
-            if (message.type === 'playerJoined') {
+            if (message.type === 'playerJoined' && players.length < 4) {
                 // Add new player to the list
                 const newPlayer = message.player;
                 if (!players.some(player => player.username === newPlayer.username)) {
@@ -40,6 +40,8 @@ function HostGamePage() {
                 }
             } else if (message.type === 'sessionId') {
                 setSessionId(message.sessionId);
+            } else if (players.length >= 4) {
+                window.alert("This game is full.");
             }
         };
 
