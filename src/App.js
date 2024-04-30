@@ -19,8 +19,10 @@ import GameLogic from "./components/gameplay/GameLogic";
 import DraftGameBase from "./components/gameplay/z_DRAFT_GameBase"
 import HostGamePage from "./components/gameplay/host/HostGamePage";
 import MultiGameBase from "./components/gameplay/MultiGameBase";
+import { Initialize } from "./Firebase";
 
 function App() {
+  Initialize();
   return (
     <Router>
       <Routes>

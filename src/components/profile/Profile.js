@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject} from "firebase/storage";
 import NavBar from "../universal/NavBar";
 import Background from "../universal/Background";
 import { Link } from "react-router-dom";
@@ -10,9 +11,7 @@ import "./Profile.css";
 function ProfilePage() {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
-  const [profileImage, setProfileImage] = useState(
-    "https://upload.wikimedia.org/wikipedia/en/thumb/d/dc/Thomas_Tank_Engine_1.JPG/220px-Thomas_Tank_Engine_1.JPG"
-  );
+  const [profileImage, setProfileImage] = useState('');
   const [colorblind, setColorblind] = useState(() => {
     const storedColorblind = sessionStorage.getItem("colorblind");
     return storedColorblind ? JSON.parse(storedColorblind) : false;
@@ -27,8 +26,12 @@ function ProfilePage() {
       setUsername(storedUsername);
       setEmail(storedEmail);
       fetchUserDetails(token, storedUsername);
+      fetchProfileImage(storedUsername);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  
+  const storage = getStorage();
 
   const fetchUserDetails = async (token, username) => {
     try {
@@ -49,8 +52,23 @@ function ProfilePage() {
     }
   };
 
+  const fetchProfileImage = async (username) => {
+    try {
+      const pathReference = ref(storage, username);
+      const url = await getDownloadURL(pathReference);
+      setProfileImage(url);
+    } catch (error) {
+      console.error("Error fetching user image:", error);
+      setProfileImage("https://upload.wikimedia.org/wikipedia/en/thumb/d/dc/Thomas_Tank_Engine_1.JPG/220px-Thomas_Tank_Engine_1.JPG");
+    }
+  };
+
   const handleImageChange = (e) => {
     const file = e.target.files[0];
+    const storageRef = ref(storage, username);
+    uploadBytes(storageRef, file).then((snapshot) => {
+      console.log('Profile Image Changed');
+    });
     setProfileImage(URL.createObjectURL(file));
   };
 
@@ -84,6 +102,12 @@ function ProfilePage() {
           }
         );
         if (responseUsername.status === 200) {
+          if(profileImage !== "https://upload.wikimedia.org/wikipedia/en/thumb/d/dc/Thomas_Tank_Engine_1.JPG/220px-Thomas_Tank_Engine_1.JPG"){
+            const pathReference = ref(storage, currentUsername);
+            await deleteObject(pathReference).then(() => {
+              console.log("Profile Image Deleted Successfully!");
+            })
+          }
           alert("Username changed successfully!");
           sessionStorage.setItem("username", username);
         } else {
