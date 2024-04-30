@@ -225,7 +225,22 @@ export function CheckWinner(player_list){
       return player_list[i];
     }
   }
-  return false;
+  return "No One";
+}
+
+export function EnsurePlayability(player_list){
+  const game = JSON.parse(sessionStorage.getItem("game"));
+  const boneyard = game.Boneyard;
+  if(boneyard.length!==0){
+    return false;
+  }
+  for(let i=0;i<player_list.length;i++){
+    const paths = DeterminePlayablePaths(player_list[i],player_list)
+    if(!paths.includes("Pass")){
+      return false;
+    }
+  }
+  return true;
 }
 
 export function CalculateScores(player_list){
