@@ -458,7 +458,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
                                             onClick={SelectADominoToPlay}
                                             disabled={playDisabled}
                                         >
-                                            AddToPath
+                                            Place Domino
                                         </button>
                                     </div>
                                     <button
