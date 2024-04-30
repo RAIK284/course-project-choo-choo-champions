@@ -54,6 +54,12 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
         const initialGame = JSON.parse(sessionStorage.getItem("game") || "{}");
         return initialGame.TurnIndex || 0;
     });
+    const [modalData, setModalData] = useState({
+        winner: null,
+        players: [],
+        roundScores: [],
+        cumulativeScores: []
+    });
     useEffect(() => {
         function connectWebSocket() {
             const ws = new WebSocket('ws://localhost:8765');
@@ -69,10 +75,24 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
                         window.location.reload();
                         break;
                     case 'displayRoundModal':
-                        window.alert("The round has ended.");
+                        // Update modal data state when round ends
+                        setModalData({
+                            winner: data.winner,
+                            players: data.players,
+                            roundScores: data.roundScores,
+                            cumulativeScores: data.cumulativeScores
+                        });
+                        setBroadcastDisplayRoundModal(true);
                         break;
                     case 'displayEndModal':
-                        window.alert("The game has ended.");
+                        // Update modal data state when game ends
+                        setModalData({
+                            winner: data.winner,
+                            players: data.players,
+                            roundScores: data.roundScores,
+                            cumulativeScores: data.cumulativeScores
+                        });
+                        setBroadcastDisplayEndModal(true);
                         break;
                     default:
                         break;
@@ -112,6 +132,8 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
     const [isAvailable] = useState([false, false, false, false, false]);
     const [startingDomino, setStartingDomino] = useState([startingDominoList[currentRound]]);
     const [displayRoundModal, setDisplayRoundModal] = useState(false);
+    const [broadcastDisplayRoundModal, setBroadcastDisplayRoundModal] = useState(false);
+    const [broadcastDisplayEndModal, setBroadcastDisplayEndModal] = useState(false);
     const [displayEndModal, setDisplayEndModal] = useState(false);
     const [roundsLeft, setRoundsLeft] = useState(sessionStorage.getItem("game") !== null
         ? JSON.parse(sessionStorage.getItem("game")).GamesLeft
@@ -242,6 +264,13 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
                     game.Scores = scores;
                     sessionStorage.setItem("game", JSON.stringify(game));
                     setDisplayRoundModal(true);
+                    webSocket.send(JSON.stringify({
+                        type: 'displayRoundModal',
+                        winner: CheckWinner(players),
+                        players: players,
+                        roundScores: scores,
+                        cumulativeScores: game.Scores
+                    }));
                     return;
                 } else {
                     for (let i = 0; i < players.length; i++) {
@@ -268,6 +297,12 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
                     game.Scores = scores;
                     sessionStorage.setItem("game", JSON.stringify(game));
                     setDisplayEndModal(true);
+                    webSocket.send(JSON.stringify({
+                        type: 'displayEndModal',
+                        players: players,
+                        roundScores: scores,
+                        cumulativeScores: game.Scores
+                    }));
                     return;
                 } else {
                     for (let i = 0; i < players.length; i++) {
@@ -507,6 +542,23 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
                 players={players}
                 roundScores={CalculateScores(players)}
                 cumulativeScores={JSON.parse(sessionStorage.getItem("game")).Scores} />}
+            {broadcastDisplayRoundModal && (
+                <RoundEndModal
+                    onClose={() => setBroadcastDisplayRoundModal(false)}
+                    winner={modalData.winner}
+                    players={modalData.players}
+                    roundScores={modalData.roundScores}
+                    cumulativeScores={modalData.cumulativeScores}
+                />
+            )}
+            {broadcastDisplayEndModal && (
+                <GameEndWinModal
+                    onClose={() => setBroadcastDisplayEndModal(false)}
+                    players={modalData.players}
+                    roundScores={modalData.roundScores}
+                    cumulativeScores={modalData.cumulativeScores}
+                />
+            )}
             <Background />
         </>
     );
