@@ -11,6 +11,7 @@ import {
   PlayDomino,
   CheckWinner,
   CalculateScores,
+  EnsurePlayability,
 } from "./GameLogic";
 import { ConvertToReact } from "./dominoes/Domino";
 import "./GameBase.css";
@@ -51,7 +52,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
   // a bunch of booleans that we will use within
   const [currentPlayerIndex, setCurrentPlayerIndex] = useState(
     sessionStorage.getItem("game") !== null
-      ? JSON.parse(sessionStorage.getItem("game")).TurnIndex
+      ? parseInt(JSON.parse(sessionStorage.getItem("game")).TurnIndex)
       : 0
   );
   const [currentRound, setCurrentRound] = useState(
@@ -75,6 +76,8 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
       ? JSON.parse(sessionStorage.getItem("game")).GamesLeft
       : 3
   );
+
+  const [buttonName, setButtonName] = useState('Draw');
 
   // round setup function
   function SetUpRound() {
@@ -121,7 +124,10 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
   };
 
   const switchToNextPlayer = () => {
-    const nextIndex = (currentPlayerIndex + 1) % players.length;
+    let nextIndex = currentPlayerIndex+1;
+    if(nextIndex>=playerCount){
+      nextIndex = 0*1;
+    }
     setCurrentPlayerIndex(nextIndex);
     const game = JSON.parse(sessionStorage.getItem("game"));
     game.TurnIndex = nextIndex.toString();
@@ -129,7 +135,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
   };
 
   const getPlayerColor = (index) => {
-    switch (index) {
+    switch (parseInt(index)) {
       case 0:
         //green
         return "rgb(30,214,86)";
@@ -152,8 +158,18 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
 
   const DrawDomino = () => {
     sessionStorage.setItem("DominoDrawn", JSON.stringify(true));
-    DrawADomino(players[currentPlayerIndex], players);
-    window.location.reload();
+    const options = DeterminePlayablePaths(
+      players[currentPlayerIndex],
+      players
+    );
+    if(options.includes('Draw')){
+      DrawADomino(players[currentPlayerIndex], players);
+      window.location.reload();
+    } else{
+      const event = new Event("DominoDrawn");
+      window.dispatchEvent(event);
+      setDrawDisabled(true);
+    }
   };
 
   const SelectADominoToPlay = () => {
@@ -206,7 +222,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
   };
 
   const checkForWinner = () => {
-    if (CheckWinner(players) !== false && roundsLeft !== 0) {
+    if ((CheckWinner(players) !== "No One" || EnsurePlayability(players) !== false) && roundsLeft !== 0) {
       const game = JSON.parse(sessionStorage.getItem("game"));
       if (!game.Scored) {
         game.Scored = true;
@@ -231,7 +247,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
   };
 
   const checkForGameOver = () => {
-    if (CheckWinner(players) !== false && roundsLeft <= 0) {
+    if ((CheckWinner(players) !== "No One" || EnsurePlayability(players) !== false) && roundsLeft <= 0) {
       console.log("Got here");
       const game = JSON.parse(sessionStorage.getItem("game"));
       if (!game.Scored) {
@@ -312,8 +328,11 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
       players[currentPlayerIndex],
       players
     );
+    if(JSON.parse(sessionStorage.getItem("game")).Boneyard.length===0){
+      setButtonName('Pass');
+    }
     if (
-      options.includes("Draw") &&
+      (options.includes("Draw") || options.includes("Pass")) &&
       (sessionStorage.getItem("DominoDrawn") == null ||
         !JSON.parse(sessionStorage.getItem("DominoDrawn")))
     ) {
@@ -325,6 +344,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
           resolve();
         });
       });
+      sessionStorage.setItem("DominoDrawn", JSON.parse(true))
     } else if (!options.includes("Draw") && !options.includes("Pass")) {
       setPlayDisabled(false);
       await new Promise((resolve) => {
@@ -410,7 +430,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
                     onClick={DrawDomino}
                     disabled={drawDisabled}
                   >
-                    Draw
+                    {buttonName}
                   </button>
                   <button
                     className="button"
