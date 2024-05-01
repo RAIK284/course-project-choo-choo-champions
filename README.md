@@ -2,7 +2,7 @@
 
 In this code base, you will find the front-end implementation of our multiplayer game, Mexican Train Dominoes.
 
-There is also the REST API backend which is in place in the JavaScript files and can be found at [https://github.com/RAIK284/choo-choo-champions-API](https://github.com/RAIK284/choo-choo-champions-API).
+There is also the REST API backend which is in place in the JavaScript files and can be found at [https://github.com/max7piper/choo-choo-champions-api](https://github.com/max7piper/choo-choo-champions-api).
 
 ### Deployment:
 
