@@ -15,6 +15,7 @@ import {
     DeterminePlayablePaths,
     PlayDomino,
     CheckWinner,
+    EnsurePlayability,
     CalculateScores
 } from "./GameLogic";
 import { ConvertToReact } from "./dominoes/Domino";
@@ -95,7 +96,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
                         setBroadcastDisplayEndModal(true);
                         break;
                     case 'gameOver':
-                        window.location.href("/dashboard");
+                        window.location.href = "/dashboard";
                         break;
                     default:
                         break;
@@ -257,7 +258,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
     };
 
     const checkForWinner = () => {
-        if (CheckWinner(players) !== false && roundsLeft !== 0) {
+        if ((CheckWinner(players) !== "No One" || EnsurePlayability(players) !== false) && roundsLeft !== 0) {
             const game = JSON.parse(sessionStorage.getItem("game"));
             if (!game.Scored) {
                 game.Scored = true;
@@ -289,7 +290,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
     }
 
     const checkForGameOver = () => {
-        if (CheckWinner(players) !== false && roundsLeft <= 0) {
+        if ((CheckWinner(players) !== "No One" || EnsurePlayability(players) !== false) && roundsLeft !== 0) {
             console.log("Got here");
             const game = JSON.parse(sessionStorage.getItem("game"));
             if (!game.Scored) {
