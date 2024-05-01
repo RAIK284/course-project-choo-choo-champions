@@ -36,7 +36,12 @@ async def handle_client(websocket, path):
     try:
         # Handle messages from the client
         async for message in websocket:
-            data = json.loads(message)
+            try:
+                data = json.loads(message)
+            except json.JSONDecodeError:
+                await websocket.send(json.dumps({'error': 'Invalid JSON format'}))
+                continue
+
             message_type = data.get('type')
             username = data.get('username')
 
@@ -103,6 +108,12 @@ async def handle_client(websocket, path):
                 if websocket in clients:
                     for client in clients:
                         await client.send(json.dumps({'type': 'redirect', 'url': '/trains'}))
+
+    except websockets.exceptions.ConnectionClosed:
+        print("Connection with client closed")
+
+    except Exception as e:
+        print(f"An error occurred: {str(e)}")
 
     finally:
         # Remove client from the set of clients upon disconnection
