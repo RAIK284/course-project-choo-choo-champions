@@ -37,7 +37,6 @@
     justify-content: center;
     /* Center horizontally */
     margin-bottom: 20px;
-    /* Add margin to create space between the text box/button and the Join Random Game button */
 }
 
 .join-code-input {
@@ -64,23 +63,8 @@
     /* Set width */
 }
 
-.join-random-game {
-    padding: 18px 36px;
-    background-color: white;
-    color: black;
-    cursor: pointer;
-    margin-top: 100px;
-    text-align: center;
-    border: none;
-    border-radius: 12px;
-    font-size: 36px;
-    transition: background-color 0.2s ease-in-out;
-    width: 400px;
-    /* Set width */
-}
 
-.confirm-join-code:hover,
-.join-random-game:hover {
+.confirm-join-code:hover {
     background-color: white;
 }
 
