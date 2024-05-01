@@ -104,6 +104,12 @@ async def handle_client(websocket, path):
                     for client in clients:
                         await client.send(json.dumps({'type': 'redirect', 'url': '/trains'}))
 
+    except websockets.exceptions.ConnectionClosed:
+        print("Connection with client closed")
+
+    except Exception as e:
+        print(f"An error occurred: {str(e)}")
+
     finally:
         # Remove client from the set of clients upon disconnection
         clients.remove(websocket)
