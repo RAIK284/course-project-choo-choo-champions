@@ -88,17 +88,17 @@ async def handle_client(websocket, path):
                     await asyncio.gather(*(client.send(message) for client in clients if client != websocket))
 
             elif message_type == 'displayRoundModal':
-                # Broadcast game state to all clients except the sender
+                # Broadcast round modal to all clients except the sender
                 if websocket in clients:
                     await asyncio.gather(*(client.send(message) for client in clients if client != websocket))
 
             elif message_type == 'displayEndModal':
-                # Broadcast game state to all clients except the sender
+                # Broadcast ending modal to all clients except the sender
                 if websocket in clients:
                     await asyncio.gather(*(client.send(message) for client in clients if client != websocket))
 
             elif message_type == 'gameOver':
-                # Broadcast game state to all clients except the sender
+                # Broadcast game over to all clients except the sender
                 if websocket in clients:
                     await asyncio.gather(*(client.send(message) for client in clients if client != websocket))
 
