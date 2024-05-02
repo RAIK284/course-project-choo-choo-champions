@@ -6,6 +6,7 @@ import Background from "../universal/Background";
 // import purpleTrain from "./PurpleTrain";
 // import orangeTrain from "./OrangeTrain";
 import TrainStation from "./TrainStation";
+import axios from 'axios';
 
 import {
     GenerateDominoesForPlayers,
@@ -176,9 +177,10 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
     const finishTurn = () => {
         const game = JSON.parse(sessionStorage.getItem("game"));
         if (game["Player Dominoes"][players[currentPlayerIndex]].length === 0) {
-            checkForWinner();
-            if (currentRound === 0) {
+            if (JSON.parse(sessionStorage.getItem("game")).CurrentRound === -1) {
                 checkForGameOver();
+            } else {
+                checkForWinner();
             }
         } else {
             const nextIndex = (currentPlayerIndex + 1) % players.length;
@@ -259,6 +261,44 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
         }
     };
 
+    const updateStats = async (players, scores, wonGame, currentPlayerIndex) => {
+        console.log("Updating stats");
+        const token = sessionStorage.getItem("token");
+        if (!token) {
+            console.error("No token available in sessionStorage.");
+            return;
+        }
+
+        const username = players[currentPlayerIndex]; // Make sure this is correct
+
+        if (!username) {
+            console.error("Invalid username for current player.");
+            return;
+        }
+
+        const postData = {
+            username: 'TestArjun41124', // Replace 'testUser' with a valid username for testing
+            score: scores[currentPlayerIndex],
+            wonRound: !wonGame,
+            wonGame: wonGame,
+            endGame: wonGame
+        };
+
+        console.log(postData);
+
+        try {
+            await axios.post('https://choochoochampionsapi.azurewebsites.net/user/updateStats', postData, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            console.log("Stats updated successfully for:", username);
+        } catch (error) {
+            console.error("Failed to update stats for:", username, "Error:", error.response ? error.response.data : error.message);
+        }
+    };
+
     const checkForWinner = () => {
         if ((CheckWinner(players) !== "No One" || EnsurePlayability(players) !== false) && roundsLeft !== 0) {
             const game = JSON.parse(sessionStorage.getItem("game"));
@@ -277,6 +317,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
                         roundScores: scores,
                         cumulativeScores: game.Scores
                     }));
+                    updateStats(players, scores, false, currentPlayerIndex);
                     return;
                 } else {
                     for (let i = 0; i < players.length; i++) {
@@ -309,6 +350,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
                         roundScores: scores,
                         cumulativeScores: game.Scores
                     }));
+                    updateStats(players, scores, true, currentPlayerIndex);
                     return;
                 } else {
                     for (let i = 0; i < players.length; i++) {
@@ -320,7 +362,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
                 }
             }
             setDisplayEndModal(true);
-            if (currentRound === 0) {
+            if (JSON.parse(sessionStorage.getItem("game")).CurrentRound === -1) {
                 webSocket.send(JSON.stringify({
                     type: 'gameOver'
                 }));
@@ -425,10 +467,6 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
         await sessionStorage.setItem("DominoDrawn", false);
         setFinishDisabled(true);
         setInTurn(false);
-
-        // this will trigger a reset
-        checkForWinner();
-        checkForGameOver();
     }
 
     // finishes the round
