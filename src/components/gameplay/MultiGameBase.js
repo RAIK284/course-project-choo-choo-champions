@@ -177,7 +177,9 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
         const game = JSON.parse(sessionStorage.getItem("game"));
         if (game["Player Dominoes"][players[currentPlayerIndex]].length === 0) {
             checkForWinner();
-            checkForGameOver();
+            if (currentRound === 0) {
+                checkForGameOver();
+            }
         } else {
             const nextIndex = (currentPlayerIndex + 1) % players.length;
             const updatedGameState = {
@@ -318,9 +320,11 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
                 }
             }
             setDisplayEndModal(true);
-            webSocket.send(JSON.stringify({
-                type: 'gameOver'
-            }));
+            if (currentRound === 0) {
+                webSocket.send(JSON.stringify({
+                    type: 'gameOver'
+                }));
+            }
         }
     }
 
@@ -546,6 +550,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
                 cumulativeScores={JSON.parse(sessionStorage.getItem("game")).Scores} />}
             {displayEndModal && <GameEndWinModal
                 onClose={closeEndModal}
+                winner={CheckWinner(players)}
                 players={players}
                 roundScores={CalculateScores(players)}
                 cumulativeScores={JSON.parse(sessionStorage.getItem("game")).Scores} />}
