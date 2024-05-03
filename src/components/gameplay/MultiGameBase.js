@@ -269,35 +269,36 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
             return;
         }
 
-        const username = players[currentPlayerIndex]; // Make sure this is correct
-
+        const username = players[currentPlayerIndex];
         if (!username) {
             console.error("Invalid username for current player.");
             return;
         }
 
-        const postData = {
-            username: 'TestArjun41124', // Replace 'testUser' with a valid username for testing
+        // Construct query string parameters
+        const params = new URLSearchParams({
+            username: username,
             score: scores[currentPlayerIndex],
             wonRound: !wonGame,
             wonGame: wonGame,
             endGame: wonGame
-        };
+        }).toString();
 
-        console.log(postData);
+        const url = `https://choochoochampionsapi.azurewebsites.net/user/updateStats?${params}`;
 
         try {
-            await axios.post('https://choochoochampionsapi.azurewebsites.net/user/updateStats', postData, {
+            await axios.post(url, {}, {
                 headers: {
-                    'Authorization': `Bearer ${token}`
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
                 }
             });
-
             console.log("Stats updated successfully for:", username);
         } catch (error) {
             console.error("Failed to update stats for:", username, "Error:", error.response ? error.response.data : error.message);
         }
     };
+
 
     const checkForWinner = () => {
         if ((CheckWinner(players) !== "No One" || EnsurePlayability(players) !== false) && roundsLeft !== 0) {
@@ -369,6 +370,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
             }
         }
     }
+
 
     const closeRoundModal = () => {
         setDisplayRoundModal(false);
