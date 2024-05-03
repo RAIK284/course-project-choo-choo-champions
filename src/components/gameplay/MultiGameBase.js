@@ -1,10 +1,5 @@
 import NavBar from "../universal/NavBar";
 import Background from "../universal/Background";
-// import greenTrain from "./GreenTrain";
-// import { redTrain } from "./RedTrain";
-// import blueTrain from "./BlueTrain";
-// import purpleTrain from "./PurpleTrain";
-// import orangeTrain from "./OrangeTrain";
 import TrainStation from "./TrainStation";
 import axios from 'axios';
 
@@ -30,13 +25,7 @@ const startingDominoList = [[0, 0, 0], [13, 1, 1], [25, 2, 2], [36, 3, 3], [46, 
 
 
 function GameChoice({ src, alt, onSelect, isSelected }) {
-    // hard coded setup
-    // const players = ["max", "arjun", "carly"/*, "alison"*/];
-    // sessionStorage.setItem(
-    //     "Players",
-    //     JSON.stringify(["Mexican Train", "max", "arjun", "carly"/*, "alison"*/])
-    // );
-
+    // Assign players to the game.
     const searchParams = new URLSearchParams(window.location.search);
     const playersParam = searchParams.get('players');
     const players = playersParam ? JSON.parse(playersParam) : [];
@@ -62,6 +51,8 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
         roundScores: [],
         cumulativeScores: []
     });
+
+    // Connect to the WebSocket server.
     useEffect(() => {
         function connectWebSocket() {
             const ws = new WebSocket('ws://localhost:8765');
@@ -116,13 +107,6 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
         //eslint-disable-next-line
     }, []);
 
-
-    // // a bunch of booleans that we will use within
-    // const [currentPlayerIndex, setCurrentPlayerIndex] = useState(
-    //     sessionStorage.getItem("game") !== null
-    //         ? JSON.parse(sessionStorage.getItem("game")).TurnIndex
-    //         : 0
-    // );
     const [currentRound, setCurrentRound] = useState(
         sessionStorage.getItem("game") !== null
             ? JSON.parse(sessionStorage.getItem("game")).CurrentRound
@@ -144,7 +128,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
         ? JSON.parse(sessionStorage.getItem("game")).GamesLeft
         : 3);
 
-    // round setup function
+    // Round setup function.
     function SetUpRound() {
         setStartingDomino([startingDominoList[currentRound]]);
         GenerateDominoesForPlayers(players, startingDomino);
@@ -152,7 +136,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
         const scores = sessionStorage.getItem("game") !== null
             ? JSON.parse(sessionStorage.getItem("game")).Scores
             : null;
-        // create the super crazy game
+        // Creates the game.
         setRoundsLeft(roundsLeft - 1)
         const game = {
             "Player Dominoes": JSON.parse(sessionStorage.getItem("Player Dominoes")),
@@ -173,7 +157,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
         SetUpRound();
     }
 
-
+    // Logic to finish turn and send data over sockets.
     const finishTurn = () => {
         const game = JSON.parse(sessionStorage.getItem("game"));
         if (game["Player Dominoes"][players[currentPlayerIndex]].length === 0) {
@@ -211,14 +195,6 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
         }
     }, []);
 
-    // const switchToNextPlayer = () => {
-    //     const nextIndex = (currentPlayerIndex + 1) % players.length;
-    //     setCurrentPlayerIndex(nextIndex);
-    //     const game = JSON.parse(sessionStorage.getItem("game"));
-    //     game.TurnIndex = nextIndex.toString();
-    //     sessionStorage.setItem("game", JSON.stringify(game));
-    // };
-
     const DrawDomino = () => {
         sessionStorage.setItem("DominoDrawn", JSON.stringify(true));
         DrawADomino(players[currentPlayerIndex], players);
@@ -247,7 +223,6 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
     };
 
     const handleDominoSelection = (index) => {
-
         if (isAvailable[index]) {
             if (index === 0) {
                 PlayDomino(players[currentPlayerIndex], players, selectedDomino, 'Mexican Train');
@@ -257,7 +232,6 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
             const event = new Event("DominoOnPath");
             sessionStorage.setItem("SelectedDomino", null);
             window.dispatchEvent(event);
-            // finishTurn();
         }
     };
 
@@ -381,7 +355,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
 
     const closeEndModal = () => {
         setDisplayEndModal(false);
-        // route them to home screen idk
+        // Routes players to the dashboard.
         window.location.href = `/dashboard`;
     };
 
@@ -413,17 +387,14 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
                     );
                 }
             } else {
-                // i want this to be a placeholder but that mess up the spacing for now
-                // so we will keep this ftm
                 lastDominos.push(ConvertToReact([[0, 13, 14]]));
             }
         }
         return lastDominos;
     }
 
-    // turn and finish round functions
+    // Turn and finish round functions.
     async function Turn() {
-        // timer goes here
         const options = DeterminePlayablePaths(players[currentPlayerIndex], players);
         if (
             options.includes("Draw") &&
@@ -473,14 +444,10 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
         setInTurn(false);
     }
 
-    // finishes the round
+    // Finishes the round and reloads the page.
     function FinishRound() {
-        // this would have more in the future
         const newRound = currentRound - 1;
         setCurrentRound(newRound);
-        // console.log(currentRound);
-        // sessionStorage.setItem("currentRound", newRound);
-        // log scores here in the future
         SetUpRound();
         window.location.reload();
     }
@@ -508,10 +475,9 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
     };
 
 
-    // load the round objects
+    // Load the round objects.
     const playerDominoes = JSON.parse(sessionStorage.getItem("game"))["Player Dominoes"];
     const playerPaths = JSON.parse(sessionStorage.getItem("game"))["Player Paths"];
-    //const dominos = ConvertToReact(playerDominoes[players[currentPlayerIndex]]);
     const sDomino = ConvertToReact(playerPaths["Starting Domino"]);
     const lastDominos = loadDominos();
 
