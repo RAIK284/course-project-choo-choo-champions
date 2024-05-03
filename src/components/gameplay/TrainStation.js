@@ -4,6 +4,7 @@ import greenTrain from "../trains/GreenTrain";
 import { redTrain } from "../trains/RedTrain";
 import blueTrain from "../trains/BlueTrain";
 import purpleTrain from "../trains/PurpleTrain";
+import whiteTrain from "../trains/WhiteTrain";
 
 const TrainStation = ({
   sDomino,
@@ -19,7 +20,7 @@ const TrainStation = ({
       >
         {lastDominos[0]}
       </div>
-      <div className="mexicanTrain">{orangeTrain()}</div>
+      <div className="mexicanTrain">{whiteTrain()}</div>
       <div className="rotateDominoTop">
         <div className="train-domino-pairing-top">
           <div
