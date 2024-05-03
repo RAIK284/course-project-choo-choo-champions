@@ -261,7 +261,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
         }
     };
 
-    const updateStats = async (players, scores, wonRound, wonGame, currentPlayerIndex) => {
+    const updateStats = async (players, scores, wonGame, winner) => {
         console.log("Updating stats");
         const token = sessionStorage.getItem("token");
         if (!token) {
@@ -269,33 +269,35 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
             return;
         }
 
-        const username = players[currentPlayerIndex];
-        if (!username) {
-            console.error("Invalid username for current player.");
-            return;
-        }
+        for (let i = 0; i < players.length; i++) {
+            const username = players[i];
+            if (!username) {
+                console.error("Invalid username for player at index:", i);
+                continue; // Skip to the next iteration for invalid usernames
+            }
 
-        // Construct query string parameters
-        const params = new URLSearchParams({
-            username: username,
-            score: scores[currentPlayerIndex],
-            wonRound: wonRound,
-            wonGame: wonGame,
-            endGame: wonGame
-        }).toString();
+            // Construct query string parameters
+            const params = new URLSearchParams({
+                username: username,
+                score: scores[i],
+                wonRound: username === winner,
+                wonGame: wonGame,
+                endGame: wonGame
+            }).toString();
 
-        const url = `https://choochoochampionsapi.azurewebsites.net/user/updateStats?${params}`;
+            const url = `https://choochoochampionsapi.azurewebsites.net/user/updateStats?${params}`;
 
-        try {
-            await axios.post(url, {}, {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                }
-            });
-            console.log("Stats updated successfully for:", username);
-        } catch (error) {
-            console.error("Failed to update stats for:", username, "Error:", error.response ? error.response.data : error.message);
+            try {
+                await axios.post(url, {}, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                console.log("Stats updated successfully for:", username);
+            } catch (error) {
+                console.error("Failed to update stats for:", username, "Error:", error.response ? error.response.data : error.message);
+            }
         }
     };
 
@@ -318,7 +320,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
                         roundScores: scores,
                         cumulativeScores: game.Scores
                     }));
-                    updateStats(players, scores, true, false, currentPlayerIndex);
+                    updateStats(players, scores, false, CheckWinner(players));
                     return;
                 } else {
                     for (let i = 0; i < players.length; i++) {
@@ -351,7 +353,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
                         roundScores: scores,
                         cumulativeScores: game.Scores
                     }));
-                    updateStats(players, scores, true, true, currentPlayerIndex);
+                    updateStats(players, scores, true, CheckWinner(players));
                     return;
                 } else {
                     for (let i = 0; i < players.length; i++) {

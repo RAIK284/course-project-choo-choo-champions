@@ -21,12 +21,12 @@ function DashboardPage() {
     const storedUsername = sessionStorage.getItem("username");
     const storedEmail = sessionStorage.getItem("email");
     if (!token || !storedUsername || !storedEmail) {
-      window.location.href = "/";
+        window.location.href = "/";
     }
 
     useEffect(() => {
         fetchUserStats();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const fetchUserStats = async () => {
@@ -37,8 +37,8 @@ function DashboardPage() {
                 }
             });
             const userData = response.data;
-            const ppg = userData.totalGames !== 0 ? userData.totalPoints / userData.totalGames : 0;
-            const ppr = userData.totalRounds !==0 ? userData.totalPoints / userData.totalRounds : 0;
+            const ppg = userData.totalGames !== 0 ? (userData.totalPoints / userData.totalGames).toFixed(2) : 0;
+            const ppr = userData.totalRounds !== 0 ? (userData.totalPoints / userData.totalRounds).toFixed(2) : 0;
             setStats({
                 averagePPG: ppg,
                 averagePPR: ppr,
