@@ -261,7 +261,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
         }
     };
 
-    const updateStats = async (players, scores, wonGame, currentPlayerIndex) => {
+    const updateStats = async (players, scores, wonRound, wonGame, currentPlayerIndex) => {
         console.log("Updating stats");
         const token = sessionStorage.getItem("token");
         if (!token) {
@@ -279,7 +279,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
         const params = new URLSearchParams({
             username: username,
             score: scores[currentPlayerIndex],
-            wonRound: !wonGame,
+            wonRound: wonRound,
             wonGame: wonGame,
             endGame: wonGame
         }).toString();
@@ -318,7 +318,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
                         roundScores: scores,
                         cumulativeScores: game.Scores
                     }));
-                    updateStats(players, scores, false, currentPlayerIndex);
+                    updateStats(players, scores, true, false, currentPlayerIndex);
                     return;
                 } else {
                     for (let i = 0; i < players.length; i++) {
@@ -351,7 +351,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
                         roundScores: scores,
                         cumulativeScores: game.Scores
                     }));
-                    updateStats(players, scores, true, currentPlayerIndex);
+                    updateStats(players, scores, true, true, currentPlayerIndex);
                     return;
                 } else {
                     for (let i = 0; i < players.length; i++) {
