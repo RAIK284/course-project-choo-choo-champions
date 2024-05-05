@@ -18,6 +18,7 @@ function EmailVerificationPage() {
         setEmail(emailParam);
     }, []);
 
+    // Stretch Goal: Authenticating email.
     const handleSendVerificationCode = async () => {
         try {
             await axios.post('https://choochoochampionsapi.azurewebsites.net/user/sendEmailVerification', null, {

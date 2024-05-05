@@ -47,7 +47,9 @@ function TrainSelector() {
         setConfirmedTrains(prev => ({ ...prev, [username]: train }));
         setDisabledTrains(prev => [...prev, train]);
       } else if (message.type === 'redirect' && message.url === '/multiplayer') {
-        window.location.href = message.url;
+        const players = message.players;
+        // Redirect to multiplayer page with list of players
+        window.location.href = `/multiplayer?players=${JSON.stringify(players)}`
       }
     };
 

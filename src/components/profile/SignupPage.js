@@ -10,6 +10,7 @@ function SignupPage() {
   const [confirmPassword, setConfirmPassword] = useState('');
 
   const handleSignup = async () => {
+    // Validation for signup.
     if (!email || !username || !password || !confirmPassword) {
       alert('Please fill out all fields');
       return;
@@ -25,6 +26,7 @@ function SignupPage() {
       return;
     }
 
+    // Attempt to sign up using the entered information.
     try {
       const response = await axios.post('https://choochoochampionsapi.azurewebsites.net/user/register', null, {
         params: {

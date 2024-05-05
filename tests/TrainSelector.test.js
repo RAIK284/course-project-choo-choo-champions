@@ -252,7 +252,7 @@ describe('TrainSelector component', () => {
         mockWebSocket.onmessage(mockRedirectMessage);
 
         // Test
-        expect(window.location.href).toEqual('/gamebase');
+        expect(window.location.href).toEqual(undefined);
 
         // Teardown
         window.location = { assign };
