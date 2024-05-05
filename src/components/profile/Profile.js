@@ -12,6 +12,7 @@ function ProfilePage() {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [profileImage, setProfileImage] = useState('');
+  // Stretch Goal: Accessibility for Colorblind Individuals
   const [colorblind, setColorblind] = useState(() => {
     const storedColorblind = sessionStorage.getItem("colorblind");
     return storedColorblind ? JSON.parse(storedColorblind) : false;
