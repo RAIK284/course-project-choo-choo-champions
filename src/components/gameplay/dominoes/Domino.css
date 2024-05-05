@@ -13,7 +13,6 @@
 }
 
 .domino:hover {
-    /* background-color: #e4e5ff; */
     box-shadow: 0 0 10px rgb(88, 93, 236);
     border: 1.5px solid #000;
     border-radius: 6px;
@@ -22,7 +21,6 @@
 }
 
 .domino:active {
-    /* background-color: #B9BBFE; */
     box-shadow: 0 0 10px rgb(88, 93, 236);
 
 }
@@ -33,7 +31,6 @@
     border: 2px solid #000;
     border-radius: 6px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    /* transform: scale(.85); */
     transition: all 0.3s ease;
     width: 30px;
     height: 75px;

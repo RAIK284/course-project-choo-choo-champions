@@ -15,6 +15,7 @@ function LoginForm() {
       return;
     }
 
+    // Handles login attempts.
     try {
       const response = await axios.post(
         "https://choochoochampionsapi.azurewebsites.net/user/login",

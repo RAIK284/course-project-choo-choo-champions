@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject} from "firebase/storage";
+import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
 import NavBar from "../universal/NavBar";
 import Background from "../universal/Background";
 import { Link } from "react-router-dom";
@@ -28,9 +28,9 @@ function ProfilePage() {
       fetchUserDetails(token, storedUsername);
       fetchProfileImage(storedUsername);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  
+
   const storage = getStorage();
 
   const fetchUserDetails = async (token, username) => {
@@ -90,6 +90,7 @@ function ProfilePage() {
     e.target.querySelector('button[type="submit"]').disabled = true;
 
     try {
+      // Handles changing usernames.
       if (username !== currentUsername) {
         const responseUsername = await axios.post(
           "https://choochoochampionsapi.azurewebsites.net/user/updateUsername",
@@ -102,7 +103,7 @@ function ProfilePage() {
           }
         );
         if (responseUsername.status === 200) {
-          if(profileImage !== "https://upload.wikimedia.org/wikipedia/en/thumb/d/dc/Thomas_Tank_Engine_1.JPG/220px-Thomas_Tank_Engine_1.JPG"){
+          if (profileImage !== "https://upload.wikimedia.org/wikipedia/en/thumb/d/dc/Thomas_Tank_Engine_1.JPG/220px-Thomas_Tank_Engine_1.JPG") {
             const pathReference = ref(storage, currentUsername);
             await deleteObject(pathReference).then(() => {
               console.log("Profile Image Deleted Successfully!");
@@ -116,6 +117,7 @@ function ProfilePage() {
         }
       }
 
+      // Handles changing emails.
       if (email !== currentEmail) {
         const responseEmail = await axios.post(
           "https://choochoochampionsapi.azurewebsites.net/user/updateEmail",
