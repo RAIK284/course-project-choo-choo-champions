@@ -1,11 +1,7 @@
 import NavBar from "../universal/NavBar";
 import Background from "../universal/Background";
-// import greenTrain from "./GreenTrain";
-// import { redTrain } from "./RedTrain";
-// import blueTrain from "./BlueTrain";
-// import purpleTrain from "./PurpleTrain";
-// import orangeTrain from "./OrangeTrain";
 import TrainStation from "./TrainStation";
+import axios from 'axios';
 
 import {
     GenerateDominoesForPlayers,
@@ -15,30 +11,102 @@ import {
     DeterminePlayablePaths,
     PlayDomino,
     CheckWinner,
+    EnsurePlayability,
     CalculateScores
 } from "./GameLogic";
 import { ConvertToReact } from "./dominoes/Domino";
 import "./GameBase.css";
-import { useEffect, useState } from "react";
+// eslint-disable-next-line
+import { useEffect, useState, useRef } from "react";
 import RoundEndModal from "./modals/RoundEndModal";
 import GameEndWinModal from "./modals/GameEndWinModal";
 
 const startingDominoList = [[0, 0, 0], [13, 1, 1], [25, 2, 2], [36, 3, 3], [46, 4, 4], [55, 5, 5], [63, 6, 6], [70, 7, 7], [76, 8, 8], [81, 9, 9], [85, 10, 10], [88, 11, 11], [90, 12, 12]];
 
+
 function GameChoice({ src, alt, onSelect, isSelected }) {
-    // hard coded setup
-    const players = ["max", "arjun", "carly"/*, "alison"*/];
+    // Assign players to the game.
+    const searchParams = new URLSearchParams(window.location.search);
+    const playersParam = searchParams.get('players');
+    const players = playersParam ? JSON.parse(playersParam) : [];
+
     sessionStorage.setItem(
         "Players",
-        JSON.stringify(["Mexican Train", "max", "arjun", "carly"/*, "alison"*/])
+        JSON.stringify(["Mexican Train", ...players])
     );
 
-    // a bunch of booleans that we will use within
-    const [currentPlayerIndex, setCurrentPlayerIndex] = useState(
-        sessionStorage.getItem("game") !== null
-            ? JSON.parse(sessionStorage.getItem("game")).TurnIndex
-            : 0
-    );
+    // eslint-disable-next-line
+    const [webSocket, setWebSocket] = useState(null);
+    // eslint-disable-next-line
+    const [gameState, setGameState] = useState(() => JSON.parse(sessionStorage.getItem("game")) || {});
+    // eslint-disable-next-line
+    const storedGame = JSON.parse(sessionStorage.getItem("game") || "{}");
+    const [currentPlayerIndex, setCurrentPlayerIndex] = useState(() => {
+        const initialGame = JSON.parse(sessionStorage.getItem("game") || "{}");
+        return initialGame.TurnIndex || 0;
+    });
+    const [modalData, setModalData] = useState({
+        winner: null,
+        players: [],
+        roundScores: [],
+        cumulativeScores: []
+    });
+
+    // Connect to the WebSocket server.
+    useEffect(() => {
+        function connectWebSocket() {
+            // const ws = new WebSocket('ws://localhost:8765');
+            const ws = new WebSocket('ws://34.125.63.8:3389');
+            ws.onopen = () => console.log("Connected to WebSocket server");
+            ws.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+                switch (data.type) {
+                    case 'gameState':
+                        sessionStorage.setItem("game", JSON.stringify(data.gameState));
+                        setGameState(data.gameState);
+                        setCurrentPlayerIndex(data.gameState.TurnIndex);
+                        window.location.reload();
+                        break;
+                    case 'displayRoundModal':
+                        // Update modal data state when round ends
+                        setModalData({
+                            winner: data.winner,
+                            players: data.players,
+                            roundScores: data.roundScores,
+                            cumulativeScores: data.cumulativeScores
+                        });
+                        setBroadcastDisplayRoundModal(true);
+                        break;
+                    case 'displayEndModal':
+                        // Update modal data state when game ends
+                        setModalData({
+                            winner: data.winner,
+                            players: data.players,
+                            roundScores: data.roundScores,
+                            cumulativeScores: data.cumulativeScores
+                        });
+                        setBroadcastDisplayEndModal(true);
+                        break;
+                    case 'gameOver':
+                        window.location.href = "/dashboard";
+                        break;
+                    default:
+                        break;
+                }
+            };
+            ws.onclose = () => {
+                console.log("WebSocket closed unexpectedly, attempting to reconnect...");
+                setTimeout(connectWebSocket, 2000);
+            };
+            setWebSocket(ws);
+            return () => {
+                ws.close();
+            };
+        }
+        connectWebSocket();
+        //eslint-disable-next-line
+    }, []);
+
     const [currentRound, setCurrentRound] = useState(
         sessionStorage.getItem("game") !== null
             ? JSON.parse(sessionStorage.getItem("game")).CurrentRound
@@ -53,12 +121,14 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
     const [isAvailable] = useState([false, false, false, false, false]);
     const [startingDomino, setStartingDomino] = useState([startingDominoList[currentRound]]);
     const [displayRoundModal, setDisplayRoundModal] = useState(false);
+    const [broadcastDisplayRoundModal, setBroadcastDisplayRoundModal] = useState(false);
+    const [broadcastDisplayEndModal, setBroadcastDisplayEndModal] = useState(false);
     const [displayEndModal, setDisplayEndModal] = useState(false);
     const [roundsLeft, setRoundsLeft] = useState(sessionStorage.getItem("game") !== null
         ? JSON.parse(sessionStorage.getItem("game")).GamesLeft
         : 3);
 
-    // round setup function
+    // Round setup function.
     function SetUpRound() {
         setStartingDomino([startingDominoList[currentRound]]);
         GenerateDominoesForPlayers(players, startingDomino);
@@ -66,7 +136,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
         const scores = sessionStorage.getItem("game") !== null
             ? JSON.parse(sessionStorage.getItem("game")).Scores
             : null;
-        // create the super crazy game
+        // Creates the game.
         setRoundsLeft(roundsLeft - 1)
         const game = {
             "Player Dominoes": JSON.parse(sessionStorage.getItem("Player Dominoes")),
@@ -87,28 +157,43 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
         SetUpRound();
     }
 
+    // Logic to finish turn and send data over sockets.
+    const finishTurn = () => {
+        const game = JSON.parse(sessionStorage.getItem("game"));
+        if (game["Player Dominoes"][players[currentPlayerIndex]].length === 0) {
+            if (JSON.parse(sessionStorage.getItem("game")).CurrentRound === -1) {
+                checkForGameOver();
+            } else {
+                checkForWinner();
+            }
+        } else {
+            const nextIndex = (currentPlayerIndex + 1) % players.length;
+            const updatedGameState = {
+                ...game,
+                TurnIndex: nextIndex,
+            };
+            // Update the sessionStorage immediately
+            sessionStorage.setItem("game", JSON.stringify(updatedGameState));
+            setCurrentPlayerIndex(nextIndex);  // Update the state to trigger re-render
+            // Broadcast the new state to all clients
+            webSocket.send(JSON.stringify({
+                type: 'gameState',
+                gameState: updatedGameState
+            }));
+            // This can be used to trigger any additional actions needed at turn end
+            const event = new Event("TurnEnded");
+            window.dispatchEvent(event);
+        }
+    };
 
-    // now the react functions
     useEffect(() => {
         const storedGame = sessionStorage.getItem("game");
         if (storedGame !== null) {
-            setCurrentPlayerIndex(JSON.parse(storedGame).TurnIndex);
+            const game = JSON.parse(storedGame);
+            setCurrentPlayerIndex(game.TurnIndex);
+            setGameState(game);
         }
     }, []);
-
-    const finishTurn = () => {
-        switchToNextPlayer();
-        const event = new Event("TurnEnded");
-        window.dispatchEvent(event);
-    };
-
-    const switchToNextPlayer = () => {
-        const nextIndex = (currentPlayerIndex + 1) % players.length;
-        setCurrentPlayerIndex(nextIndex);
-        const game = JSON.parse(sessionStorage.getItem("game"));
-        game.TurnIndex = nextIndex.toString();
-        sessionStorage.setItem("game", JSON.stringify(game));
-    };
 
     const DrawDomino = () => {
         sessionStorage.setItem("DominoDrawn", JSON.stringify(true));
@@ -138,7 +223,6 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
     };
 
     const handleDominoSelection = (index) => {
-
         if (isAvailable[index]) {
             if (index === 0) {
                 PlayDomino(players[currentPlayerIndex], players, selectedDomino, 'Mexican Train');
@@ -148,12 +232,52 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
             const event = new Event("DominoOnPath");
             sessionStorage.setItem("SelectedDomino", null);
             window.dispatchEvent(event);
-            // finishTurn();
         }
     };
 
+    const updateStats = async (players, scores, wonGame, winner) => {
+        console.log("Updating stats");
+        const token = sessionStorage.getItem("token");
+        if (!token) {
+            console.error("No token available in sessionStorage.");
+            return;
+        }
+
+        for (let i = 0; i < players.length; i++) {
+            const username = players[i];
+            if (!username) {
+                console.error("Invalid username for player at index:", i);
+                continue; // Skip to the next iteration for invalid usernames
+            }
+
+            // Construct query string parameters
+            const params = new URLSearchParams({
+                username: username,
+                score: scores[i],
+                wonRound: username === winner,
+                wonGame: wonGame,
+                endGame: wonGame
+            }).toString();
+
+            const url = `https://choochoochampionsapi.azurewebsites.net/user/updateStats?${params}`;
+
+            try {
+                await axios.post(url, {}, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                console.log("Stats updated successfully for:", username);
+            } catch (error) {
+                console.error("Failed to update stats for:", username, "Error:", error.response ? error.response.data : error.message);
+            }
+        }
+    };
+
+
     const checkForWinner = () => {
-        if (CheckWinner(players) !== false && roundsLeft !== 0) {
+        if ((CheckWinner(players) !== "No One" || EnsurePlayability(players) !== false) && roundsLeft !== 0) {
             const game = JSON.parse(sessionStorage.getItem("game"));
             if (!game.Scored) {
                 game.Scored = true;
@@ -163,6 +287,14 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
                     game.Scores = scores;
                     sessionStorage.setItem("game", JSON.stringify(game));
                     setDisplayRoundModal(true);
+                    webSocket.send(JSON.stringify({
+                        type: 'displayRoundModal',
+                        winner: CheckWinner(players),
+                        players: players,
+                        roundScores: scores,
+                        cumulativeScores: game.Scores
+                    }));
+                    updateStats(players, scores, false, CheckWinner(players));
                     return;
                 } else {
                     for (let i = 0; i < players.length; i++) {
@@ -178,7 +310,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
     }
 
     const checkForGameOver = () => {
-        if (CheckWinner(players) !== false && roundsLeft <= 0) {
+        if ((CheckWinner(players) !== "No One" || EnsurePlayability(players) !== false) && roundsLeft !== 0) {
             console.log("Got here");
             const game = JSON.parse(sessionStorage.getItem("game"));
             if (!game.Scored) {
@@ -189,6 +321,13 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
                     game.Scores = scores;
                     sessionStorage.setItem("game", JSON.stringify(game));
                     setDisplayEndModal(true);
+                    webSocket.send(JSON.stringify({
+                        type: 'displayEndModal',
+                        players: players,
+                        roundScores: scores,
+                        cumulativeScores: game.Scores
+                    }));
+                    updateStats(players, scores, true, CheckWinner(players));
                     return;
                 } else {
                     for (let i = 0; i < players.length; i++) {
@@ -200,8 +339,14 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
                 }
             }
             setDisplayEndModal(true);
+            if (JSON.parse(sessionStorage.getItem("game")).CurrentRound === -1) {
+                webSocket.send(JSON.stringify({
+                    type: 'gameOver'
+                }));
+            }
         }
     }
+
 
     const closeRoundModal = () => {
         setDisplayRoundModal(false);
@@ -210,7 +355,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
 
     const closeEndModal = () => {
         setDisplayEndModal(false);
-        // route them to home screen idk
+        // Routes players to the dashboard.
         window.location.href = `/dashboard`;
     };
 
@@ -242,17 +387,14 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
                     );
                 }
             } else {
-                // i want this to be a placeholder but that mess up the spacing for now
-                // so we will keep this ftm
                 lastDominos.push(ConvertToReact([[0, 13, 14]]));
             }
         }
         return lastDominos;
     }
 
-    // turn and finish round functions
+    // Turn and finish round functions.
     async function Turn() {
-        // timer goes here
         const options = DeterminePlayablePaths(players[currentPlayerIndex], players);
         if (
             options.includes("Draw") &&
@@ -300,28 +442,42 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
         await sessionStorage.setItem("DominoDrawn", false);
         setFinishDisabled(true);
         setInTurn(false);
-
-        // this will trigger a reset
-        checkForWinner();
-        checkForGameOver();
     }
 
-    // finishes the round
+    // Finishes the round and reloads the page.
     function FinishRound() {
-        // this would have more in the future
         const newRound = currentRound - 1;
         setCurrentRound(newRound);
-        // console.log(currentRound);
-        // sessionStorage.setItem("currentRound", newRound);
-        // log scores here in the future
         SetUpRound();
         window.location.reload();
     }
 
-    // load the round objects
+    const getPlayerColor = (index) => {
+        switch (index) {
+            case 0:
+                //green
+                return "rgb(30,214,86)";
+            case 1:
+                //blue
+                return "rgb(66,148,194)";
+            case 2:
+                //purple
+                return "rgb(146,28,193)";
+            case 3:
+                //orange
+                return "rgb(232,133,4)";
+            case 4:
+                //red
+                return "rgb(179,47,38)";
+            default:
+                return "white";
+        }
+    };
+
+
+    // Load the round objects.
     const playerDominoes = JSON.parse(sessionStorage.getItem("game"))["Player Dominoes"];
     const playerPaths = JSON.parse(sessionStorage.getItem("game"))["Player Paths"];
-    const dominos = ConvertToReact(playerDominoes[players[currentPlayerIndex]]);
     const sDomino = ConvertToReact(playerPaths["Starting Domino"]);
     const lastDominos = loadDominos();
 
@@ -339,38 +495,47 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
                     <div className="sidegroup">
                         <div className="inner-content">
                             <h1 className="banktitle">Bank</h1>
-                            <div className="bank">{dominos}</div>
+                            <div className="bank">{ConvertToReact(playerDominoes[players[players.indexOf(sessionStorage.getItem("username"))]])}</div>
                             {/* end of bank group */}
-                            <div className="button-container">
-                                <div className="buttonTopRow">
+                            {players[currentPlayerIndex] === sessionStorage.getItem("username") && (
+                                <div className="button-container">
+                                    <div className="buttonTopRow">
+                                        <button
+                                            className="button"
+                                            onClick={DrawDomino}
+                                            disabled={drawDisabled}
+                                        >
+                                            Draw
+                                        </button>
+                                        <button
+                                            className="button"
+                                            onClick={SelectADominoToPlay}
+                                            disabled={playDisabled}
+                                        >
+                                            Place Domino
+                                        </button>
+                                    </div>
                                     <button
-                                        className="button"
-                                        onClick={DrawDomino}
-                                        disabled={drawDisabled}
+                                        className="finish-turn-button"
+                                        onClick={finishTurn}
+                                        disabled={finishDisabled}
                                     >
-                                        Draw
-                                    </button>
-                                    <button
-                                        className="button"
-                                        onClick={SelectADominoToPlay}
-                                        disabled={playDisabled}
-                                    >
-                                        AddToPath
-                                    </button>
+                                        Finish Turn
+                                    </button>{" "}
                                 </div>
-                                <button
-                                    className="finish-turn-button"
-                                    onClick={finishTurn}
-                                    disabled={finishDisabled}
-                                >
-                                    Finish Turn
-                                </button>{" "}
-                            </div>
+                            )}
                         </div>
                         {/* end of left content */}
                         <div className="inner-content">
                             <h3 className="players_turn">
-                                It is <strong>{players[currentPlayerIndex]}</strong>'s turn
+                                It is{" "}
+                                <strong
+                                    className="player-color"
+                                    style={{ color: getPlayerColor(currentPlayerIndex) }}
+                                >
+                                    {players[currentPlayerIndex]}
+                                </strong>
+                                's turn
                             </h3>{" "}
                             <TrainStation
                                 sDomino={sDomino}
@@ -393,9 +558,28 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
                 cumulativeScores={JSON.parse(sessionStorage.getItem("game")).Scores} />}
             {displayEndModal && <GameEndWinModal
                 onClose={closeEndModal}
+                winner={CheckWinner(players)}
                 players={players}
                 roundScores={CalculateScores(players)}
                 cumulativeScores={JSON.parse(sessionStorage.getItem("game")).Scores} />}
+            {broadcastDisplayRoundModal && (
+                <RoundEndModal
+                    onClose={() => setBroadcastDisplayRoundModal(false)}
+                    winner={modalData.winner}
+                    players={modalData.players}
+                    roundScores={modalData.roundScores}
+                    cumulativeScores={modalData.cumulativeScores}
+                />
+            )}
+            {broadcastDisplayEndModal && (
+                <GameEndWinModal
+                    onClose={() => setBroadcastDisplayEndModal(false)}
+                    winner={modalData.winner}
+                    players={modalData.players}
+                    roundScores={modalData.roundScores}
+                    cumulativeScores={modalData.cumulativeScores}
+                />
+            )}
             <Background />
         </>
     );

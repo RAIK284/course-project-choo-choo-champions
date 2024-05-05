@@ -479,6 +479,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
       {displayEndModal && (
         <GameEndWinModal
           onClose={closeEndModal}
+          winner={CheckWinner(players)}
           players={players}
           roundScores={CalculateScores(players)}
           cumulativeScores={JSON.parse(sessionStorage.getItem("game")).Scores}

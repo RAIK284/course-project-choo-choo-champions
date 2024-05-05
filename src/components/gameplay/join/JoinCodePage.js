@@ -13,7 +13,7 @@ function JoinCodePage() {
     // LocalHost
     // const newWs = new WebSocket('ws://localhost:8765');
     // Production
-    const newWs = new WebSocket("ws://34.125.63.8:3389");
+    const newWs = new WebSocket('ws://34.125.63.8:3389');
 
     newWs.onopen = () => {
       console.log("WebSocket connection established");

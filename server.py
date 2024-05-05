@@ -19,8 +19,8 @@ requested_session_id = None
 # Function to handle each client connection
 
 
-async def handle_client(websocket):
-    global confirmed_train, player_train_selection, confirmed_trains, player_session_ids
+async def handle_client(websocket, path):
+    global confirmed_train, player_train_selection, confirmed_trains, player_session_ids, session_id
     # Add client to the set of clients
     clients.add(websocket)
     print(f"New client connected: {websocket.remote_address}")
@@ -76,30 +76,50 @@ async def handle_client(websocket):
                 for client in clients:
                     await client.send(json.dumps({'type': 'trainConfirmed', 'username': username, 'train': confirmed_train}))
                 if all_players_confirmed(requested_session_id):
+                    players = [player['username']
+                               for player in session_players[requested_session_id]]
                     for client in clients:
-                        await client.send(json.dumps({'type': 'redirect', 'url': '/multiplayer'}))
+                        await client.send(json.dumps({'type': 'redirect', 'url': '/multiplayer', 'players': players}))
                 print(f"Player {username} confirmed train: {confirmed_train}")
+
+            elif message_type == 'gameState':
+                # Broadcast game state to all clients except the sender
+                if websocket in clients:
+                    await asyncio.gather(*(client.send(message) for client in clients if client != websocket))
+
+            elif message_type == 'displayRoundModal':
+                # Broadcast round modal to all clients except the sender
+                if websocket in clients:
+                    await asyncio.gather(*(client.send(message) for client in clients if client != websocket))
+
+            elif message_type == 'displayEndModal':
+                # Broadcast ending modal to all clients except the sender
+                if websocket in clients:
+                    await asyncio.gather(*(client.send(message) for client in clients if client != websocket))
+
+            elif message_type == 'gameOver':
+                # Broadcast game over to all clients except the sender
+                if websocket in clients:
+                    await asyncio.gather(*(client.send(message) for client in clients if client != websocket))
 
             elif message_type == 'startGame':
                 # Start the game and redirect clients to the game page
                 if websocket in clients:
                     for client in clients:
                         await client.send(json.dumps({'type': 'redirect', 'url': '/trains'}))
+
+    except websockets.exceptions.ConnectionClosed:
+        print("Connection with client closed")
+
+    except Exception as e:
+        print(f"An error occurred: {str(e)}")
+
     finally:
         # Remove client from the set of clients upon disconnection
         clients.remove(websocket)
         if websocket in player_train_selection:
             del player_train_selection[websocket]
         print(f"Client disconnected: {websocket.remote_address}")
-
-# Main function to run the WebSocket server
-
-async def main():
-    global session_id
-    session_id = generate_session_id()
-    async with websockets.serve(handle_client, "0.0.0.0", 3389):
-        print("WebSocket server started. Listening on port 3389...")
-        await asyncio.Future()
 
 # Function to generate a unique session ID for a client
 
@@ -127,6 +147,16 @@ def all_players_confirmed(requested_session_id):
             return False
     return True
 
+# Main function to run the WebSocket server
+
+
+async def main():
+    global session_id
+    session_id = generate_session_id()
+    async with websockets.serve(handle_client, "0.0.0.0", 3389):
+        # async with websockets.serve(handle_client, "localhost", 8765):
+        print("WebSocket server started. Listening on port 3389...")
+        await asyncio.Future()
 
 # Run the main function
 asyncio.run(main())

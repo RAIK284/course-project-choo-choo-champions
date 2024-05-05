@@ -1,12 +1,13 @@
 import React from 'react';
 import './Modal.css';
 
-const GameEndWinModal = ({ onClose, players, roundScores, cumulativeScores }) => {
+const GameEndWinModal = ({ onClose, winner, players, roundScores, cumulativeScores }) => {
     return (
         <div className="modal">
             <div className="modal-content">
                 <span className="close" onClick={onClose}>&times;</span>
-                <h2>You Won!</h2>
+                <h2>Game Over!</h2>
+                <p>{winner} played all their dominoes!</p>
                 <table>
                     <thead>
                         <tr>
