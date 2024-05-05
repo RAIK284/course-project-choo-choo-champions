@@ -124,9 +124,9 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
   };
 
   const switchToNextPlayer = () => {
-    let nextIndex = currentPlayerIndex+1;
-    if(nextIndex>=playerCount){
-      nextIndex = 0*1;
+    let nextIndex = currentPlayerIndex + 1;
+    if (nextIndex >= playerCount) {
+      nextIndex = 0 * 1;
     }
     setCurrentPlayerIndex(nextIndex);
     const game = JSON.parse(sessionStorage.getItem("game"));
@@ -162,10 +162,10 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
       players[currentPlayerIndex],
       players
     );
-    if(options.includes('Draw')){
+    if (options.includes('Draw')) {
       DrawADomino(players[currentPlayerIndex], players);
       window.location.reload();
-    } else{
+    } else {
       const event = new Event("DominoDrawn");
       window.dispatchEvent(event);
       setDrawDisabled(true);
@@ -294,7 +294,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
       lastDominos.push(
         ConvertToReact([
           playerPaths["Mexican Train"].Dominoes[
-            playerPaths["Mexican Train"].Dominoes.length - 1
+          playerPaths["Mexican Train"].Dominoes.length - 1
           ],
         ])
       );
@@ -307,7 +307,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
           lastDominos.push(
             ConvertToReact([
               playerPaths[players[i]].Dominoes[
-                playerPaths[players[i]].Dominoes.length - 1
+              playerPaths[players[i]].Dominoes.length - 1
               ],
             ])
           );
@@ -328,7 +328,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
       players[currentPlayerIndex],
       players
     );
-    if(JSON.parse(sessionStorage.getItem("game")).Boneyard.length===0){
+    if (JSON.parse(sessionStorage.getItem("game")).Boneyard.length === 0) {
       setButtonName('Pass');
     }
     if (
@@ -459,6 +459,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
                 handleDominoSelection={handleDominoSelection}
                 lastDominos={lastDominos}
                 isAvailable={isAvailable}
+                trains={["Green Train", "Blue Train", "Purple Train", "Red Train"]}
               />
             </div>
           </div>

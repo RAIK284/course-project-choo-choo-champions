@@ -35,6 +35,25 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
         JSON.stringify(["Mexican Train", ...players])
     );
 
+    const [trains, setTrains] = useState([]);
+
+    useEffect(() => {
+        const searchParams = new URLSearchParams(window.location.search);
+        const trainsParam = searchParams.get('trains');
+        if (trainsParam) {
+            // Decode and parse the JSON string
+            try {
+                const decodedTrains = decodeURIComponent(trainsParam);
+                const parsedTrains = JSON.parse(decodedTrains);
+                setTrains(parsedTrains);
+            } catch (e) {
+                console.error("Failed to parse trains data:", e);
+            }
+        }
+    }, []);
+
+    console.log(trains);
+
     // eslint-disable-next-line
     const [webSocket, setWebSocket] = useState(null);
     // eslint-disable-next-line
@@ -452,28 +471,19 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
         window.location.reload();
     }
 
-    const getPlayerColor = (index) => {
-        switch (index) {
-            case 0:
-                //green
-                return "rgb(30,214,86)";
-            case 1:
-                //blue
-                return "rgb(66,148,194)";
-            case 2:
-                //purple
-                return "rgb(146,28,193)";
-            case 3:
-                //orange
-                return "rgb(232,133,4)";
-            case 4:
-                //red
-                return "rgb(179,47,38)";
-            default:
-                return "white";
-        }
+    const trainColors = {
+        "Green Train": "rgb(30,214,86)", // green
+        "Blue Train": "rgb(66,148,194)", // blue
+        "Purple Train": "rgb(146,28,193)", // purple
+        "Red Train": "rgb(179,47,38)", // red
+        "Orange Train": "rgb(232,133,4)", // orange
+        "White Train": "white", // default or white
     };
 
+    const getPlayerColor = (index, trains) => {
+        const trainName = trains[index]; // Get the train name assigned to the player at the given index
+        return trainColors[trainName] || "white"; // Return the color associated with the train, or white if undefined
+    };
 
     // Load the round objects.
     const playerDominoes = JSON.parse(sessionStorage.getItem("game"))["Player Dominoes"];
@@ -531,7 +541,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
                                 It is{" "}
                                 <strong
                                     className="player-color"
-                                    style={{ color: getPlayerColor(currentPlayerIndex) }}
+                                    style={{ color: getPlayerColor(currentPlayerIndex, trains) }}
                                 >
                                     {players[currentPlayerIndex]}
                                 </strong>
@@ -542,6 +552,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
                                 handleDominoSelection={handleDominoSelection}
                                 lastDominos={lastDominos}
                                 isAvailable={isAvailable}
+                                trains={trains}
                             />
                         </div>
                     </div>

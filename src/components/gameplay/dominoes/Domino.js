@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import "./Domino.css";
 
 
-function DetermineIfDominoIsSelectable(domino){
-  if(JSON.parse(sessionStorage.getItem('game'))['Player Paths']!=null && domino !== undefined){
+function DetermineIfDominoIsSelectable(domino) {
+  if (JSON.parse(sessionStorage.getItem('game'))['Player Paths'] != null && domino !== undefined) {
     const paths = JSON.parse(sessionStorage.getItem('game'))['Player Paths']
     const players = JSON.parse(sessionStorage.getItem('Players'));
-    for(let i=0;i<players.length;i++){
+    for (let i = 0; i < players.length; i++) {
       const path = paths[players[i]].Dominoes;
       for (let j = 0; j < path.length; j++) {
         if (
@@ -112,7 +112,7 @@ function Domino({ top, bottom, isSelected, onSelect }) {
   const isColorblind = sessionStorage.getItem('colorblind') === "true";
 
   // Determine if the current domino should be represented using text or images
-  const useImages = isColorblind && [13, 14, 15].includes(top) && [13, 14, 15].includes(bottom) || !isColorblind;
+  const useImages = (isColorblind && [13, 14, 15].includes(top) && [13, 14, 15].includes(bottom)) || !isColorblind;
 
   if (isSelected && DetermineIfDominoIsSelectable([0, bottom, top])) {
     sessionStorage.setItem("SelectedDomino", JSON.stringify([0, bottom, top]));
