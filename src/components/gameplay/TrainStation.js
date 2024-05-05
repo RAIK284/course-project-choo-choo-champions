@@ -1,10 +1,11 @@
 import React from "react";
-import orangeTrain from "../trains/OrangeTrain";
-import greenTrain from "../trains/GreenTrain";
-import { redTrain } from "../trains/RedTrain";
-import blueTrain from "../trains/BlueTrain";
-import purpleTrain from "../trains/PurpleTrain";
+// import orangeTrain from "../trains/OrangeTrain";
+// import greenTrain from "../trains/GreenTrain";
+// import { redTrain } from "../trains/RedTrain";
+// import blueTrain from "../trains/BlueTrain";
+// import purpleTrain from "../trains/PurpleTrain";
 import whiteTrain from "../trains/WhiteTrain";
+import confirmedTrain from "../trains/TrainSelector";
 
 const TrainStation = ({
   sDomino,
@@ -29,10 +30,10 @@ const TrainStation = ({
           >
             {lastDominos[1]}
           </div>
-          <div className="playerOneTrain">{greenTrain()}</div>
+          <div className="playerOneTrain">{confirmedTrain[0]}</div>
         </div>
         <div className="train-domino-pairing-top">
-          <div className="playerFourTrain">{redTrain()}</div>
+          <div className="playerFourTrain">{confirmedTrain[1]}</div>
           <div
             className={`playerFourDomino ${isAvailable[4] ? "highlight" : ""}`}
             onClick={() => handleDominoSelection(4)}
@@ -50,10 +51,10 @@ const TrainStation = ({
           >
             {lastDominos[2]}
           </div>
-          <div className="playerTwoTrain">{blueTrain()}</div>
+          <div className="playerTwoTrain">{confirmedTrain[2]}</div>
         </div>
         <div className="train-domino-pairing-bottom">
-          <div className="playerThreeTrain">{purpleTrain()}</div>
+          <div className="playerThreeTrain">{confirmedTrain[3]}</div>
           <div
             className={`playerThreeDomino ${isAvailable[3] ? "highlight" : ""}`}
             onClick={() => handleDominoSelection(3)}
