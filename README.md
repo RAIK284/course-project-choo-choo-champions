@@ -2,7 +2,7 @@
 
 In this code base, you will find the implementation of our multiplayer game, Mexican Train Dominoes.
 
-There is also the ASP.NET REST API backend which is in place in the JavaScript files and can be found at [https://github.com/max7piper/choo-choo-champions-api](https://github.com/max7piper/choo-choo-champions-api).
+There is also the ASP.NET REST API backend which is in place in the JavaScript files and can be found at [https://github.com/max7piper/choo-choo-champions-api](https://github.com/max7piper/choo-choo-champions-api). Our database is encrypted, which accomplishes a stretch goal for this project.
 
 ### Deployment:
 
@@ -35,6 +35,10 @@ Also, in the root directory, start the website or run unit tests:
 #### Step 4:
 
 If you ran ```npm start```, you will see our React app website. If you ran ```npm run coverage```, you will see our unit test results.
+
+### Running the WebSocket Server Locally:
+
+The WebSocket server, responsible for multiplayer games, is deployed via [Google Cloud](https://cloud.google.com/?hl=en). If you want to run the server locally, comment out the line in the main function of ```server.py``` that currently assigns the server to the production URL (```ws://34.125.63.8:3389```) and uncomment the line that assigns the server to the localhost URL. Then, update the URLs in the corresponding multiplayer game flow files to ```ws://localhost:8765```.
 
 # API Documentation
 
