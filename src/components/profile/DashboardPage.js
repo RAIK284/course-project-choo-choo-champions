@@ -58,6 +58,7 @@ function DashboardPage() {
     };
 
     const handleLocalGameStart = () => {
+        sessionStorage.removeItem("game");
         // Open modal for inputting player count
         const playerCount = window.prompt('How many total players would you like in your local game? (2-4)');
         const parsedCount = parseInt(playerCount);

@@ -18,7 +18,7 @@ import {
 } from "./GameLogic";
 import { ConvertToReact } from "./dominoes/Domino";
 import "./GameBase.css";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import RoundEndModal from "./modals/RoundEndModal";
 import GameEndWinModal from "./modals/GameEndWinModal";
 
@@ -86,6 +86,10 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
       : 3
   );
 
+  // ingredients for turn timer
+  const Ref = useRef(null);
+  const [timer, setTimer] = useState("000");
+
   const [buttonName, setButtonName] = useState("Draw");
 
   // round setup function
@@ -114,7 +118,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
     console.log(JSON.parse(sessionStorage.getItem("game")));
   }
 
-  if (sessionStorage.getItem("Player Dominoes") == null) {
+  if (sessionStorage.getItem("game") === null) {
     SetUpRound();
   }
 
@@ -362,10 +366,57 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
     }
   }
 
+  // timer functions - referenced from https://www.geeksforgeeks.org/how-to-create-a-countdown-timer-using-reactjs/ 
+  const getTimeRemaining = (e) => {
+    const total =
+        Date.parse(e) - Date.parse(new Date());
+    const seconds = Math.floor((total / 1000) % 180);
+    return {
+        total,
+        seconds,
+    };
+  };
+
+  const startTimer = (e) => {
+    let {total, seconds } =
+        getTimeRemaining(e);
+    if (total >= 0) {
+        setTimer(
+            (seconds > 9 ? seconds : "0" + seconds)
+        );
+    } else{
+      alert("Turn time ran out. The game is now over.");
+      window.location.href = `/dashboard`;
+    }
+  };
+
+  const clearTimer = (e) => {
+    setTimer("180");
+    if (Ref.current) clearInterval(Ref.current);
+    const id = setInterval(() => {
+        startTimer(e);
+    }, 1000);
+    Ref.current = id;
+  };
+
+  const getDeadTime = () => {
+    let deadline = new Date();
+    deadline.setSeconds(deadline.getSeconds() + 180);
+    return deadline;
+  };
+
+  useEffect(() => {
+    clearTimer(getDeadTime());
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+
   // turn and finish round functions
 
   // this function handles all necessary logic to accomplish a players turn
   async function Turn() {
+    // reset the timer
+    clearTimer(getDeadTime());
     // first we must check what the players options are 
     const options = DeterminePlayablePaths(
       players[currentPlayerIndex],
@@ -533,6 +584,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
                 isAvailable={isAvailable}
                 isPlayable={isPlayable}
               />
+              <div class="turnTimer">Time Left: {timer}</div>
             </div>
           </div>
         </div>{" "}
