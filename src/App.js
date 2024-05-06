@@ -15,7 +15,6 @@ import DominoBank from "./components/gameplay/dominoes/DominoBank";
 import Domino from "./components/gameplay/dominoes/Domino";
 import GameBase from "./components/gameplay/GameBase";
 import EmailVerification from "./components/profile/EmailVerification";
-import GameLogic from "./components/gameplay/GameLogic";
 import HostGamePage from "./components/gameplay/host/HostGamePage";
 import MultiGameBase from "./components/gameplay/MultiGameBase";
 import { Initialize } from "./Firebase";
@@ -39,7 +38,6 @@ function App() {
         <Route path="/domino" element={<Domino />} />
         <Route path="/gamebase" element={<GameBase />} />
         <Route path="/email-verification" element={<EmailVerification />} />
-        <Route path="/gamelogic" element={<GameLogic />} />
         <Route path="/host" element={<HostGamePage />} />
         <Route path="/multiplayer" element={<MultiGameBase />} />
       </Routes>
