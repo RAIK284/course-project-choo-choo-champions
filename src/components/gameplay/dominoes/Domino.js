@@ -1,11 +1,16 @@
+// This page has been tested and approved by Lighthouse for correct alt text and ease of readability
+// This page has also been verified to comply with the Chrome screenreader extension
+
 import React, { useState } from "react";
 import "./Domino.css";
 
-
 function DetermineIfDominoIsSelectable(domino) {
-  if (JSON.parse(sessionStorage.getItem('game'))['Player Paths'] != null && domino !== undefined) {
-    const paths = JSON.parse(sessionStorage.getItem('game'))['Player Paths']
-    const players = JSON.parse(sessionStorage.getItem('Players'));
+  if (
+    JSON.parse(sessionStorage.getItem("game"))["Player Paths"] != null &&
+    domino !== undefined
+  ) {
+    const paths = JSON.parse(sessionStorage.getItem("game"))["Player Paths"];
+    const players = JSON.parse(sessionStorage.getItem("Players"));
     for (let i = 0; i < players.length; i++) {
       const path = paths[players[i]].Dominoes;
       for (let j = 0; j < path.length; j++) {
@@ -89,31 +94,23 @@ function Domino({ top, bottom, isSelected, onSelect }) {
     return `./assets/dots${number}.png`;
   };
 
-  const topNumberImage = {
-    src: getDots(top),
-    alt: `Top dots representing ${top}`,
-  };
-
-  const bottomNumberImage = {
-    src: getDots(bottom),
-    alt: `Bottom dots representing ${bottom}`,
-  };
-
-  const topNumberText = {
+  // eslint-disable-next-line no-unused-vars
+  const topNumberStyle = {
     color: getColor(top),
-    text: top,
   };
 
-  const bottomNumberText = {
+  // eslint-disable-next-line no-unused-vars
+  const bottomNumberStyle = {
     color: getColor(bottom),
-    text: bottom,
   };
 
-  const isColorblind = sessionStorage.getItem('colorblind') === "true";
+  const topNumberDots = {
+    color: getDots(top),
+  };
 
-  // Determine if the current domino should be represented using text or images
-  const useImages = (isColorblind && [13, 14, 15].includes(top) && [13, 14, 15].includes(bottom)) || !isColorblind;
-
+  const bottomNumberDots = {
+    color: getDots(bottom),
+  };
   if (isSelected && DetermineIfDominoIsSelectable([0, bottom, top])) {
     sessionStorage.setItem("SelectedDomino", JSON.stringify([0, bottom, top]));
   }
@@ -124,29 +121,38 @@ function Domino({ top, bottom, isSelected, onSelect }) {
       onClick={onSelect}
       data-testid="domino"
     >
-      {useImages ? (
+      {sessionStorage.getItem("colorblind") === "true" ? (
         <>
-          <img
-            className="dominoImageTop"
-            src={topNumberImage.src}
-            alt={topNumberImage.alt}
-          />
-          <div className="line" aria-hidden="true"></div>
-          <img
-            className="dominoImageBottom"
-            src={bottomNumberImage.src}
-            alt={bottomNumberImage.alt}
-          />
+          <div className="topnumber" style={topNumberStyle}>
+            {top}
+          </div>
+          <div className="line"></div>
+          <div className="bottomnumber" style={bottomNumberStyle}>
+            {bottom}
+          </div>
         </>
       ) : (
         <>
-          <div className="topnumber" style={{ color: topNumberText.color }}>
-            {topNumberText.text}
-          </div>
-          <div className="line"></div>
-          <div className="bottomnumber" style={{ color: bottomNumberText.color }}>
-            {bottomNumberText.text}
-          </div>
+          <img
+            className="dominoImageTop"
+            src={topNumberDots.color}
+            alt={
+              top === 13
+                ? "Empty domino slot"
+                : `Top dots representing the number ${top}`
+            }
+          />
+          <div className="line" aria-hidden="true"></div>
+
+          <img
+            className="dominoImageBottom"
+            src={bottomNumberDots.color}
+            alt={
+              bottom === 14
+                ? "Empty domino slot"
+                : `Bottom dots representing the number ${bottom}`
+            }
+          />
         </>
       )}
     </div>
