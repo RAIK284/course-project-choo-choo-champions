@@ -390,3 +390,11 @@
     z-index: 10;
     rotate: 140deg;
 }
+
+.turnTimer {
+    font-size: 25px;
+    font-weight: bolder;
+    z-index: 20;
+    position: relative;
+    top: -40px;
+}
