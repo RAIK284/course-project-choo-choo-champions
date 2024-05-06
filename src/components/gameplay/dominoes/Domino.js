@@ -142,6 +142,8 @@ function Domino({ top, bottom, isSelected, onSelect }) {
                 : `Top dots representing the number ${top}`
             }
           />
+          <div className="line" aria-hidden="true"></div>
+
           <img
             className="dominoImageBottom"
             src={bottomNumberDots.color}
