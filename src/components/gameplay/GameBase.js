@@ -39,7 +39,7 @@ const startingDominoList = [
 ];
 
 function GameChoice({ src, alt, onSelect, isSelected }) {
-  // hard coded setup
+  // setup
   const urlParams = new URLSearchParams(window.location.search);
   const playerCount = parseInt(urlParams.get("playerCount")); // Get player count from URL parameter
 
@@ -52,7 +52,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
     "Players",
     JSON.stringify(["Mexican Train", ...players])
   );
-  // a bunch of booleans that we will use within
+  // a ton of booleans that represent different states in our game
   const [currentPlayerIndex, setCurrentPlayerIndex] = useState(
     sessionStorage.getItem("game") !== null
       ? parseInt(JSON.parse(sessionStorage.getItem("game")).TurnIndex)
@@ -63,16 +63,21 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
       ? JSON.parse(sessionStorage.getItem("game")).CurrentRound
       : 12
   );
+  // indicators for whether buttons are usable
   const [drawDisabled, setDrawDisabled] = useState(true);
   const [playDisabled, setPlayDisabled] = useState(true);
+  // indicators for whether the game is 'loading' or a player is in turn
   const [loading, setLoading] = useState(true);
   const [inTurn, setInTurn] = useState(false);
+  // indicators that highlight whether dominos or paths are playable or selected
   const [selectedDomino, setSelectedDomino] = useState(null);
   const [isAvailable] = useState([false, false, false, false, false]);
   const [isPlayable] = useState([false, false, false, false]);
+  // the starting domino for the game
   const [startingDomino, setStartingDomino] = useState([
     startingDominoList[currentRound],
   ]);
+  // indicators for ending modals
   const [displayRoundModal, setDisplayRoundModal] = useState(false);
   const [displayEndModal, setDisplayEndModal] = useState(false);
   const [roundsLeft, setRoundsLeft] = useState(
@@ -92,7 +97,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
       sessionStorage.getItem("game") !== null
         ? JSON.parse(sessionStorage.getItem("game")).Scores
         : null;
-    // create the super crazy game
+    // create the game object, which stores all relevant game data in an object
     setRoundsLeft(roundsLeft - 1);
     const game = {
       "Player Dominoes": JSON.parse(sessionStorage.getItem("Player Dominoes")),
@@ -113,7 +118,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
     SetUpRound();
   }
 
-  // now the react functions
+  // these react functions handle the user facing side of our game
   useEffect(() => {
     const storedGame = sessionStorage.getItem("game");
     if (storedGame !== null) {
@@ -121,6 +126,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
     }
   }, []);
 
+  // handles the user finishing their turn, and switches play to the next player
   const finishTurn = () => {
     switchToNextPlayer();
     const event = new Event("TurnEnded");
@@ -160,6 +166,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
     }
   };
 
+  // handles logic for drawing a domino
   const DrawDomino = () => {
     sessionStorage.setItem("DominoDrawn", JSON.stringify(true));
     const options = DeterminePlayablePaths(
@@ -176,6 +183,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
     }
   };
 
+  // handles logic for selecting a domino from the bank
   const SelectADominoToPlay = () => {
     const domino = JSON.parse(sessionStorage.getItem("SelectedDomino"));
     if (domino == null) {
@@ -201,19 +209,18 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
     }
   };
 
+  // handles taking the selected domino, and actually playing it on the path
   const handleDominoSelection = (index) => {
     if (isAvailable[index]) {
       if (index === 0) {
         PlayDomino(
           players[currentPlayerIndex],
-          players,
           selectedDomino,
           "Mexican Train"
         );
       } else {
         PlayDomino(
           players[currentPlayerIndex],
-          players,
           selectedDomino,
           players[index - 1]
         );
@@ -225,6 +232,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
     }
   };
 
+  // checks to ensure round end condition has not been reached
   const checkForWinner = () => {
     if (
       (CheckWinner(players) !== "No One" ||
@@ -254,6 +262,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
     }
   };
 
+  // checks to ensure game end condition has not been reached
   const checkForGameOver = () => {
     if (
       (CheckWinner(players) !== "No One" ||
@@ -284,6 +293,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
     }
   };
 
+  // deals with closing models
   const closeRoundModal = () => {
     setDisplayRoundModal(false);
     FinishRound();
@@ -291,17 +301,20 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
 
   const closeEndModal = () => {
     setDisplayEndModal(false);
-    // route them to home screen idk
+    // route them to home screen
     window.location.href = `/dashboard`;
   };
 
+  // responsible for loading the last played dominoes on player paths
   function loadDominos() {
     const playerPaths = JSON.parse(sessionStorage.getItem("game"))[
       "Player Paths"
     ];
+    // gets the last domino of the mexican train, if there isn't a domino on path
+    // it appends an 'empty train' domino
     const lastDominos = [];
     if (playerPaths["Mexican Train"].Dominoes.length === 0) {
-      lastDominos.push(ConvertToReact([[0, 13, 14]]));
+      lastDominos.push(ConvertToReact([[0, 13, 14]])); // empty train domino
     } else {
       lastDominos.push(
         ConvertToReact([
@@ -311,6 +324,8 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
         ])
       );
     }
+    // gets the last domino of the players trains, if there isn't a domino on path
+    // it appends an 'empty train' domino
     for (let i = 0; i < 5; i++) {
       if (i < players.length) {
         if (playerPaths[players[i]].Dominoes.length === 0) {
@@ -325,14 +340,14 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
           );
         }
       } else {
-        // i want this to be a placeholder but that mess up the spacing for now
-        // so we will keep this ftm
+        // if there is no player, appends an 'empty player' domino
         lastDominos.push(ConvertToReact([[0, 13, 15]]));
       }
     }
     return lastDominos;
   }
 
+  // responsible for highlighting which players are playable to all players
   function CheckPlayable() {
     const paths = JSON.parse(sessionStorage.getItem("game"))["Player Paths"];
     for (let i = 0; i < players.length; i++) {
@@ -348,21 +363,30 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
   }
 
   // turn and finish round functions
+
+  // this function handles all necessary logic to accomplish a players turn
   async function Turn() {
-    // timer goes here
+    // first we must check what the players options are 
     const options = DeterminePlayablePaths(
       players[currentPlayerIndex],
       players
     );
+    
+    // then we highlight the global ones 
     CheckPlayable();
+
+    // if there are no dominos to draw, change the buttons name to pass
     if (JSON.parse(sessionStorage.getItem("game")).Boneyard.length === 0) {
       setButtonName("Pass");
     }
+    
+    // option 1: player can only draw or pass
     if (
       (options.includes("Draw") || options.includes("Pass")) &&
       (sessionStorage.getItem("DominoDrawn") == null ||
         !JSON.parse(sessionStorage.getItem("DominoDrawn")))
     ) {
+      // only enable the draw button, and await the user to click it
       setDrawDisabled(false);
       setPlayDisabled(true);
       await new Promise((resolve) => {
@@ -371,8 +395,12 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
           resolve();
         });
       });
+      // once the domino is drawn, set session storage so user can't infinitely draw
       sessionStorage.setItem("DominoDrawn", JSON.parse(true));
-    } else if (!options.includes("Draw") && !options.includes("Pass")) {
+    } 
+    // otherwise option 2: user can p[lay a domino
+    else if (!options.includes("Draw") && !options.includes("Pass")) {
+      // only enable the play button and wait for user to select a domino
       setPlayDisabled(false);
       await new Promise((resolve) => {
         window.addEventListener("DominoPlayed", function handler() {
@@ -380,6 +408,8 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
           resolve();
         });
       });
+
+      // once they select, disable play button and highlight paths, await them to play on path
       setPlayDisabled(true);
       await new Promise((resolve) => {
         window.addEventListener("DominoOnPath", function handler() {
@@ -387,6 +417,9 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
           resolve();
         });
       });
+
+      // check for the double condition, if its a double set all paths unavailable and 
+      // call the turn function again
       if (
         JSON.parse(sessionStorage.getItem("game"))["Player Paths"]
           .UnvalidatedDouble !== null
@@ -399,6 +432,8 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
         return;
       }
     }
+
+    // clean up all side effects, and end turn
     for (let i = 0; i < isAvailable.length; i++) {
       isAvailable[i] = false;
     }
@@ -406,34 +441,33 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
     await sessionStorage.setItem("DominoDrawn", false);
     setInTurn(false);
 
-    // this will trigger a reset
+    // check for our ending conditions
     checkForWinner();
     checkForGameOver();
   }
 
   // finishes the round
   function FinishRound() {
-    // this would have more in the future
     const newRound = currentRound - 1;
     setCurrentRound(newRound);
-    // console.log(currentRound);
-    // sessionStorage.setItem("currentRound", newRound);
-    // log scores here in the future
     SetUpRound();
     window.location.reload();
   }
 
-  // load the round objects
+  // load the round objects that will be displayed
   const playerDominoes = JSON.parse(sessionStorage.getItem("game"))[
     "Player Dominoes"
   ];
   const playerPaths = JSON.parse(sessionStorage.getItem("game"))[
     "Player Paths"
   ];
+  
+  // get the player's dominos, and the starting domino
   const dominos = ConvertToReact(playerDominoes[players[currentPlayerIndex]]);
   const sDomino = ConvertToReact(playerPaths["Starting Domino"]);
   const lastDominos = loadDominos();
 
+  // block to ensure mounting of components does not occur too fast (this caused many problems earlier)
   if (!loading && !inTurn) {
     Turn(players[currentPlayerIndex]);
     setInTurn(true);
