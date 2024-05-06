@@ -1,29 +1,19 @@
+// This page has been tested and approved by Lighthouse for correct alt text and ease of readability
+// This page has also been verified to comply with the Chrome screenreader extension
+
 import React from "react";
+import orangeTrain from "../trains/OrangeTrain";
 import greenTrain from "../trains/GreenTrain";
 import { redTrain } from "../trains/RedTrain";
 import blueTrain from "../trains/BlueTrain";
 import purpleTrain from "../trains/PurpleTrain";
-import whiteTrain from "../trains/WhiteTrain";
-import orangeTrain from "../trains/OrangeTrain";
-import blackTrain from "../trains/BlackTrain";
-
-const trainComponents = {
-  "Green Train": greenTrain,
-  "Red Train": redTrain,
-  "Blue Train": blueTrain,
-  "Purple Train": purpleTrain,
-  "White Train": whiteTrain,
-  "Orange Train": orangeTrain,
-  "Black Train": blackTrain
-};
 
 const TrainStation = ({
   sDomino,
   handleDominoSelection,
   lastDominos,
   isAvailable,
-  trains = [], // Default to an empty array if not provided
-  isPlayable
+  isPlayable,
 }) => {
   return (
     <div className="newTrainStation">
@@ -33,7 +23,7 @@ const TrainStation = ({
       >
         {lastDominos[0]}
       </div>
-      <div className="mexicanTrain">{whiteTrain()}</div>
+      <div className="mexicanTrain">{orangeTrain()}</div>
       <div className="rotateDominoTop">
         <div className="train-domino-pairing-top">
           <div
@@ -42,10 +32,16 @@ const TrainStation = ({
           >
             {lastDominos[1]}
           </div>
-          <div className={`playerOneTrain ${isPlayable[0] ? "highlight" : ""}`}>{trainComponents[trains[0] || "Black Train"]()}</div>
+          <div className={`playerOneTrain ${isPlayable[0] ? "highlight" : ""}`}>
+            {greenTrain()}
+          </div>
         </div>
         <div className="train-domino-pairing-top">
-          <div className={`playerFourTrain ${isPlayable[3] ? "highlight" : ""}`}>{trainComponents[trains[3] || "Black Train"]()}</div>
+          <div
+            className={`playerFourTrain ${isPlayable[3] ? "highlight" : ""}`}
+          >
+            {redTrain()}
+          </div>
           <div
             className={`playerFourDomino ${isAvailable[4] ? "highlight" : ""}`}
             onClick={() => handleDominoSelection(4)}
@@ -63,10 +59,16 @@ const TrainStation = ({
           >
             {lastDominos[2]}
           </div>
-          <div className={`playerTwoTrain ${isPlayable[1] ? "highlight" : ""}`}>{trainComponents[trains[1] || "Black Train"]()}</div>
+          <div className={`playerTwoTrain ${isPlayable[1] ? "highlight" : ""}`}>
+            {blueTrain()}
+          </div>
         </div>
         <div className="train-domino-pairing-bottom">
-          <div className={`playerThreeTrain ${isPlayable[2] ? "highlight" : ""}`}>{trainComponents[trains[2] || "Black Train"]()}</div>
+          <div
+            className={`playerThreeTrain ${isPlayable[2] ? "highlight" : ""}`}
+          >
+            {purpleTrain()}
+          </div>
           <div
             className={`playerThreeDomino ${isAvailable[3] ? "highlight" : ""}`}
             onClick={() => handleDominoSelection(3)}

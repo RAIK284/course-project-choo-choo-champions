@@ -1,6 +1,6 @@
 import NavBar from "../universal/NavBar";
 import Background from "../universal/Background";
-import TrainStation from "./TrainStation";
+import TrainStation from "./MultiTrainStation";
 import axios from 'axios';
 
 import {
