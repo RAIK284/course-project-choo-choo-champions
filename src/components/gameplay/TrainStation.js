@@ -22,7 +22,8 @@ const TrainStation = ({
   handleDominoSelection,
   lastDominos,
   isAvailable,
-  trains = [] // Default to an empty array if not provided
+  trains = [], // Default to an empty array if not provided
+  isPlayable
 }) => {
   return (
     <div className="newTrainStation">
@@ -41,10 +42,10 @@ const TrainStation = ({
           >
             {lastDominos[1]}
           </div>
-          <div className="playerOneTrain">{trainComponents[trains[0] || "Black Train"]()}</div>
+          <div className={`playerOneTrain ${isPlayable[0] ? "highlight" : ""}`}>{trainComponents[trains[0] || "Black Train"]()}</div>
         </div>
         <div className="train-domino-pairing-top">
-          <div className="playerFourTrain">{trainComponents[trains[3] || "Black Train"]()}</div>
+          <div className={`playerFourTrain ${isPlayable[3] ? "highlight" : ""}`}>{trainComponents[trains[3] || "Black Train"]()}</div>
           <div
             className={`playerFourDomino ${isAvailable[4] ? "highlight" : ""}`}
             onClick={() => handleDominoSelection(4)}
@@ -62,10 +63,10 @@ const TrainStation = ({
           >
             {lastDominos[2]}
           </div>
-          <div className="playerTwoTrain">{trainComponents[trains[1] || "Black Train"]()}</div>
+          <div className={`playerTwoTrain ${isPlayable[1] ? "highlight" : ""}`}>{trainComponents[trains[1] || "Black Train"]()}</div>
         </div>
         <div className="train-domino-pairing-bottom">
-          <div className="playerThreeTrain">{trainComponents[trains[2] || "Black Train"]()}</div>
+          <div className={`playerThreeTrain ${isPlayable[2] ? "highlight" : ""}`}>{trainComponents[trains[2] || "Black Train"]()}</div>
           <div
             className={`playerThreeDomino ${isAvailable[3] ? "highlight" : ""}`}
             onClick={() => handleDominoSelection(3)}
