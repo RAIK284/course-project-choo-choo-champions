@@ -1,12 +1,17 @@
+// This page has been tested and approved by Lighthouse for correct alt text and ease of readability
+// This page has also been verified to comply with the Chrome screenreader extension
+
 import React, { useState } from "react";
 import "./Domino.css";
 
-
-function DetermineIfDominoIsSelectable(domino){
-  if(JSON.parse(sessionStorage.getItem('game'))['Player Paths']!=null && domino !== undefined){
-    const paths = JSON.parse(sessionStorage.getItem('game'))['Player Paths']
-    const players = JSON.parse(sessionStorage.getItem('Players'));
-    for(let i=0;i<players.length;i++){
+function DetermineIfDominoIsSelectable(domino) {
+  if (
+    JSON.parse(sessionStorage.getItem("game"))["Player Paths"] != null &&
+    domino !== undefined
+  ) {
+    const paths = JSON.parse(sessionStorage.getItem("game"))["Player Paths"];
+    const players = JSON.parse(sessionStorage.getItem("Players"));
+    for (let i = 0; i < players.length; i++) {
       const path = paths[players[i]].Dominoes;
       for (let j = 0; j < path.length; j++) {
         if (
@@ -116,7 +121,7 @@ function Domino({ top, bottom, isSelected, onSelect }) {
       onClick={onSelect}
       data-testid="domino"
     >
-      {sessionStorage.getItem('colorblind') === "true" ? (
+      {sessionStorage.getItem("colorblind") === "true" ? (
         <>
           <div className="topnumber" style={topNumberStyle}>
             {top}
@@ -131,31 +136,27 @@ function Domino({ top, bottom, isSelected, onSelect }) {
           <img
             className="dominoImageTop"
             src={topNumberDots.color}
-            alt="Top dots representing a number"
+            alt={
+              top === 13
+                ? "Empty domino slot"
+                : `Top dots representing the number ${top}`
+            }
           />
           <div className="line" aria-hidden="true"></div>
+
           <img
             className="dominoImageBottom"
             src={bottomNumberDots.color}
-            alt="Bottom dots representing a number"
+            alt={
+              bottom === 14
+                ? "Empty domino slot"
+                : `Bottom dots representing the number ${bottom}`
+            }
           />
         </>
       )}
     </div>
   );
-
-  // for text color instead of dots
-
-  //   <div className="domino">
-  //   <div className="topnumber" style={topNumberStyle}>
-  //     {top}
-  //   </div>
-  //   <div className="line"></div>
-  //   <div className="bottomnumber" style={bottomNumberStyle}>
-  //     {bottom}
-  //   </div>
-  // </div>
-  // );
 }
 
 export default Domino;

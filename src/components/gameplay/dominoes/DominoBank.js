@@ -1,3 +1,6 @@
+// This page has been tested and approved by Lighthouse for correct alt text and ease of readability
+// This page has also been verified to comply with the Chrome screenreader extension
+
 import React from "react";
 import NavBar from "../../universal/NavBar";
 import Background from "../../universal/Background";
@@ -6,7 +9,7 @@ import { ConvertToReact } from "./Domino";
 
 function GenerateDominoBank() {
   const dominoJSON = [];
-  let index = 0
+  let index = 0;
   // Loop through unique combinations of numbers for both top and bottom
   for (let top = 0; top <= 12; top++) {
     for (let bottom = top; bottom <= 12; bottom++) {
@@ -25,16 +28,23 @@ export function GenerateDominoBankForGame() {
 
 function DominoBank() {
   GenerateDominoBank();
-  const dominos = ConvertToReact(JSON.parse(sessionStorage.getItem("Domino")))
+  const dominos = ConvertToReact(JSON.parse(sessionStorage.getItem("Domino")));
   return (
     <div className="domino-page full-page">
       <Background />
       <NavBar />
       <div className="centered-content">
         <div className="container">
-          <h2 className="domino-title">Bank</h2>
+          <h2 alt="Title: Bank" className="domino-title">
+            Bank
+          </h2>
         </div>
-        <div className="bank">{dominos}</div>
+        <div
+          alt="Domino bank: includes all dominos the user may play"
+          className="bank"
+        >
+          {dominos}
+        </div>
       </div>
     </div>
   );

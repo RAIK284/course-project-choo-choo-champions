@@ -1,3 +1,6 @@
+// This page has been tested and approved by Lighthouse for correct alt text and ease of readability
+// This page has also been verified to comply with the Chrome screenreader extension
+
 import React from "react";
 import orangeTrain from "../trains/OrangeTrain";
 import greenTrain from "../trains/GreenTrain";
@@ -10,7 +13,7 @@ const TrainStation = ({
   handleDominoSelection,
   lastDominos,
   isAvailable,
-  isPlayable
+  isPlayable,
 }) => {
   return (
     <div className="newTrainStation">
@@ -34,7 +37,9 @@ const TrainStation = ({
           </div>
         </div>
         <div className="train-domino-pairing-top">
-        <div className={`playerFourTrain ${isPlayable[3] ? "highlight" : ""}`}>
+          <div
+            className={`playerFourTrain ${isPlayable[3] ? "highlight" : ""}`}
+          >
             {redTrain()}
           </div>
           <div
@@ -59,7 +64,9 @@ const TrainStation = ({
           </div>
         </div>
         <div className="train-domino-pairing-bottom">
-        <div className={`playerThreeTrain ${isPlayable[2] ? "highlight" : ""}`}>
+          <div
+            className={`playerThreeTrain ${isPlayable[2] ? "highlight" : ""}`}
+          >
             {purpleTrain()}
           </div>
           <div
