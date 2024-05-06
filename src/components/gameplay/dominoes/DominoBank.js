@@ -1,3 +1,6 @@
+// This page has been tested and approved by Lighthouse for correct alt text and ease of readability
+// This page has also been verified to comply with the Chrome screenreader extension
+
 import React from "react";
 import NavBar from "../../universal/NavBar";
 import Background from "../../universal/Background";
