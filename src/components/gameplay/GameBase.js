@@ -66,6 +66,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
   const [inTurn, setInTurn] = useState(false);
   const [selectedDomino, setSelectedDomino] = useState(null);
   const [isAvailable] = useState([false, false, false, false, false]);
+  const [isPlayable] = useState([false, false, false, false]);
   const [startingDomino, setStartingDomino] = useState([
     startingDominoList[currentRound],
   ]);
@@ -321,6 +322,17 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
     return lastDominos;
   }
 
+  function CheckPlayable(){
+    const paths = JSON.parse(sessionStorage.getItem("game"))['Player Paths'];
+    for(let i=0; i<players.length;i++){
+      if(paths[players[i]].Playable || paths.UnvalidatedDouble === players[i]){
+        isPlayable[i] = true;
+      } else{
+        isPlayable[i] = false;
+      }
+    }
+  }
+
   // turn and finish round functions
   async function Turn() {
     // timer goes here
@@ -328,6 +340,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
       players[currentPlayerIndex],
       players
     );
+    CheckPlayable();
     if(JSON.parse(sessionStorage.getItem("game")).Boneyard.length===0){
       setButtonName('Pass');
     }
@@ -459,6 +472,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
                 handleDominoSelection={handleDominoSelection}
                 lastDominos={lastDominos}
                 isAvailable={isAvailable}
+                isPlayable={isPlayable}
               />
             </div>
           </div>
