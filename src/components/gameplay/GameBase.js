@@ -115,7 +115,6 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
       Scored: false,
     };
     sessionStorage.setItem("game", JSON.stringify(game));
-    console.log(JSON.parse(sessionStorage.getItem("game")));
   }
 
   if (sessionStorage.getItem("game") === null) {
@@ -273,7 +272,6 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
         EnsurePlayability(players) !== false) &&
       roundsLeft <= 0
     ) {
-      console.log("Got here");
       const game = JSON.parse(sessionStorage.getItem("game"));
       if (!game.Scored) {
         game.Scored = true;
