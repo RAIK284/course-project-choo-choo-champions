@@ -277,14 +277,12 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
       if (index === 0) {
         PlayDomino(
           players[currentPlayerIndex],
-          players,
           selectedDomino,
           "Mexican Train"
         );
       } else {
         PlayDomino(
           players[currentPlayerIndex],
-          players,
           selectedDomino,
           players[index - 1]
         );
