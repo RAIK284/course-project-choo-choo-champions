@@ -14,6 +14,7 @@ const renderWithRouter = (component) => {
 describe('DashboardPage', () => {
 
     it('renders and makes an API call for stats', async () => {
+        // Setup
         axios.get.mockResolvedValue({
             data: {
                 totalGameWins: 5,
@@ -23,14 +24,17 @@ describe('DashboardPage', () => {
                 totalRounds: 40
             }
         });
+        // Execute
         renderWithRouter(<DashboardPage />);
         await waitFor(() => expect(axios.get).toHaveBeenCalledTimes(1));
+        // Test
         expect(screen.getByText(/Play a Game/)).toBeInTheDocument();
         expect(screen.getByText(/'s Stats/)).toBeInTheDocument();
     });
 });
 
 it('displays user statistics after fetching', async () => {
+    // Setup
     axios.get.mockResolvedValue({
         data: {
             totalGameWins: 5,
@@ -40,7 +44,9 @@ it('displays user statistics after fetching', async () => {
             totalRounds: 40
         }
     });
+    // Execute
     renderWithRouter(<DashboardPage />);
+    // Test
     await waitFor(() => {
         expect(screen.getByText('Total Games: 20')).toBeInTheDocument();
         expect(screen.getByText('Average PPG: 50.00')).toBeInTheDocument();
