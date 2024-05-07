@@ -94,23 +94,31 @@ function Domino({ top, bottom, isSelected, onSelect }) {
     return `./assets/dots${number}.png`;
   };
 
-  // eslint-disable-next-line no-unused-vars
-  const topNumberStyle = {
+  const topNumberImage = {
+    src: getDots(top),
+    alt: `Top dots representing ${top}`,
+  };
+
+  const bottomNumberImage = {
+    src: getDots(bottom),
+    alt: `Bottom dots representing ${bottom}`,
+  };
+
+  const topNumberText = {
     color: getColor(top),
+    text: top,
   };
 
-  // eslint-disable-next-line no-unused-vars
-  const bottomNumberStyle = {
+  const bottomNumberText = {
     color: getColor(bottom),
+    text: bottom,
   };
 
-  const topNumberDots = {
-    color: getDots(top),
-  };
+  const isColorblind = sessionStorage.getItem('colorblind') === "true";
 
-  const bottomNumberDots = {
-    color: getDots(bottom),
-  };
+  // Determine if the current domino should be represented using text or images
+  const useImages = (isColorblind && [13, 14, 15].includes(top) && [13, 14, 15].includes(bottom)) || !isColorblind;
+
   if (isSelected && DetermineIfDominoIsSelectable([0, bottom, top])) {
     sessionStorage.setItem("SelectedDomino", JSON.stringify([0, bottom, top]));
   }
@@ -121,38 +129,29 @@ function Domino({ top, bottom, isSelected, onSelect }) {
       onClick={onSelect}
       data-testid="domino"
     >
-      {sessionStorage.getItem("colorblind") === "true" ? (
-        <>
-          <div className="topnumber" style={topNumberStyle}>
-            {top}
-          </div>
-          <div className="line"></div>
-          <div className="bottomnumber" style={bottomNumberStyle}>
-            {bottom}
-          </div>
-        </>
-      ) : (
+      {useImages ? (
         <>
           <img
             className="dominoImageTop"
-            src={topNumberDots.color}
-            alt={
-              top === 13
-                ? "Empty domino slot"
-                : `Top dots representing the number ${top}`
-            }
+            src={topNumberImage.src}
+            alt={topNumberImage.alt}
           />
           <div className="line" aria-hidden="true"></div>
-
           <img
             className="dominoImageBottom"
-            src={bottomNumberDots.color}
-            alt={
-              bottom === 14
-                ? "Empty domino slot"
-                : `Bottom dots representing the number ${bottom}`
-            }
+            src={bottomNumberImage.src}
+            alt={bottomNumberImage.alt}
           />
+        </>
+      ) : (
+        <>
+          <div className="topnumber" style={{ color: topNumberText.color }}>
+            {topNumberText.text}
+          </div>
+          <div className="line"></div>
+          <div className="bottomnumber" style={{ color: bottomNumberText.color }}>
+            {bottomNumberText.text}
+          </div>
         </>
       )}
     </div>
