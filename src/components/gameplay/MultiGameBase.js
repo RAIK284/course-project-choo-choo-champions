@@ -3,8 +3,8 @@
 
 import NavBar from "../universal/NavBar";
 import Background from "../universal/Background";
-import TrainStation from "./TrainStation";
-import axios from "axios";
+import TrainStation from "./MultiTrainStation";
+import axios from 'axios';
 
 import {
   GenerateDominoesForPlayers,
@@ -51,12 +51,29 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
     JSON.stringify(["Mexican Train", ...players])
   );
 
+  const [trains, setTrains] = useState([]);
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    const trainsParam = searchParams.get('trains');
+    if (trainsParam) {
+      // Decode and parse the JSON string
+      try {
+        const decodedTrains = decodeURIComponent(trainsParam);
+        const parsedTrains = JSON.parse(decodedTrains);
+        setTrains(parsedTrains);
+      } catch (e) {
+        console.error("Failed to parse trains data:", e);
+      }
+    }
+  }, []);
+
+  console.log(trains);
+
   // eslint-disable-next-line
   const [webSocket, setWebSocket] = useState(null);
   // eslint-disable-next-line
-  const [gameState, setGameState] = useState(
-    () => JSON.parse(sessionStorage.getItem("game")) || {}
-  );
+  const [gameState, setGameState] = useState(() => JSON.parse(sessionStorage.getItem("game")) || {});
   // eslint-disable-next-line
   const storedGame = JSON.parse(sessionStorage.getItem("game") || "{}");
   const [currentPlayerIndex, setCurrentPlayerIndex] = useState(() => {
@@ -67,7 +84,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
     winner: null,
     players: [],
     roundScores: [],
-    cumulativeScores: [],
+    cumulativeScores: []
   });
 
   // Connect to the WebSocket server.
@@ -412,7 +429,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
 
   const closeRoundModal = () => {
     setDisplayRoundModal(false);
-    FinishRound();
+    FinishRound()
   };
 
   const closeEndModal = () => {
@@ -422,9 +439,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
   };
 
   function loadDominos() {
-    const playerPaths = JSON.parse(sessionStorage.getItem("game"))[
-      "Player Paths"
-    ];
+    const playerPaths = JSON.parse(sessionStorage.getItem("game"))['Player Paths'];
     const lastDominos = [];
     if (playerPaths["Mexican Train"].Dominoes.length === 0) {
       lastDominos.push(ConvertToReact([[0, 13, 14]]));
@@ -432,7 +447,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
       lastDominos.push(
         ConvertToReact([
           playerPaths["Mexican Train"].Dominoes[
-            playerPaths["Mexican Train"].Dominoes.length - 1
+          playerPaths["Mexican Train"].Dominoes.length - 1
           ],
         ])
       );
@@ -445,7 +460,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
           lastDominos.push(
             ConvertToReact([
               playerPaths[players[i]].Dominoes[
-                playerPaths[players[i]].Dominoes.length - 1
+              playerPaths[players[i]].Dominoes.length - 1
               ],
             ])
           );
@@ -459,10 +474,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
 
   // Turn and finish round functions.
   async function Turn() {
-    const options = DeterminePlayablePaths(
-      players[currentPlayerIndex],
-      players
-    );
+    const options = DeterminePlayablePaths(players[currentPlayerIndex], players);
     if (
       options.includes("Draw") &&
       (sessionStorage.getItem("DominoDrawn") == null ||
@@ -490,10 +502,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
           resolve();
         });
       });
-      if (
-        JSON.parse(sessionStorage.getItem("game"))["Player Paths"]
-          .UnvalidatedDouble !== null
-      ) {
+      if (JSON.parse(sessionStorage.getItem("game"))['Player Paths'].UnvalidatedDouble !== null) {
         await sessionStorage.setItem("DominoDrawn", false);
         await Turn(players[currentPlayerIndex]);
         return;
@@ -522,35 +531,23 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
     window.location.reload();
   }
 
-  const getPlayerColor = (index) => {
-    switch (index) {
-      case 0:
-        //green
-        return "rgb(30,214,86)";
-      case 1:
-        //blue
-        return "rgb(66,148,194)";
-      case 2:
-        //purple
-        return "rgb(146,28,193)";
-      case 3:
-        //orange
-        return "rgb(232,133,4)";
-      case 4:
-        //red
-        return "rgb(179,47,38)";
-      default:
-        return "white";
-    }
+  const trainColors = {
+    "Green Train": "rgb(30,214,86)", // green
+    "Blue Train": "rgb(66,148,194)", // blue
+    "Purple Train": "rgb(146,28,193)", // purple
+    "Red Train": "rgb(179,47,38)", // red
+    "Orange Train": "rgb(232,133,4)", // orange
+    "White Train": "white", // default or white
+  };
+
+  const getPlayerColor = (index, trains) => {
+    const trainName = trains[index]; // Get the train name assigned to the player at the given index
+    return trainColors[trainName] || "white"; // Return the color associated with the train, or white if undefined
   };
 
   // Load the round objects.
-  const playerDominoes = JSON.parse(sessionStorage.getItem("game"))[
-    "Player Dominoes"
-  ];
-  const playerPaths = JSON.parse(sessionStorage.getItem("game"))[
-    "Player Paths"
-  ];
+  const playerDominoes = JSON.parse(sessionStorage.getItem("game"))["Player Dominoes"];
+  const playerPaths = JSON.parse(sessionStorage.getItem("game"))["Player Paths"];
   const sDomino = ConvertToReact(playerPaths["Starting Domino"]);
   const lastDominos = loadDominos();
 
@@ -567,34 +564,20 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
         <div className="centered-content">
           <div className="sidegroup">
             <div className="inner-content">
-              <h1
-                alt="Domino bank containing domino tiles for players to select"
-                className="banktitle"
-              >
-                Bank
-              </h1>
-              <div className="bank">
-                {ConvertToReact(
-                  playerDominoes[
-                    players[players.indexOf(sessionStorage.getItem("username"))]
-                  ]
-                )}
-              </div>
+              <h1 className="banktitle">Bank</h1>
+              <div className="bank">{ConvertToReact(playerDominoes[players[players.indexOf(sessionStorage.getItem("username"))]])}</div>
               {/* end of bank group */}
-              {players[currentPlayerIndex] ===
-                sessionStorage.getItem("username") && (
+              {players[currentPlayerIndex] === sessionStorage.getItem("username") && (
                 <div className="button-container">
                   <div className="buttonTopRow">
                     <button
                       className="button"
                       onClick={DrawDomino}
                       disabled={drawDisabled}
-                      alt="Button to draw a domino tile"
                     >
                       Draw
                     </button>
                     <button
-                      alt="Button to place a selected domino on the board"
                       className="button"
                       onClick={SelectADominoToPlay}
                       disabled={playDisabled}
@@ -603,7 +586,6 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
                     </button>
                   </div>
                   <button
-                    alt="Button to complete a turn"
                     className="finish-turn-button"
                     onClick={finishTurn}
                     disabled={finishDisabled}
@@ -615,14 +597,11 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
             </div>
             {/* end of left content */}
             <div className="inner-content">
-              <h3
-                className="players_turn"
-                alt={`It is ${players[currentPlayerIndex]}'s turn`}
-              >
+              <h3 className="players_turn">
                 It is{" "}
                 <strong
                   className="player-color"
-                  style={{ color: getPlayerColor(currentPlayerIndex) }}
+                  style={{ color: getPlayerColor(currentPlayerIndex, trains) }}
                 >
                   {players[currentPlayerIndex]}
                 </strong>
@@ -633,6 +612,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
                 handleDominoSelection={handleDominoSelection}
                 lastDominos={lastDominos}
                 isAvailable={isAvailable}
+                trains={trains}
               />
             </div>
           </div>
@@ -641,24 +621,18 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
       {/* end of right content  */}
       {/* end of horizontal group */}
       {/* end of content */}
-      {displayRoundModal && (
-        <RoundEndModal
-          onClose={closeRoundModal}
-          winner={CheckWinner(players)}
-          players={players}
-          roundScores={CalculateScores(players)}
-          cumulativeScores={JSON.parse(sessionStorage.getItem("game")).Scores}
-        />
-      )}
-      {displayEndModal && (
-        <GameEndWinModal
-          onClose={closeEndModal}
-          winner={CheckWinner(players)}
-          players={players}
-          roundScores={CalculateScores(players)}
-          cumulativeScores={JSON.parse(sessionStorage.getItem("game")).Scores}
-        />
-      )}
+      {displayRoundModal && <RoundEndModal
+        onClose={closeRoundModal}
+        winner={CheckWinner(players)}
+        players={players}
+        roundScores={CalculateScores(players)}
+        cumulativeScores={JSON.parse(sessionStorage.getItem("game")).Scores} />}
+      {displayEndModal && <GameEndWinModal
+        onClose={closeEndModal}
+        winner={CheckWinner(players)}
+        players={players}
+        roundScores={CalculateScores(players)}
+        cumulativeScores={JSON.parse(sessionStorage.getItem("game")).Scores} />}
       {broadcastDisplayRoundModal && (
         <RoundEndModal
           onClose={() => setBroadcastDisplayRoundModal(false)}

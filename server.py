@@ -78,8 +78,10 @@ async def handle_client(websocket, path):
                 if all_players_confirmed(requested_session_id):
                     players = [player['username']
                                for player in session_players[requested_session_id]]
+                    trains = [player['train']
+                              for player in session_players[requested_session_id]]
                     for client in clients:
-                        await client.send(json.dumps({'type': 'redirect', 'url': '/multiplayer', 'players': players}))
+                        await client.send(json.dumps({'type': 'redirect', 'url': '/multiplayer', 'players': players, 'trains': trains}))
                 print(f"Player {username} confirmed train: {confirmed_train}")
 
             elif message_type == 'gameState':
@@ -154,7 +156,7 @@ async def main():
     global session_id
     session_id = generate_session_id()
     async with websockets.serve(handle_client, "0.0.0.0", 3389):
-        # async with websockets.serve(handle_client, "localhost", 8765):
+    # async with websockets.serve(handle_client, "localhost", 8765):
         print("WebSocket server started. Listening on port 3389...")
         await asyncio.Future()
 

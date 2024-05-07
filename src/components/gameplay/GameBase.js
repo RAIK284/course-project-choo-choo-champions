@@ -323,7 +323,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
       lastDominos.push(
         ConvertToReact([
           playerPaths["Mexican Train"].Dominoes[
-            playerPaths["Mexican Train"].Dominoes.length - 1
+          playerPaths["Mexican Train"].Dominoes.length - 1
           ],
         ])
       );
@@ -338,7 +338,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
           lastDominos.push(
             ConvertToReact([
               playerPaths[players[i]].Dominoes[
-                playerPaths[players[i]].Dominoes.length - 1
+              playerPaths[players[i]].Dominoes.length - 1
               ],
             ])
           );
@@ -582,6 +582,7 @@ function GameChoice({ src, alt, onSelect, isSelected }) {
                 handleDominoSelection={handleDominoSelection}
                 lastDominos={lastDominos}
                 isAvailable={isAvailable}
+                trains={["Green Train", "Blue Train", "Purple Train", "Red Train"]}
                 isPlayable={isPlayable}
               />
               <div class="turnTimer">Time Left: {timer}</div>
