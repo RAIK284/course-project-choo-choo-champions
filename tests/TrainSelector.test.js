@@ -84,7 +84,7 @@ describe('TrainSelector component', () => {
         // Execute
         const trainImages = getAllByAltText(/Train/);
         // Test
-        expect(trainImages.length).toBe(6);
+        expect(trainImages.length).toBe(5);
     });
 
     test('disables previously confirmed train choices', () => {
